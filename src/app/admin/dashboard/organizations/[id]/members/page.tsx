@@ -2,10 +2,14 @@ import { api } from '@/lib/apiClient';
 import styles from './ManageMembers.module.css';
 import AddMemberForm from '@/components/orgs/AddMemberForm';
 import CurrentMembersList from '@/components/orgs/CurrentMembersList'; // <-- Import the new component
+import { use } from 'react';
 
-export default async function ManageMembersPage({ params }: { params: { id: string } }) {
+export default async function ManageMembersPage({params}: {params: Promise<{ id: string }>}) {
+
+  const { id } = use(params);
+
   const [org, allUsers] = await Promise.all([
-    api.get(`/api/admin/orgs/${params.id}`),
+    api.get(`/api/admin/orgs/${id}`),
     api.get('/api/admin/users', ['users'])
   ]);
 

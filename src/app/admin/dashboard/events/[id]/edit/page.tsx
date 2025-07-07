@@ -1,5 +1,6 @@
 import EventForm from '@/components/events/EventForm';
 import { api } from '@/lib/apiClient';
+import { use } from 'react';
 
 type PageProps = {
   params: {
@@ -7,8 +8,10 @@ type PageProps = {
   };
 };
 
-export default async function EditEventPage({ params }: PageProps) {
-  const event = await api.get(`/api/admin/events/${params.id}`);
+export default async function EditEventPage({params}: {params: Promise<{ id: string }>}) {
+  const { id } = use(params);
+
+  const event = await api.get(`/api/admin/events/${id}`);
 
   return (
     <div>

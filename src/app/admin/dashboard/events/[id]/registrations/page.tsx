@@ -2,11 +2,16 @@ import { api } from '@/lib/apiClient';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import styles from '../../../organizations/[id]/members/ManageMembers.module.css'; 
+import { use } from 'react';
 
-export default async function EventRegistrationsPage({ params }: { params: { id: string } }) {
+export default async function EventRegistrationsPage({params}: {params: Promise<{ id: string }>}) {
+
+  const { id } = use(params);
+
+
   const [event, registrations] = await Promise.all([
-    api.get(`/api/admin/events/${params.id}`),
-    api.get(`/api/admin/events/${params.id}/registrations`)
+    api.get(`/api/admin/events/${id}`),
+    api.get(`/api/admin/events/${id}/registrations`)
   ]);
 
   return (
