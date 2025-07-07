@@ -1,0 +1,58 @@
+.memberList {
+    list-style: none;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.memberItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.25rem;
+    border-bottom: 1px solid hsl(var(--border));
+}
+
+.memberItem:last-child {
+    border-bottom: none;
+}
+
+.memberInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.memberEmail {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+}
+
+.noMembers {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.removeButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: color 0.15s, background-color 0.15s;
+}
+
+.removeButton:hover {
+    background-color: hsl(var(--destructive) / 0.1);
+    color: hsl(var(--destructive));
+}
+
+.removeButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

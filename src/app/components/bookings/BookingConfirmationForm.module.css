@@ -1,0 +1,74 @@
+.wrapper {
+  padding: 2rem;
+}
+.roomName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+.detailGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: hsl(var(--muted-foreground));
+}
+.detailItem span {
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+.costSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: hsl(var(--secondary));
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-bottom: 1.5rem;
+}
+.costLabel {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+.costValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.balance {
+  text-align: right;
+}
+.error {
+  color: hsl(var(--destructive));
+  background-color: hsl(var(--destructive) / 0.1);
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.confirmButton {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+.confirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

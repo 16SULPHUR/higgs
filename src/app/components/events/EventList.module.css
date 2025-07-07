@@ -1,0 +1,107 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+.eventCard {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+}
+.cardHeader {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.cardDate {
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}
+.cardDescription {
+  padding: 1.5rem;
+  color: hsl(var(--foreground));
+  line-height: 1.5;
+  flex-grow: 1;
+}
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid hsl(var(--border));
+  background-color: hsl(var(--secondary));
+}
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--primary));
+}
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+.iconButton {
+  display: flex;
+  padding: 0.4rem;
+  border-radius: var(--radius);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: hsl(var(--muted-foreground));
+}
+.iconButton:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.deleteButton:hover {
+  color: hsl(var(--destructive));
+}
+
+
+
+.eventCard {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.imageContainer {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: hsl(var(--secondary));
+}
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: hsl(var(--muted-foreground));
+}
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.cardHeader, .cardDescription, .cardFooter {
+    padding: 1rem 1.5rem;
+}
+.cardDescription {
+    flex-grow: 1;
+}
+.cardFooter {
+    border-top: 1px solid hsl(var(--border));
+    background-color: hsl(var(--secondary) / 0.5);
+}

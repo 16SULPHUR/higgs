@@ -1,0 +1,53 @@
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+.description {
+    color: hsl(var(--muted-foreground));
+    margin-top: 0.25rem;
+    margin-bottom: 2rem;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    align-items: flex-start;
+}
+.card {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    padding: 1.5rem;
+}
+.cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid hsl(var(--border));
+}
+.memberList {
+    list-style: none;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.memberItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.25rem;
+    border-bottom: 1px solid hsl(var(--border));
+}
+.memberItem:last-child {
+    border-bottom: none;
+}
+.memberEmail {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+}
+.noMembers {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    padding: 2rem 0;
+    text-align: center;
+}

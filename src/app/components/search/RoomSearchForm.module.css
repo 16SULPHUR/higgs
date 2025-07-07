@@ -1,0 +1,172 @@
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1rem;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+.inputGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.input {
+  height: 2.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid hsl(var(--input));
+  padding: 0 0.75rem;
+}
+.searchButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding: 0 1.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+.searchButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+.resultsContainer {
+  margin-top: 2.5rem;
+}
+.loadingState,
+.emptyState {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: hsl(var(--muted-foreground));
+}
+.loaderIcon {
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.emptyState h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+
+/* ... keep all existing styles ... */
+
+.fullWidth {
+  grid-column: 1 / -1; /* For layouts where the form is a grid */
+  width: 100%;
+}
+
+.errorText {
+  color: hsl(var(--destructive));
+  font-size: 0.875rem;
+  width: 100%;
+  text-align: center;
+  margin-top: -0.5rem; /* Pull it closer to the form */
+  margin-bottom: 0.5rem;
+}
+
+.slotPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: hsl(var(--secondary));
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+}
+
+.slotButton {
+  flex-grow: 1;
+  padding: 0.5rem 0.75rem;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.slotButton:hover {
+  background-color: hsl(var(--accent));
+}
+
+.slotButton.selected {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+}
+
+
+.slotButton {
+  position: relative;
+}
+
+.slotButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: hsl(var(--muted));
+}
+
+.slotButton.selected {
+  background-color: hsl(var(--primary) / 0.2);
+  
+  color: hsl(var(--primary));
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+
+.slotButton.startSlot,
+.slotButton.endSlot {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary));
+  font-weight: 700;
+}
+
+
+.slotButton.startSlot::before,
+.slotButton.endSlot::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    width: 5px;
+    height: 5px;
+    background-color: white;
+    border-radius: 50%;
+}
+.slotButton.startSlot::before {
+    left: 4px;
+}
+.slotButton.endSlot::after {
+    right: 4px;
+}

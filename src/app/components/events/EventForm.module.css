@@ -1,0 +1,40 @@
+.formContent {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+}
+.imageUploader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.imageUploader label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.imagePreview {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: hsl(var(--secondary));
+    border: 2px solid hsl(var(--border));
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.95rem;
+    position: relative;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    transition: border-color 0.2s;
+}
+
+.imagePreview img,
+.imagePreview :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    display: block;
+}

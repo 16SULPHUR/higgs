@@ -1,0 +1,91 @@
+/* Page Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+.backButton:hover {
+  color: hsl(var(--foreground));
+}
+
+/* Title Section */
+.titleSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.iconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: hsl(var(--secondary));
+    border-radius: var(--radius);
+    color: hsl(var(--primary));
+}
+.orgName {
+    font-size: 2rem;
+    font-weight: 700;
+}
+.orgId {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+}
+
+/* Details Grid */
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Card for each detail */
+.detailCard {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.cardTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1rem;
+}
+.cardContent {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.cardIcon {
+    color: hsl(var(--muted-foreground));
+}
+.detailValue {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.planValue {
+    font-size: 1.125rem;
+    font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+    border-radius: 999px;
+}
+.mutedText {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+}
