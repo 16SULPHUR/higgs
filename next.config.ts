@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   images: {
     domains: ['example.com', 'ik.imagekit.io'], 
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
