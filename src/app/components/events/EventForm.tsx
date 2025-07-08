@@ -4,15 +4,14 @@ import { useState, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { saveEvent } from '@/actions/eventActions';
-import styles from '../rooms/RoomForm.module.css'; // Re-use the master form styles
-import imageStyles from './EventForm.module.css'; // Add specific styles for the image uploader
+import styles from '../rooms/RoomForm.module.css';  
+import imageStyles from './EventForm.module.css';  
 
 export default function EventForm({ initialData }: { initialData?: any }) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
-
-    // State for all form fields, including file and preview
+ 
     const [formData, setFormData] = useState({ title: '', description: '', date: '' });
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -39,7 +38,7 @@ export default function EventForm({ initialData }: { initialData?: any }) {
         const file = e.target.files?.[0];
         if (file) {
             setImageFile(file);
-            // Create a temporary URL for client-side preview
+            
             setImagePreview(URL.createObjectURL(file));
         }
     };

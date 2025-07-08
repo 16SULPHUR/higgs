@@ -8,7 +8,7 @@ export default async function EditOrgPage({params}: {params: Promise<{ id: strin
 
 
   const [org, plans] = await Promise.all([
-    api.get(`/api/admin/orgs/${id}`), // NOTE: You need a GET /orgs/:id endpoint
+    api.get(`/api/admin/orgs/${id}`), 
     api.get('/api/admin/plans')
   ]);
 

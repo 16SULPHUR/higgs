@@ -5,7 +5,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const adminAuthOptions = {
   providers: [
-    // ONLY Credentials for admin email/password
+    
     CredentialsProvider({
       name: 'Admin Credentials',
       credentials: {
@@ -55,9 +55,10 @@ export const adminAuthOptions = {
     },
   },
   pages: {
-    signIn: '/admin/login', // Redirect admins to the admin login page
+    signIn: '/admin/login', 
+    
   },
-  // IMPORTANT: Use a different cookie name to avoid conflicts with user sessions
+  
   cookies: {
     sessionToken: {
       name: `__Secure-admin.next-auth.session-token`,
@@ -73,8 +74,11 @@ export const adminAuthOptions = {
 
 
 export const {
-  handlers: { GET, POST }, // The GET and POST handlers
-  signIn: adminSignIn,     // Renaming for clarity if needed elsewhere
+  handlers: { GET, POST },
+  
+  signIn: adminSignIn,     
+  
   signOut: adminSignOut,
-  auth: adminAuth,         // The server-side session helper
+  auth: adminAuth,        
+  
 } = NextAuth(adminAuthOptions);

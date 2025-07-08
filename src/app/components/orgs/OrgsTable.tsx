@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { CircleDollarSign, Pencil, Trash2, UserCog, Users } from 'lucide-react';
 import SetAdminModal from './SetAdminModal';
-import styles from '../rooms/RoomsTable.module.css'; // Re-use styles
+import styles from '../rooms/RoomsTable.module.css'; 
+
 import AssignCreditsModal from './AssignCreditsModal';
 
-// Helper function is now only needed for plans
+
 const findPlanNameById = (plans: any[], id: string) => plans.find(plan => plan.id === id)?.name || 'N/A';
 
 export default function OrgsTable({ organizations, plans, users }: { organizations: any[], plans: any[], users: any[] }) {
@@ -22,10 +23,11 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
     const handleDelete = async (orgId: string) => {
         if (confirm('Are you sure you want to delete this organization? This action cannot be undone.')) {
             try {
-                // NOTE: No need for a custom client-side fetcher if we use relative paths
+                
                 await fetch(`/api/admin/orgs/${orgId}`, { method: 'DELETE' });
                 alert('Organization deleted successfully.');
-                router.refresh(); // Reload server data
+                router.refresh();
+                
             } catch (error) {
                 alert('Failed to delete organization.');
             }
@@ -89,7 +91,7 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
                     isOpen={isModalOpen}
                     onClose={() => setIsModalOpen(false)}
                     orgId={selectedOrgId}
-                    // The modal still needs the full user list to find potential admins
+                    
                     users={users.filter(u => u.organization_id === selectedOrgId)}
                 />
             )}

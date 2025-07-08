@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { addUserToOrg } from '@/actions/orgActions'; // We'll create this next
+import { addUserToOrg } from '@/actions/orgActions';
+
 import styles from './AddMemberForm.module.css';
 
 export default function AddMemberForm({ orgId, availableUsers }: { orgId: string, availableUsers: any[] }) {
@@ -22,7 +23,8 @@ export default function AddMemberForm({ orgId, availableUsers }: { orgId: string
 
     if (result.success) {
       alert('User added to organization successfully!');
-      setSelectedUserId(''); // Reset form
+      setSelectedUserId('');
+      
     } else {
       setError(result.message ?? null);
     }

@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../rooms/RoomForm.module.css'; // Re-use styles
-import { saveOrganization } from '@/actions/orgActions'; // <-- Import the new Server Action
+import styles from '../rooms/RoomForm.module.css';
+
+import { saveOrganization } from '@/actions/orgActions'; 
+
 
 export default function OrgForm({ plans, initialData }: { plans: any[], initialData?: any }) {
     const router = useRouter();
     const [formData, setFormData] = useState({ name: '', plan_id: '' });
     const [error, setError] = useState<string | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false); // Add loading state for better UX
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    
 
     useEffect(() => {
         if (initialData) {
@@ -26,17 +29,17 @@ export default function OrgForm({ plans, initialData }: { plans: any[], initialD
         setIsSubmitting(true);
         setError(null);
 
-        // Call the Server Action directly
+        
         const result = await saveOrganization(formData, initialData?.id);
 
         setIsSubmitting(false);
 
         if (result.success) {
             alert(result.message);
-            // Redirect to the list page. The data will be fresh because of `revalidateTag`.
+            
             router.push('/dashboard/organizations');
         } else {
-            // Display the error message returned from the server action
+            
             setError(result.message);
         }
     };

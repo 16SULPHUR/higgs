@@ -1,7 +1,7 @@
 import { api } from '@/lib/apiClient';
 import styles from './ManageMembers.module.css';
 import AddMemberForm from '@/components/orgs/AddMemberForm';
-import CurrentMembersList from '@/components/orgs/CurrentMembersList'; // <-- Import the new component
+import CurrentMembersList from '@/components/orgs/CurrentMembersList';  
 import { use } from 'react';
 
 export default async function ManageMembersPage({params}: {params: Promise<{ id: string }>}) {

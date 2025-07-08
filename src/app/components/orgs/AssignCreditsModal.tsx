@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { assignCreditsToOrg } from '@/actions/orgActions'; // We will create this action next
-import styles from './SetAdminModal.module.css'; // Reuse styles from the other modal
+import { assignCreditsToOrg } from '@/actions/orgActions'; 
+
+import styles from './SetAdminModal.module.css'; 
+
 
 export default function AssignCreditsModal({ isOpen, onClose, org }: { isOpen: boolean, onClose: () => void, org: any }) {
   const [credits, setCredits] = useState('');
@@ -46,7 +48,8 @@ export default function AssignCreditsModal({ isOpen, onClose, org }: { isOpen: b
             type="number"
             value={credits}
             onChange={(e) => setCredits(e.target.value)}
-            className={styles.select} // Reusing the select style for a simple input
+            className={styles.select} 
+            
             placeholder="e.g., 100"
             required
             min="1"

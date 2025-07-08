@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { savePlan } from '@/actions/planActions';
-import styles from '../rooms/RoomForm.module.css'; // Re-use form styles
+import styles from '../rooms/RoomForm.module.css'; 
+
 
 export default function PlanForm({ initialData }: { initialData?: any }) {
     const router = useRouter();

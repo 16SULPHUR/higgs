@@ -20,6 +20,8 @@ export default async function MembersDashboardPage() {
         </div>
 
         <Link href="/dashboard/find-room">Book a Meeting</Link>
+        <br />
+        <Link href="/dashboard/my-bookings">My Bookings</Link>
       </main>
     </div>
   );

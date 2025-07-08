@@ -4,8 +4,7 @@ import RoomsTable from '@/components/rooms/RoomsTable';
 import styles from './RoomsPage.module.css';
 import { Plus } from 'lucide-react';
 
-export default async function RoomsPage() {
-  // Fetch rooms on the server using our new API client
+export default async function RoomsPage() { 
   const rooms = await api.get('/api/admin/meeting-rooms', ['rooms']);
 
   return (

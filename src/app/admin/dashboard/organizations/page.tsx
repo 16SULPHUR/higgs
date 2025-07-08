@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { api } from '@/lib/apiClient';
 import OrgsTable from '@/components/orgs/OrgsTable';
-import styles from '../rooms/RoomsPage.module.css'; // Re-use styles
+import styles from '../rooms/RoomsPage.module.css';  
 import { Plus } from 'lucide-react';
 
 export default async function OrgsPage() {

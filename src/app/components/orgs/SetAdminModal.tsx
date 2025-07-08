@@ -1,7 +1,8 @@
 'use client';
 import { useState } from 'react';
 import styles from './SetAdminModal.module.css';
-import { setOrgAdmin } from '@/actions/orgActions'; // <-- Import the new Server Action
+import { setOrgAdmin } from '@/actions/orgActions'; 
+
 export default function SetAdminModal({ isOpen, onClose, orgId, users }: { isOpen: boolean, onClose: () => void, orgId: string, users: any[] }) {
   const [selectedUserId, setSelectedUserId] = useState('');
   const [error, setError] = useState('');
