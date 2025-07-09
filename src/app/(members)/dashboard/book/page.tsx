@@ -40,7 +40,14 @@ export default async function BookingConfirmationPage({ searchParams }: BookingP
       <h1 className={styles.title}>Confirm Your Booking</h1>
       <p className={styles.description}>Please review the details below before confirming.</p>
       <div className={styles.card}>
-        <BookingConfirmationForm roomType={roomType} liveUserData={liveUserData} startDateTime={startDateTime} endDateTime={endDateTime} />
+        <BookingConfirmationForm
+          roomType={roomType}
+          liveUserData={liveUserData}
+          startDateTime={startDateTime}
+          endDateTime={endDateTime}
+          rawStartTime={startTime}
+          rawEndTime={endTime}
+        />
       </div>
     </div>
   );
