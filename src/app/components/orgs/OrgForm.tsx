@@ -37,7 +37,7 @@ export default function OrgForm({ plans, initialData }: { plans: any[], initialD
         if (result.success) {
             alert(result.message);
             
-            router.push('/dashboard/organizations');
+            router.push('/admin/dashboard/organizations');
         } else {
             
             setError(result.message);

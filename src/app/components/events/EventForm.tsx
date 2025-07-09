@@ -61,7 +61,7 @@ export default function EventForm({ initialData }: { initialData?: any }) {
 
             if (result.success) {
                 alert(result.message);
-                router.push('/dashboard/events');
+                router.push('/admin/dashboard/events');
             } else {
                 setError(result.message);
             }

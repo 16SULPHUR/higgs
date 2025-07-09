@@ -24,19 +24,28 @@ export const authOptions = {
     
     
     CredentialsProvider({
-      name: 'Admin Credentials',
+      name: 'Credentials',
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
+        type: { label: "UserType", type:"text"}
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
+        let endpoint = "";
+
         try {
+
+          if (credentials.type === "ADMIN") {
+            endpoint = "api/admin/auth/login";
+          } else {
+            endpoint = "api/auth/email-auth/login";
+          }
             
-          const res = await fetch(`${API_BASE_URL}/api/auth/email-auth/login`, {
+          const res = await fetch(`${API_BASE_URL}/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

@@ -16,7 +16,7 @@ export default async function EventRegistrationsPage({params}: {params: Promise<
 
   return (
     <div>
-       <Link href="/dashboard/events" className={styles.backButton} style={{marginBottom: '1.5rem', display: 'inline-flex'}}>
+       <Link href="/admin/dashboard/events" className={styles.backButton} style={{marginBottom: '1.5rem', display: 'inline-flex'}}>
           <ArrowLeft size={16} />
           <span>Back to Events</span>
         </Link>

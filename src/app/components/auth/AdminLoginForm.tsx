@@ -6,7 +6,7 @@ import { LogIn } from 'lucide-react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from './LoginForm.module.css';
 
-export default function LoginForm() {
+export default function AdminLoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -21,6 +21,8 @@ export default function LoginForm() {
       redirect: false,
       email: email,
       password: password,
+      type: "ADMIN",
+      callbackUrl: "/admin/dashboard"
     });
 
     if (result?.error) {

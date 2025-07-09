@@ -58,7 +58,7 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
                 <tbody>
                     {organizations.map((org) => (
                         <tr key={org.id}>
-                            <td> <Link href={`/dashboard/organizations/${org.id}`} className={styles.nameLink}>
+                            <td> <Link href={`/admin/dashboard/organizations/${org.id}`} className={styles.nameLink}>
                                 {org.name}
                             </Link></td>
                             <td>{findPlanNameById(plans, org.plan_id)}</td>
@@ -69,13 +69,13 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
                                 <button onClick={() => openCreditsModal(org)} className={styles.iconButton} title="Assign Credits">
                                     <CircleDollarSign size={16} />
                                 </button>
-                                <Link href={`/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members">
+                                <Link href={`/admin/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members">
                                     <Users size={16} />
                                 </Link>
                                 <button onClick={() => openSetAdminModal(org.id)} className={styles.iconButton} title="Set Admin">
                                     <UserCog size={16} />
                                 </button>
-                                <Link href={`/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit">
+                                <Link href={`/admin/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit">
                                     <Pencil size={16} />
                                 </Link>
                                 <button onClick={() => handleDelete(org.id)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete">

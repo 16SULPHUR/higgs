@@ -41,7 +41,7 @@ export default function PlanForm({ initialData }: { initialData?: any }) {
 
         if (result.success) {
             alert(result.message);
-            router.push('/dashboard/plans');
+            router.push('/admin/dashboard/plans');
         } else {
             setError(result.message);
         }

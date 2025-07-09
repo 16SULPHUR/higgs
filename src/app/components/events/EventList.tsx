@@ -42,11 +42,11 @@ export default function EventList({ events }: { events: any[] }) {
                         </div>
                         <p className={styles.cardDescription}>{event.description}</p>
                         <div className={styles.cardFooter}>
-                            <Link href={`/dashboard/events/${event.id}/registrations`} className={styles.footerLink}>
+                            <Link href={`/admin/dashboard/events/${event.id}/registrations`} className={styles.footerLink}>
                                 <Users size={14} /> {event.registration_count} Registrations
                             </Link>
                             <div className={styles.actions}>
-                                <Link href={`/dashboard/events/${event.id}/edit`} className={styles.iconButton} title="Edit">
+                                <Link href={`/admin/dashboard/events/${event.id}/edit`} className={styles.iconButton} title="Edit">
                                     <Pencil size={16} />
                                 </Link>
                                 <button onClick={() => handleDelete(event.id, event.title)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete">

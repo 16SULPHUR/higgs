@@ -34,7 +34,7 @@ export default function PlansTable({ plans }: { plans: any[] }) {
                         <td>{plan.plan_credits}</td>
                         <td>₹ {parseFloat(plan.price).toFixed(2)}</td> 
                         <td className={styles.actions}>
-                            <Link href={`/dashboard/plans/${plan.id}/edit`} className={styles.iconButton} title="Edit">
+                            <Link href={`/admin/dashboard/plans/${plan.id}/edit`} className={styles.iconButton} title="Edit">
                                 <Pencil size={16} />
                             </Link>
                             <button onClick={() => handleDelete(plan.id, plan.name)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete">

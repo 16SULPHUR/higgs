@@ -8,8 +8,10 @@ export default async function MembersDashboardPage() {
   const session = await getSession();
   console.log(session)
   if (!session) {
-
     redirect('/login');
+  }
+  if(session?.user?.role === "SUPER_ADMIN"){
+    redirect('/admin/dashboard');
   }
 
   return (

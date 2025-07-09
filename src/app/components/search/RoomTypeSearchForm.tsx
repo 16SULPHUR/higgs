@@ -1,0 +1,119 @@
+'use client';
+
+import { useState, useTransition, useMemo } from 'react';
+import { Search, Loader2 } from 'lucide-react';
+import { searchAvailableRoomTypesAction } from '@/actions/bookingActions';
+import { generate30MinSlots } from '@/lib/timeSlots';
+import styles from './RoomSearchForm.module.css';
+import RoomTypeResultCard from './RoomTypeResultCard';
+
+const timeSlots = generate30MinSlots();
+
+export default function RoomTypeSearchForm() {
+    const [criteria, setCriteria] = useState({
+        date: new Date().toISOString().split('T')[0],
+        startTime: '09:00',
+        endTime: '09:30',
+        capacity: '2',
+    });
+    
+    const [results, setResults] = useState<any[]>([]);
+    const [executedSearchCriteria, setExecutedSearchCriteria] = useState<any>(null);
+    const [hasSearched, setHasSearched] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [isPending, startTransition] = useTransition();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setCriteria(prev => ({ ...prev, [name]: value }));
+
+        // If the start time changes, automatically adjust the end time if it's no longer valid
+        if (name === 'startTime') {
+            const startIndex = timeSlots.findIndex(slot => slot.value === value);
+            const endIndex = timeSlots.findIndex(slot => slot.value === criteria.endTime);
+            if (endIndex <= startIndex) {
+                // Set end time to the next available slot
+                const nextSlot = timeSlots[startIndex + 1];
+                if (nextSlot) {
+                    setCriteria(prev => ({ ...prev, startTime: value, endTime: nextSlot.value }));
+                } else {
+                     setCriteria(prev => ({ ...prev, startTime: value, endTime: value })); // Fallback
+                }
+            }
+        }
+    };
+
+    // Memoize the available end times based on the selected start time
+    const availableEndTimes = useMemo(() => {
+        const startIndex = timeSlots.findIndex(slot => slot.value === criteria.startTime);
+        // The end time must be after the start time
+        return timeSlots.slice(startIndex + 1);
+    }, [criteria.startTime]);
+
+    const handleSearch = (e: React.FormEvent) => {
+        e.preventDefault();
+        setHasSearched(true);
+        setResults([]);
+        setError(null);
+        setExecutedSearchCriteria(null);
+
+        startTransition(async () => {
+            const result = await searchAvailableRoomTypesAction(criteria);
+            if (result.success) {
+                setResults(result.data);
+                setExecutedSearchCriteria(criteria);
+            } else {
+                setError(result.error);
+            }
+        });
+    };
+
+    return (
+        <div>
+            <form onSubmit={handleSearch} className={styles.form}>
+                <div className={styles.inputGroup}>
+                    <label htmlFor="date">Date</label>
+                    <input type="date" id="date" name="date" value={criteria.date} onChange={handleChange} className={styles.input} />
+                </div>
+                
+                <div className={styles.inputGroup}>
+                    <label htmlFor="startTime">Start Time</label>
+                    <select id="startTime" name="startTime" value={criteria.startTime} onChange={handleChange} className={styles.input}>
+                        {timeSlots.slice(0, -1).map(slot => ( // Exclude the very last slot
+                            <option key={slot.value} value={slot.value}>{slot.label}</option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label htmlFor="endTime">End Time</label>
+                    <select id="endTime" name="endTime" value={criteria.endTime} onChange={handleChange} className={styles.input}>
+                        {availableEndTimes.map(slot => (
+                            <option key={slot.value} value={slot.value}>{slot.label}</option>
+                        ))}
+                    </select>
+                </div>
+                
+                <div className={styles.inputGroup}>
+                    <label htmlFor="capacity">People</label>
+                    <input type="number" id="capacity" name="capacity" min="1" value={criteria.capacity} onChange={handleChange} className={styles.input} />
+                </div>
+                
+                <button type="submit" className={styles.searchButton} disabled={isPending}>
+                    <Search size={18} />
+                    <span>{isPending ? 'Searching...' : 'Find Spaces'}</span>
+                </button>
+            </form>
+            {error && <p className={styles.errorText}>{error}</p>}
+            <div className={styles.resultsContainer}>
+                {isPending && <div className={styles.loadingState}><Loader2 className={styles.loaderIcon} /><p>Finding available spaces...</p></div>}
+                {!isPending && hasSearched && !error && results.length === 0 && <div className={styles.emptyState}><h3>No Spaces Found</h3><p>There are no spaces available that match your criteria.</p></div>}
+                {!isPending && results.length > 0 && executedSearchCriteria && (
+                    <div className={styles.resultsGrid}>
+                        {results.map(roomType => <RoomTypeResultCard key={roomType.id} roomType={roomType} searchCriteria={executedSearchCriteria} />)}
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

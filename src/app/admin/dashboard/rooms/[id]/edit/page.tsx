@@ -1,21 +1,37 @@
-
-import RoomForm from '@/components/rooms/RoomForm';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/apiClient';
-import { use } from 'react';
+import RoomForm from '@/components/rooms/RoomForm';
+import styles from '../../RoomsPage.module.css';
 
-export default async function EditRoomPage({params}: {params: Promise<{ id: string }>}) {
+interface EditRoomPageProps {
+  params: {
+    id: string;
+  };
+}
 
-  const { id } = use(params);
- 
-  const [room, locations] = await Promise.all([
-    api.get(`/api/admin/meeting-rooms/${id}`),
-    api.get('/api/admin/locations')
+export default async function EditRoomPage({ params }: EditRoomPageProps) {
+  // Fetch the room instance to edit and all room types in parallel.
+  const [room, roomTypes] = await Promise.all([
+    api.get(`/api/admin/rooms/${params.id}`),
+    api.get('/api/admin/room-types')
   ]);
 
   return (
     <div>
-      <h1>Edit {room.name}</h1>
-      <RoomForm locations={locations} initialData={room} />
+      <div className={styles.header}>
+        <div>
+          <Link href="/admin/dashboard/rooms" className={styles.backButton}>
+            <ArrowLeft size={16} />
+            <span>Back to Room Instances</span>
+          </Link>
+          <h1 className={styles.title}>Edit "{room.name}"</h1>
+          <p className={styles.description}>
+            Update the details for this specific room instance.
+          </p>
+        </div>
+      </div>
+      <RoomForm roomTypes={roomTypes} initialData={room} />
     </div>
   );
 }

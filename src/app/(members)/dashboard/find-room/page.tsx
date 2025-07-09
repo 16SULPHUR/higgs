@@ -1,14 +1,16 @@
-
-import RoomSearchForm from '@/components/search/RoomSearchForm';
+import RoomTypeSearchForm from '@/components/search/RoomTypeSearchForm';
 import styles from './FindRoomPage.module.css';
 
 export default function FindRoomPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1 className={styles.title}>Find a Meeting Room</h1>
+        <h1 className={styles.title}>Find a Space</h1>
+        <p className={styles.description}>
+          Select your criteria to find the perfect available space for your needs.
+        </p>
       </div>
-      <RoomSearchForm />
+      <RoomTypeSearchForm />
     </div>
   );
 }

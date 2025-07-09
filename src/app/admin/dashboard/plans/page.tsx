@@ -15,7 +15,7 @@ export default async function PlansPage() {
             <h1 className={styles.title}>Subscription Plans</h1>
             <p className={styles.description}>Create and manage pricing plans for organizations.</p>
         </div>
-        <Link href="/dashboard/plans/new" className={styles.addButton}>
+        <Link href="/admin/dashboard/plans/new" className={styles.addButton}>
             <Plus size={16} />
             <span>Add New Plan</span>
         </Link>
