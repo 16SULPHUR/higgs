@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/apiClient';
-import RoomForm from '@/components/meeting_rooms/RoomForm';
+import RoomForm from '@/components/rooms/RoomForm';
 import styles from '../RoomsPage.module.css';
 
 export default async function NewRoomPage() {
