@@ -5,9 +5,11 @@ import { ArrowLeft } from 'lucide-react';
 import BookingConfirmationForm from '@/components/bookings/BookingConfirmationForm';
 import styles from './BookingConfirmationPage.module.css';
 import { getSession } from '@/lib/session';
+import { use } from 'react';
 
-export default async function BookingConfirmationPage({ searchParams }: { searchParams: { [key: string]: string } }) {
-    const { typeOfRoomId, date, startTime, endTime } = searchParams;
+export default async function BookingConfirmationPage({ searchParams }: { searchParams: Promise<{ [key: string]: string }> }) {
+ 
+    const { typeOfRoomId, date, startTime, endTime } = use(searchParams);
     if (!typeOfRoomId || !date || !startTime || !endTime) { redirect('/dashboard/find-room'); }
     
     const [session, roomType, liveUserData] = await Promise.all([

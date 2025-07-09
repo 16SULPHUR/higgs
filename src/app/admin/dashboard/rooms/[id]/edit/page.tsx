@@ -3,17 +3,19 @@ import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 import RoomForm from '@/components/rooms/RoomForm';
 import styles from '../../RoomsPage.module.css';
+import { use } from 'react';
 
 interface EditRoomPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditRoomPage({ params }: EditRoomPageProps) {
-  // Fetch the room instance to edit and all room types in parallel.
+  
+  const {id} = use(params)
   const [room, roomTypes] = await Promise.all([
-    api.get(`/api/admin/rooms/${params.id}`),
+    api.get(`/api/admin/rooms/${id}`),
     api.get('/api/admin/room-types')
   ]);
 
