@@ -3,6 +3,7 @@ import { getSession } from '../../lib/session';
 import { redirect } from 'next/navigation';
 import styles from './Dashboard.module.css';
 import Link from 'next/link';
+import SignOutButton from '@/components/SignOutButton';
 
 export default async function MembersDashboardPage() {
   const session = await getSession();
@@ -16,6 +17,7 @@ export default async function MembersDashboardPage() {
 
   return (
     <div className={styles.container}>
+      <SignOutButton />
       <main className={styles.main}>
         <div className={styles.welcomeCard}>
           <h2 className={styles.welcomeTitle}>Welcome back, {session?.user?.name}!</h2>

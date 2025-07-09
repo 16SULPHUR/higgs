@@ -33,6 +33,9 @@ export default function BookingConfirmationForm({ roomType, liveUserData, startD
     
     const hasEnoughCredits = userCredits >= totalCost;
 
+     const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
+    const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+
     return (
         <div className={styles.wrapper}>
             <h2 className={styles.roomName}>{roomType.name}</h2>
@@ -40,11 +43,11 @@ export default function BookingConfirmationForm({ roomType, liveUserData, startD
             <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
                     <Calendar size={16} />
-                    <span>{startDateTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</span>
+                    <span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span>
                 </div>
                 <div className={styles.detailItem}>
                     <Clock size={16} />
-                    <span>{startDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} - {endDateTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} ({durationInMinutes} mins)</span>
+                    <span>{startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({durationInMinutes} mins)</span>
                 </div>
                 <div className={styles.detailItem}>
                     <Users size={16} />

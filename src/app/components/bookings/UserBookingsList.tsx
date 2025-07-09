@@ -1,9 +1,9 @@
 'use client';
 
 import { useTransition } from 'react';
-import { Calendar, Clock, XCircle } from 'lucide-react';
+import { Calendar, Clock, DoorOpen, Hash, Tag, XCircle } from 'lucide-react';
 import { cancelBookingAction } from '@/actions/bookingActions';
-import styles from './UserBookingsList.module.css';
+import styles from './UserBookingsList.module.css'; // We will use the existing, excellent CSS file
 
 export default function UserBookingsList({ bookings }: { bookings: any[] }) {
     const [isPending, startTransition] = useTransition();
@@ -12,11 +12,13 @@ export default function UserBookingsList({ bookings }: { bookings: any[] }) {
         if (confirm("Are you sure you want to cancel this booking? Credits will be refunded according to the cancellation policy.")) {
             startTransition(async () => {
                 const result = await cancelBookingAction(bookingId);
-                if (!result.success) {
+                if (result?.success === false) {
+                    // Use optional chaining for safety
                     alert(`Error: ${result.message}`);
                 } else {
-                    alert(result.message);
+                    alert(result?.message || 'Booking cancelled successfully.');
                 }
+                
             });
         }
     };
@@ -27,32 +29,54 @@ export default function UserBookingsList({ bookings }: { bookings: any[] }) {
     return (
         <div className={styles.listContainer}>
             {bookings.map(booking => {
+                
                 const isCancellable = booking.status === 'CONFIRMED' && new Date(booking.start_time) > new Date();
                 
                 return (
                     <div key={booking.id} className={styles.card}>
                         <div className={styles.cardHeader}>
-                            <h3 className={styles.roomName}>{booking.room_name}</h3>
-                            {/* <span className={`${styles.statusBadge} ${styles[booking.status.toLowerCase()]}`}>
-                                {booking.status}
-                            </span> */}
+                            
+                            <h3 className={styles.roomName}>{booking.room_type_name}</h3>
+                            <span className={`${styles.statusBadge} ${styles[booking.status?.toLowerCase() || 'unknown']}`}>
+                                {booking.status || 'UNKNOWN'}
+                            </span>
                         </div>
                         <div className={styles.details}>
-                            <div className={styles.detailItem}><Calendar size={14} /> <span>{formatDate(booking.start_time)}</span></div>
-                            <div className={styles.detailItem}><Clock size={14} /> <span>{formatTime(booking.start_time)} to {formatTime(booking.end_time)}</span></div>
+                            
+                            <div className={styles.detailItem}>
+                                <DoorOpen size={14} /> 
+                                <span><strong>Instance:</strong> {booking.room_instance_name}</span>
+                            </div>
+                            {/* Detail: Date */}
+                            <div className={styles.detailItem}>
+                                <Calendar size={14} /> 
+                                <span>{formatDate(booking.start_time)}</span>
+                            </div>
+                            {/* Detail: Time */}
+                            <div className={styles.detailItem}>
+                                <Clock size={14} /> 
+                                <span>{formatTime(booking.start_time)} to {formatTime(booking.end_time)}</span>
+                            </div>
+                            {/* Detail: Booking ID for reference */}
+                            <div className={styles.detailItem}>
+                                <Hash size={14} /> 
+                                <span className={styles.bookingId}>ID: {booking.id}</span>
+                            </div>
                         </div>
-                        <div className={styles.actions}>
-                            {isCancellable && (
+
+                        {/* Only show the actions footer if there's an action to take */}
+                        {isCancellable && (
+                            <div className={styles.actions}>
                                 <button 
                                     onClick={() => handleCancel(booking.id)} 
                                     className={styles.cancelButton}
                                     disabled={isPending}
                                 >
                                     <XCircle size={16}/>
-                                    <span>Cancel Booking</span>
+                                    <span>{isPending ? 'Cancelling...' : 'Cancel Booking'}</span>
                                 </button>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 );
             })}
