@@ -1,3 +1,5 @@
+'use client';
+
 import { api } from '@/lib/apiClient';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';

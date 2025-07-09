@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { api } from '@/lib/apiClient';
-import RoomsTable from '@/components/rooms/RoomsTable';
+import RoomsTable from '@/components/meeting_rooms/RoomsTable';
 import styles from './RoomsPage.module.css';
 import { Plus } from 'lucide-react';
 

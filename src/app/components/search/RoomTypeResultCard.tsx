@@ -3,6 +3,7 @@ import styles from './RoomResultCard.module.css';
 import Link from 'next/link';
 
 export default function RoomTypeResultCard({ roomType, searchCriteria }: { roomType: any, searchCriteria: any }) {
+    
   const bookingUrl = `/dashboard/book?typeOfRoomId=${roomType.id}&date=${searchCriteria.date}&startTime=${searchCriteria.startTime}&endTime=${searchCriteria.endTime}`;
 
   return (
