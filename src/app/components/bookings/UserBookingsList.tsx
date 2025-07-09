@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 import { Calendar, Clock, DoorOpen, Hash, Tag, XCircle } from 'lucide-react';
 import { cancelBookingAction } from '@/actions/bookingActions';
-import styles from './UserBookingsList.module.css'; // We will use the existing, excellent CSS file
+import styles from './UserBookingsList.module.css'; 
 
 export default function UserBookingsList({ bookings }: { bookings: any[] }) {
     const [isPending, startTransition] = useTransition();
@@ -12,8 +12,7 @@ export default function UserBookingsList({ bookings }: { bookings: any[] }) {
         if (confirm("Are you sure you want to cancel this booking? Credits will be refunded according to the cancellation policy.")) {
             startTransition(async () => {
                 const result = await cancelBookingAction(bookingId);
-                if (result?.success === false) {
-                    // Use optional chaining for safety
+                if (result?.success === false) { 
                     alert(`Error: ${result.message}`);
                 } else {
                     alert(result?.message || 'Booking cancelled successfully.');

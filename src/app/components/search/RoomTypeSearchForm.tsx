@@ -15,9 +15,8 @@ export default function RoomTypeSearchForm() {
         startTime: '09:00',
         endTime: '09:30',
         capacity: '2',
-
     });
-
+    
     const [results, setResults] = useState<any[]>([]);
     const [executedSearchCriteria, setExecutedSearchCriteria] = useState<any>(null);
     const [hasSearched, setHasSearched] = useState(false);
@@ -28,24 +27,24 @@ export default function RoomTypeSearchForm() {
         const { name, value } = e.target;
         setCriteria(prev => ({ ...prev, [name]: value }));
 
-
+        
         if (name === 'startTime') {
             const startIndex = timeSlots.findIndex(slot => slot.value === value);
             const endIndex = timeSlots.findIndex(slot => slot.value === criteria.endTime);
             if (endIndex <= startIndex) {
-
+                
                 const nextSlot = timeSlots[startIndex + 1];
                 if (nextSlot) {
                     setCriteria(prev => ({ ...prev, startTime: value, endTime: nextSlot.value }));
                 } else {
-                    setCriteria(prev => ({ ...prev, startTime: value, endTime: value }));
+                     setCriteria(prev => ({ ...prev, startTime: value, endTime: value })); // Fallback
                 }
             }
         }
     };
-
+ 
     const availableEndTimes = useMemo(() => {
-        const startIndex = timeSlots.findIndex(slot => slot.value === criteria.startTime);
+        const startIndex = timeSlots.findIndex(slot => slot.value === criteria.startTime); 
         return timeSlots.slice(startIndex + 1);
     }, [criteria.startTime]);
 
@@ -74,11 +73,11 @@ export default function RoomTypeSearchForm() {
                     <label htmlFor="date">Date</label>
                     <input type="date" id="date" name="date" value={criteria.date} onChange={handleChange} className={styles.input} />
                 </div>
-
+                
                 <div className={styles.inputGroup}>
                     <label htmlFor="startTime">Start Time</label>
                     <select id="startTime" name="startTime" value={criteria.startTime} onChange={handleChange} className={styles.input}>
-                        {timeSlots.slice(0, -1).map(slot => (
+                        {timeSlots.slice(0, -1).map(slot => ( // Exclude the very last slot
                             <option key={slot.value} value={slot.value}>{slot.label}</option>
                         ))}
                     </select>
@@ -92,12 +91,12 @@ export default function RoomTypeSearchForm() {
                         ))}
                     </select>
                 </div>
-
+                
                 <div className={styles.inputGroup}>
                     <label htmlFor="capacity">People</label>
                     <input type="number" id="capacity" name="capacity" min="1" value={criteria.capacity} onChange={handleChange} className={styles.input} />
                 </div>
-
+                
                 <button type="submit" className={styles.searchButton} disabled={isPending}>
                     <Search size={18} />
                     <span>{isPending ? 'Searching...' : 'Find Spaces'}</span>
@@ -109,9 +108,7 @@ export default function RoomTypeSearchForm() {
                 {!isPending && hasSearched && !error && results.length === 0 && <div className={styles.emptyState}><h3>No Spaces Found</h3><p>There are no spaces available that match your criteria.</p></div>}
                 {!isPending && results.length > 0 && executedSearchCriteria && (
                     <div className={styles.resultsGrid}>
-                        {results.map(roomType => { return <RoomTypeResultCard key={roomType.id} roomType={roomType} searchCriteria={executedSearchCriteria} /> }
-
-                        )}
+                        {results.map(roomType => <RoomTypeResultCard key={roomType.id} roomType={roomType} searchCriteria={executedSearchCriteria} />)}
                     </div>
                 )}
             </div>
