@@ -47,7 +47,7 @@ export default function BookingConfirmationForm({ roomType, liveUserData, startD
                 </div>
                 <div className={styles.detailItem}>
                     <Clock size={16} />
-                    <span>{startDateTime.toLocaleTimeString()} - {endDateTime.toLocaleTimeString()} ({durationInMinutes} mins)</span>
+                    <span>{startDateTime.toTimeString()} - {endDateTime.toTimeString()} ({durationInMinutes} mins)</span>
                 </div>
                 <div className={styles.detailItem}>
                     <Users size={16} />
