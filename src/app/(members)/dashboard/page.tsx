@@ -9,6 +9,7 @@ import styles from './Dashboard.module.css';
 // The InstallPrompt component is likely a non-visual logic component,
 // so it's fine to keep it if it's part of your PWA setup. We'll hide it with CSS if needed.
 import { InstallPrompt } from '@/components/common/InstallPrompt';
+import InstallPwaPrompt from '@/components/common/InstallPwaPrompt';
 
 export default async function MembersDashboardPage() {
   const session = await getSession();
@@ -16,21 +17,16 @@ export default async function MembersDashboardPage() {
   if (!session) {
     redirect('/login');
   }
-  
+
   if (session?.user?.role === "SUPER_ADMIN") {
     redirect('/admin/dashboard');
   }
 
   return (
     <div className={styles.pageContainer}>
-      <InstallPrompt />
       <header className={styles.header}>
-        <div className={styles.welcomeMessage}>
-          <h1 className={styles.welcomeTitle}>Welcome, {session?.user?.name}!</h1>
-          <p className={styles.welcomeSubtitle}>Your workspace dashboard is ready.</p>
-        </div>
         <div className={styles.headerActions}>
-          <InstallPwaButton />
+          <InstallPwaPrompt />
           <SignOutButton />
         </div>
       </header>

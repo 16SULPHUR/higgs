@@ -1,0 +1,59 @@
+/* src/components/common/InstallPwaPrompt.module.css */
+
+.installButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.installButton:hover {
+    background-color: hsl(var(--primary) / 0.9);
+}
+
+.iosBanner {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background-color: hsl(var(--secondary));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+}
+
+.iosContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: hsl(var(--secondary-foreground));
+    font-weight: 500;
+}
+
+.inlineIcon {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .buttonText {
+        display: none;
+    }
+    .installButton {
+        width: 2.5rem;
+        padding: 0;
+    }
+    .iosText {
+        font-size: 0.8rem;
+    }
+}

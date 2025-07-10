@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react"
+import styles from './InstallPwaButton.module.css';
 
 export function InstallPrompt() {
     const [isIOS, setIsIOS] = useState(false)
@@ -23,7 +24,7 @@ export function InstallPrompt() {
             {isIOS && (
                 <p>
                     <h3>Install App</h3>
-                    <button>Add to Home Screen</button>
+                    <button className={styles.installButton}>Add to Home Screen</button>
                     To install this app on your iOS device, tap the share button
                     <span role="img" aria-label="share icon">
                         {' '}

@@ -1,0 +1,44 @@
+.signOutButton {
+  /* Flexbox for aligning icon and text */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  /* Sizing and Spacing */
+  height: 2.5rem;
+  padding: 0 1rem;
+  
+  /* Appearance */
+  background-color: transparent;
+  border: 1px solid transparent; /* Start transparent to reveal on hover */
+  color: hsl(var(--muted-foreground));
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  
+  /* Interactivity */
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Hover state: Provide clear feedback */
+.signOutButton:hover {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+  border-color: hsl(var(--border));
+}
+
+/* Focus state: For accessibility */
+.signOutButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
+}
+
+/* Alternative Destructive Style (Optional) */
+/* If you prefer a red hint on hover, you could use this instead of the hover style above */
+
+.signOutButton:hover {
+  background-color: hsl(var(--destructive) / 0.1);
+  color: hsl(var(--destructive));
+}
