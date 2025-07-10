@@ -5,8 +5,8 @@ import RoomTypeSearchForm from '@/components/search/RoomTypeSearchForm';
 import styles from './ReschedulePage.module.css';
 import CurrentBookingDetails from '@/components/bookings/CurrentBookingDetails';
 
-export default async function ReschedulePage({ params }: { params: { bookingId: string } }) {
-    const { bookingId } = params;
+export default async function ReschedulePage({ params }: { params?: { bookingId?: string } }) {
+    const { bookingId } = params ?? {};
 
     const originalBooking = await api.get(`/api/bookings/${bookingId}`);
 

@@ -4,8 +4,8 @@ import { CheckCircle, Users } from 'lucide-react';
 import InviteGuestForm from '@/components/bookings/InviteGuestForm';
 import styles from './BookingSuccessPage.module.css';
 
-export default async function BookingSuccessPage({ params }: { params: { bookingId: string } }) {
-    const { bookingId } = params;
+export default async function BookingSuccessPage({ params }: { params?: { bookingId?: string } }) {
+    const { bookingId } = params ?? {};
     
     const [booking, invitedGuests] = await Promise.all([
         api.get(`/api/bookings/${bookingId}`),

@@ -7,7 +7,7 @@ import styles from '../../book/BookingConfirmationPage.module.css';
 import { getSession } from '@/lib/session';
 
 interface RescheduleConfirmPageProps {
-    searchParams: {
+    searchParams?: {
         originalBookingId?: string;
         newTypeOfRoomId?: string;
         start?: string;
@@ -16,7 +16,7 @@ interface RescheduleConfirmPageProps {
 }
 
 export default async function RescheduleConfirmPage({ searchParams }: RescheduleConfirmPageProps) {
-    const { originalBookingId, newTypeOfRoomId, start, end } = searchParams;
+    const { originalBookingId, newTypeOfRoomId, start, end } = searchParams ?? {};
 
     if (!originalBookingId || !newTypeOfRoomId || !start || !end) {
         redirect('/dashboard/my-bookings');

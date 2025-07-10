@@ -7,7 +7,7 @@ import styles from './BookingConfirmationPage.module.css';
 import { getSession } from '@/lib/session';
 
 interface BookingPageProps {
-  searchParams: {
+  searchParams?: {
     typeOfRoomId?: string;
     start?: string;
     end?: string;
@@ -15,7 +15,7 @@ interface BookingPageProps {
 }
 
 export default async function BookingConfirmationPage({ searchParams }: BookingPageProps) {
-    const { typeOfRoomId, start, end } = searchParams;
+    const { typeOfRoomId, start, end } = searchParams ?? {};
     if (!typeOfRoomId || !start || !end) {
         redirect('/dashboard/find-room');
     }
