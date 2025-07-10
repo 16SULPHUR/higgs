@@ -2,8 +2,20 @@ import { Calendar, Clock, DoorOpen, Hash } from 'lucide-react';
 import styles from './CurrentBookingDetails.module.css';
 
 export default function CurrentBookingDetails({ booking }: { booking: any }) {
-    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full' });
-    const formatTime = (d: string) => new Date(d).toLocaleTimeString('en-US', { timeStyle: 'short' });
+    const TIMEZONE = 'Asia/Kolkata';
+
+    const formatDate = (d: string) =>
+        new Date(d).toLocaleDateString('en-US', {
+            dateStyle: 'full',
+            timeZone: TIMEZONE,
+        });
+
+    const formatTime = (d: string) =>
+        new Date(d).toLocaleTimeString('en-US', {
+            timeStyle: 'short',
+            timeZone: TIMEZONE,
+        });
+
 
     return (
         <div className={styles.card}>
