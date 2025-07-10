@@ -1,24 +1,40 @@
+'use client';
+
 import { Users, MapPin, DollarSign } from 'lucide-react';
 import styles from './RoomResultCard.module.css';
 import Link from 'next/link';
 
-export default function RoomTypeResultCard({ roomType, searchCriteria }: { roomType: any, searchCriteria: any }) {
+interface RoomTypeResultCardProps {
+  roomType: any;
+  searchCriteria: {
+    date: string;
+    startTime: string;
+    endTime: string;
+    rescheduleBookingId?: string;
+  };
+}
 
+export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTypeResultCardProps) {
   const isReschedule = !!searchCriteria.rescheduleBookingId;
 
-  const params = new URLSearchParams();
-  params.set('newTypeOfRoomId', roomType.id);
-  params.set('start', searchCriteria.startDateTimeISO);
-  params.set('end', searchCriteria.endDateTimeISO);
+  const params = new URLSearchParams({
+    date: searchCriteria.date,
+    startTime: searchCriteria.startTime,
+    endTime: searchCriteria.endTime,
+  });
 
-  let confirmationUrl = '/dashboard/book';
+  let confirmationUrl: string;
+
   if (isReschedule) {
-    params.set('originalBookingId', searchCriteria.rescheduleBookingId);
+    params.set('originalBookingId', searchCriteria.rescheduleBookingId!);
+    params.set('newTypeOfRoomId', roomType.id);
     confirmationUrl = `/dashboard/reschedule/confirm`;
+  } else {
+    params.set('typeOfRoomId', roomType.id);
+    confirmationUrl = `/dashboard/book`;
   }
 
   const finalUrl = `${confirmationUrl}?${params.toString()}`;
-
 
   return (
     <div className={styles.card}>

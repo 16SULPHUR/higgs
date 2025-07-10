@@ -1,27 +1,28 @@
-import { api } from '@/lib/apiClient';
+import { api } from '@/lib/apiClient'; 
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import BookingConfirmationForm from '@/components/bookings/BookingConfirmationForm';
+import RescheduleConfirmation from '@/components/bookings/RescheduleConfirmation';
 import styles from '../../book/BookingConfirmationPage.module.css';
 import { getSession } from '@/lib/session';
 
 interface RescheduleConfirmPageProps {
-    searchParams?: {
-        originalBookingId?: string;
-        newTypeOfRoomId?: string;
-        start?: string;
-        end?: string;
-    };
+  searchParams?: {
+    originalBookingId?: string;
+    newTypeOfRoomId?: string;
+    date?: string;
+    startTime?: string;
+    endTime?: string;
+  };
 }
 
 export default async function RescheduleConfirmPage({ searchParams }: RescheduleConfirmPageProps) {
-    const { originalBookingId, newTypeOfRoomId, start, end } = searchParams ?? {};
+    const { originalBookingId, newTypeOfRoomId, date, startTime, endTime } = searchParams ?? {};
 
-    if (!originalBookingId || !newTypeOfRoomId || !start || !end) {
+    if (!originalBookingId || !newTypeOfRoomId || !date || !startTime || !endTime) {
         redirect('/dashboard/my-bookings');
     }
-
+    
     const session = await getSession();
     if (!session || !session.user) {
         redirect('/login');
@@ -33,21 +34,21 @@ export default async function RescheduleConfirmPage({ searchParams }: Reschedule
         api.get('/api/auth/me')
     ]);
 
-    const startDateTime = new Date(start);
-    const endDateTime = new Date(end);
+    const startDateTime = new Date(`${date}T${startTime}`);
+    const endDateTime = new Date(`${date}T${endTime}`);
 
     return (
         <div className={styles.container}>
-            <Link href={`/dashboard/reschedule/${originalBookingId}`} className={styles.backButton}>
+             <Link href={`/dashboard/reschedule/${originalBookingId}`} className={styles.backButton}>
                 <ArrowLeft size={16} />
                 <span>Back to Reschedule Search</span>
             </Link>
             <h1 className={styles.title}>Confirm Reschedule</h1>
             <p className={styles.description}>Review the new details and credit adjustment before confirming.</p>
             <div className={styles.card}>
-                <BookingConfirmationForm
+                <RescheduleConfirmation 
                     newRoomType={newRoomType}
-                    liveUserData={liveUserData}
+                    liveUserData={liveUserData} 
                     startDateTime={startDateTime}
                     endDateTime={endDateTime}
                     originalBooking={originalBooking}

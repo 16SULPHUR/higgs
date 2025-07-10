@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo, useTransition } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Search, Loader2 } from 'lucide-react';
 import { searchAvailableRoomTypesAction } from '@/actions/bookingActions';
 import { generate30MinSlots } from '@/lib/timeSlots';
@@ -8,7 +9,7 @@ import RoomTypeResultCard from './RoomTypeResultCard';
 import styles from './RoomSearchForm.module.css';
 
 const timeSlots = generate30MinSlots();
- 
+
 export default function RoomTypeSearchForm({ rescheduleBookingId }: { rescheduleBookingId?: string }) {
     const [criteria, setCriteria] = useState({
         date: new Date().toISOString().split('T')[0],
@@ -28,7 +29,7 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
         
         setCriteria(prev => {
             const newCriteria = { ...prev, [name]: value };
-             
+            
             if (name === 'startTime') {
                 const startIndex = timeSlots.findIndex(slot => slot.value === value);
                 const endIndex = timeSlots.findIndex(slot => slot.value === newCriteria.endTime);
@@ -66,15 +67,8 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
             
             if (result.success) {
                 setResults(result.data);
-                
-                // Create the data payload that the result cards will need
-                const startDateTime = new Date(`${criteria.date}T${criteria.startTime}`);
-                const endDateTime = new Date(`${criteria.date}T${criteria.endTime}`);
-
                 setExecutedSearchCriteria({
-                    startDateTimeISO: startDateTime.toISOString(),
-                    endDateTimeISO: endDateTime.toISOString(),
-                    // Pass the reschedule ID along if it exists
+                    ...criteria,
                     rescheduleBookingId: rescheduleBookingId,
                 });
             } else {
@@ -90,7 +84,6 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
                     <label htmlFor="date">Date</label>
                     <input type="date" id="date" name="date" value={criteria.date} onChange={handleChange} className={styles.input} min={new Date().toISOString().split('T')[0]}/>
                 </div>
-
                 <div className={styles.inputGroup}>
                     <label htmlFor="startTime">Start Time</label>
                     <select id="startTime" name="startTime" value={criteria.startTime} onChange={handleChange} className={styles.input}>
@@ -99,7 +92,6 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
                         ))}
                     </select>
                 </div>
-
                 <div className={styles.inputGroup}>
                     <label htmlFor="endTime">End Time</label>
                     <select id="endTime" name="endTime" value={criteria.endTime} onChange={handleChange} className={styles.input}>
@@ -108,12 +100,10 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
                         ))}
                     </select>
                 </div>
-
                 <div className={styles.inputGroup}>
                     <label htmlFor="capacity">People</label>
                     <input type="number" id="capacity" name="capacity" min="1" value={criteria.capacity} onChange={handleChange} className={styles.input} />
                 </div>
-
                 <button type="submit" className={styles.searchButton} disabled={isPending}>
                     <Search size={18} />
                     <span>{isPending ? 'Searching...' : 'Find Spaces'}</span>

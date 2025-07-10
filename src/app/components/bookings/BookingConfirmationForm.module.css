@@ -72,3 +72,5 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.rescheduleSubtext { color: hsl(var(--muted-foreground)); margin-top: -1.25rem; margin-bottom: 1.5rem; font-weight: 500; }
