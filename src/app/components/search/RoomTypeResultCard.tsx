@@ -3,8 +3,22 @@ import styles from './RoomResultCard.module.css';
 import Link from 'next/link';
 
 export default function RoomTypeResultCard({ roomType, searchCriteria }: { roomType: any, searchCriteria: any }) {
-    
-  const bookingUrl = `/dashboard/book?typeOfRoomId=${roomType.id}&date=${searchCriteria.date}&startTime=${searchCriteria.startTime}&endTime=${searchCriteria.endTime}`;
+
+  const isReschedule = !!searchCriteria.rescheduleBookingId;
+
+  const params = new URLSearchParams();
+  params.set('newTypeOfRoomId', roomType.id);
+  params.set('start', searchCriteria.startDateTimeISO);
+  params.set('end', searchCriteria.endDateTimeISO);
+
+  let confirmationUrl = '/dashboard/book';
+  if (isReschedule) {
+    params.set('originalBookingId', searchCriteria.rescheduleBookingId);
+    confirmationUrl = `/dashboard/reschedule/confirm`;
+  }
+
+  const finalUrl = `${confirmationUrl}?${params.toString()}`;
+
 
   return (
     <div className={styles.card}>
@@ -14,8 +28,8 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: { roomT
         <span className={styles.detailItem}><Users size={14} /> Up to {roomType.capacity} people</span>
         <span className={styles.detailItem}><DollarSign size={14} /> {roomType.credits_per_booking} credits per 30 min</span>
       </div>
-      <Link href={bookingUrl} className={styles.bookButton}>
-        Book This Space
+      <Link href={finalUrl} className={styles.bookButton}>
+        {isReschedule ? 'Select New Slot' : 'Book This Space'}
       </Link>
     </div>
   );

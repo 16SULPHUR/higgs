@@ -1,0 +1,37 @@
+.card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+.roomName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+.details {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+}
+.detailItem span {
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+.detailItem strong {
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+.bookingId {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground)) !important;
+}

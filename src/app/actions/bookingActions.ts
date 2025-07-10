@@ -3,6 +3,7 @@ import { URLSearchParams } from 'url';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { api } from '@/lib/apiClient';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 interface SearchCriteria {
     date: string;
@@ -31,21 +32,36 @@ interface BookingPayload {
 }
 
 export async function createBookingAction(payload: BookingPayload) {
-    try {
-        await api.post('/api/bookings', payload);
-        revalidateTag('bookings');
-    } catch (error: any) {
-        console.error("Create booking failed:", error.message);
-         
+    let newBooking;
+    try { 
+        newBooking = await api.post('/api/bookings', payload);
+ 
+    } catch (error: any) { 
         try {
-            const errorBody = JSON.parse(error.message); 
+            const errorBody = JSON.parse(error.message);
             return { success: false, message: errorBody.message || 'An unknown error occurred.' };
         } catch (parseError) {
-            
             return { success: false, message: 'Could not connect to the booking service. Please try again later.' };
         }
     }
-    redirect('/dashboard/my-bookings');
+
+    
+    if (!newBooking || !newBooking.id) {
+        return { success: false, message: "Booking confirmation failed: Invalid response from server." };
+    }
+
+    
+    revalidateTag('bookings');
+ 
+    try {
+        redirect(`/dashboard/booking-success/${newBooking.id}`);
+    } catch (error) { 
+        if (isRedirectError(error)) {
+            throw error;
+        }
+        
+        return { success: false, message: "Failed to navigate to the confirmation page." };
+    }
 }
 
 export async function cancelBookingAction(bookingId: string) {
@@ -66,4 +82,26 @@ export async function cancelBookingAction(bookingId: string) {
             return { success: false, message: 'A server error occurred while trying to cancel.' };
         }
     }
+}
+
+
+interface ReschedulePayload {
+    new_type_of_room_id: string;
+    new_start_time: string;
+    new_end_time: string;
+}
+
+export async function rescheduleBookingAction(originalBookingId: string, payload: ReschedulePayload) {
+    try {
+        await api.post(`/api/bookings/${originalBookingId}/reschedule`, payload);
+        revalidateTag('bookings');
+    } catch (error: any) {
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'An unknown error occurred.' };
+        } catch (e) {
+            return { success: false, message: 'Could not connect to the booking service.' };
+        }
+    }
+    redirect('/dashboard/my-bookings');
 }

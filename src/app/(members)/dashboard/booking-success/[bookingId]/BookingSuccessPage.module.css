@@ -1,0 +1,82 @@
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+.successHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.successIcon {
+  color: #22c55e;
+  margin: 0 auto 1rem;
+}
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.description {
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.5rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
+.card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.detailList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.ctaButton {
+  display: block;
+  text-align: center;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  padding: 0.75rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  text-decoration: none;
+}
+.divider {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1.5rem 0;
+}
+.guestListTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.guestList ul {
+  list-style-position: inside;
+}
+.guestList li {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  padding: 0.25rem 0;
+}
+.noGuestsText {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

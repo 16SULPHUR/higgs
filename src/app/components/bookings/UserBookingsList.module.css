@@ -109,3 +109,86 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.filterBar {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid hsl(var(--border));
+    padding-bottom: 0.5rem;
+}
+
+.filterButton {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.filterButton.activeFilter,
+.filterButton:hover {
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--foreground));
+}
+
+.emptyFilterState {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: hsl(var(--muted-foreground));
+    background-color: hsl(var(--card));
+    border: 1px dashed hsl(var(--border));
+    border-radius: var(--radius);
+}
+
+.actions {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem; /* Add gap for multiple buttons */
+    border-top: 1px solid hsl(var(--border));
+}
+
+.inviteButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 2px);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.inviteButton:hover {
+    background-color: hsl(var(--accent));
+}
+
+.inviteButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.modifyButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--secondary-foreground));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) - 2px);
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s;
+}
+.modifyButton:hover {
+    background-color: hsl(var(--accent));
+}
