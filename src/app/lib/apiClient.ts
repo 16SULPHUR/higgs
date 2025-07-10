@@ -40,9 +40,13 @@ async function apiClient(endpoint: string, options: FetchOptions = {}) {
     const response = await fetch(`${baseUrl}${endpoint}`, config);
 
     if (!response.ok) {
+        // Read the error response body from the backend
         const errorBody = await response.text();
-        console.error(`API Error: ${response.status} ${endpoint}`, errorBody);
-        throw new Error(`Failed to fetch ${endpoint}: ${response.statusText}`);
+        console.error(`[API Client Error] ${response.status} ${endpoint}:`, errorBody);
+        
+        // Throw an error where the message IS the error body.
+        // This makes the detailed message available to the Server Action that called it.
+        throw new Error(errorBody);
     }
 
     if (response.status === 204) {

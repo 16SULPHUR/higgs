@@ -35,17 +35,35 @@ export async function createBookingAction(payload: BookingPayload) {
         await api.post('/api/bookings', payload);
         revalidateTag('bookings');
     } catch (error: any) {
-        return { success: false, message: error.message || 'An unknown error occurred.' };
+        console.error("Create booking failed:", error.message);
+         
+        try {
+            const errorBody = JSON.parse(error.message); 
+            return { success: false, message: errorBody.message || 'An unknown error occurred.' };
+        } catch (parseError) {
+            
+            return { success: false, message: 'Could not connect to the booking service. Please try again later.' };
+        }
     }
     redirect('/dashboard/my-bookings');
 }
 
 export async function cancelBookingAction(bookingId: string) {
+    if (!bookingId) {
+        return { success: false, message: 'Booking ID is required.' };
+    }
     try {
-        await api.delete(`/api/bookings/${bookingId}`);
+        const result = await api.delete(`/api/bookings/${bookingId}`);
         revalidateTag('bookings');
-        return { success: true, message: 'Booking cancelled successfully.' };
+        return { success: true, message: result.message || 'Booking cancelled successfully.' };
     } catch (error: any) {
-        return { success: false, message: error.message || 'Failed to cancel booking.' };
+        console.error("Cancel booking failed:", error.message);
+ 
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'Failed to cancel booking.' };
+        } catch (parseError) {
+            return { success: false, message: 'A server error occurred while trying to cancel.' };
+        }
     }
 }
