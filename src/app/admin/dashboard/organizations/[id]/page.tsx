@@ -4,11 +4,15 @@ import { ArrowLeft, Building2, ShieldCheck, Star, Wallet } from 'lucide-react';
 import styles from './OrganizationDetailPage.module.css';
 import { use } from 'react';
 
-export default async function OrganizationDetailPage({params}: {params: Promise<{ id: string }>}) {
-// export default async function OrganizationDetailPage({params}: {params: { id: string }}) {
+interface OrganizationDetailPageProps {
+  params?: { 
+    id?: string; 
+  };
+}
 
-  const { id } = use(params);
-  // const { id } = params;
+export default async function OrganizationDetailPage({ params }: OrganizationDetailPageProps) {
+
+   const { id } = params ?? {};
   
   const org = await api.get(`/api/admin/orgs/${id}`, [`org-detail-${id}`]);
 

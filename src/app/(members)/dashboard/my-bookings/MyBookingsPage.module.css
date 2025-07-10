@@ -43,3 +43,11 @@
     font-weight: 500;
     text-decoration: none;
 }
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.5rem;
+}

@@ -2,9 +2,15 @@ import PlanForm from '@/components/plans/PlanForm';
 import { api } from '@/lib/apiClient';
 import { use } from 'react';
 
-export default async function EditPlanPage({params}: {params: Promise<{ id: string }>}) {
+interface EditPlanPageProps {
+  params?: { 
+    id?: string; 
+  };
+}
 
-  const { id } = use(params);
+export default async function EditPlanPage({params}: EditPlanPageProps) {
+
+  const { id } = params ?? {};
 
   const plan = await api.get(`/api/admin/plans/${id}`);
 
@@ -14,4 +20,4 @@ export default async function EditPlanPage({params}: {params: Promise<{ id: stri
       <PlanForm initialData={plan} />
     </div>
   );
-}
+} 

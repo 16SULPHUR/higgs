@@ -4,56 +4,29 @@ import MembersDashboardPage from './(members)/dashboard/page';
 import SignOutButton from './components/SignOutButton';
 // import { useEffect, useState } from 'react';
 import InstallPwaButton from './components/common/InstallPwaButton';
+import { InstallPrompt } from './components/common/InstallPrompt';
+import { getSession } from './lib/session';
+import { redirect } from 'next/navigation';
 
-// function InstallPrompt() {
-//   const [isIOS, setIsIOS] = useState(false)
-//   const [isStandalone, setIsStandalone] = useState(false)
+export default async function HomePage() {
 
-//   useEffect(() => {
-//     setIsIOS(
-//       /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
-//     )
-
-//     setIsStandalone(window.matchMedia('(display-mode: standalone)').matches)
-//   }, [])
-
-//   if (isStandalone) {
-//     return null // Don't show install button if already installed
-//   }
-
-//   return (
-//     <div>
-//       <h3>Install App</h3>
-//       <button>Add to Home Screen</button>
-//       {isIOS && (
-//         <p>
-//           To install this app on your iOS device, tap the share button
-//           <span role="img" aria-label="share icon">
-//             {' '}
-//             ⎋{' '}
-//           </span>
-//           and then "Add to Home Screen"
-//           <span role="img" aria-label="plus icon">
-//             {' '}
-//             ➕{' '}
-//           </span>.
-//         </p>
-//       )}
-//     </div>
-//   )
-// }
-
-
-
-export default function HomePage() {
+  const session = await getSession();
+  console.log(session)
+  if (!session) {
+    redirect('/login');
+  }
+  if (session?.user?.role === "SUPER_ADMIN") {
+    redirect('/admin/dashboard');
+  } else {
+    redirect('/dashboard')
+  }
 
   return (
     <div className={styles.pageContainer}>
-      {/* <Link href='/admin/dashboard'>Admin Dashboard</Link> */}
       <SignOutButton />
-      {/* <InstallPrompt /> */}
+      <InstallPrompt />
       <div className={styles.headerActions}>
-        <InstallPwaButton /> 
+        <InstallPwaButton />
       </div>
       <MembersDashboardPage />
     </div>

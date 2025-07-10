@@ -1,12 +1,18 @@
 import { api } from '@/lib/apiClient';
 import styles from './ManageMembers.module.css';
 import AddMemberForm from '@/components/orgs/AddMemberForm';
-import CurrentMembersList from '@/components/orgs/CurrentMembersList';  
+import CurrentMembersList from '@/components/orgs/CurrentMembersList';
 import { use } from 'react';
 
-export default async function ManageMembersPage({params}: {params: Promise<{ id: string }>}) {
+interface ManageMembersPageProps {
+  params?: {
+    id?: string;
+  };
+}
 
-  const { id } = use(params);
+export default async function ManageMembersPage({ params }: ManageMembersPageProps) {
+
+  const { id } = params ?? {};
 
   const [org, allUsers] = await Promise.all([
     api.get(`/api/admin/orgs/${id}`),
@@ -23,14 +29,14 @@ export default async function ManageMembersPage({params}: {params: Promise<{ id:
 
       <div className={styles.grid}>
         <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Add User to Organization</h2>
-            <AddMemberForm orgId={org.id} availableUsers={availableUsers} />
+          <h2 className={styles.cardTitle}>Add User to Organization</h2>
+          <AddMemberForm orgId={org.id} availableUsers={availableUsers} />
         </div>
 
         <div className={styles.card}>
-            <h2 className={styles.cardTitle}>Current Members ({currentMembers.length})</h2>
-            
-            <CurrentMembersList members={currentMembers} />
+          <h2 className={styles.cardTitle}>Current Members ({currentMembers.length})</h2>
+
+          <CurrentMembersList members={currentMembers} />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { api } from '@/lib/apiClient';
 import Link from 'next/link';
-import { PlusCircle } from 'lucide-react';
+import { ArrowLeft, PlusCircle } from 'lucide-react';
 import UserBookingsList from '@/components/bookings/UserBookingsList';
 import styles from './MyBookingsPage.module.css';
 
@@ -11,6 +11,7 @@ export default async function MyBookingsPage() {
 
     return (
         <div className={styles.container}>
+            <Link href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></Link>
             <div className={styles.header}>
                 <h1 className={styles.title}>My Bookings</h1>
                 <p className={styles.description}>View your past and upcoming meeting room reservations.</p>
