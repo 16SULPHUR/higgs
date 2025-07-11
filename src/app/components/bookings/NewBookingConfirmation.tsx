@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { createBookingAction } from '@/actions/bookingActions';
 import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin } from 'lucide-react';
 import styles from './BookingConfirmationForm.module.css';
+import { displayDate, displayTime } from '@/lib/displayDateAndTime';
 
 export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date }) {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
-    const [displayDate, setDisplayDate] = useState('');
-    const [displayTime, setDisplayTime] = useState('');
 
     const handleSubmit = () => {
         setError(null);
@@ -65,22 +64,12 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
         return `${year}-${month}-${day}T${hour}:${minute}:${second}+05:30`;
     }
 
-    useEffect(() => {
-        const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
-        const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
-
-        const dateFormatter = new Intl.DateTimeFormat('en-IN', {
+    function formatDateTimeInKolkata(date: Date, options: Intl.DateTimeFormatOptions): string {
+        return new Intl.DateTimeFormat('en-IN', {
             timeZone: 'Asia/Kolkata',
-            ...dateOptions,
-        });
-        const timeFormatter = new Intl.DateTimeFormat('en-IN', {
-            timeZone: 'Asia/Kolkata',
-            ...timeOptions,
-        });
-
-        setDisplayDate(dateFormatter.format(startDateTime));
-        setDisplayTime(`${timeFormatter.format(startDateTime)} - ${timeFormatter.format(endDateTime)}`);
-    }, [startDateTime, endDateTime]);
+            ...options
+        }).format(date);
+    }
 
 
 
@@ -100,9 +89,19 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
             <h2 className={styles.roomName}>{roomType.name}</h2>
 
             <div className={styles.detailGrid}>
-                <div className={styles.detailItem}><Calendar size={16} /><span>{displayDate}</span></div>
-                <div className={styles.detailItem}><Clock size={16} /><span>{displayTime} ({durationInMinutes} mins)</span></div>
-                <div className={styles.detailItem}><Users size={16} /><span>For up to {roomType.capacity} people</span></div>
+                <div className={styles.detailItem}>
+                    <Calendar size={16} />
+                    <span>{displayDate(startDateTime.toString())}</span>
+                </div>
+
+                <div className={styles.detailItem}>
+                    <Clock size={16} />
+                    <span>
+                        {displayTime(startDateTime.toString())} - {displayTime(endDateTime.toString())} ({durationInMinutes} mins)
+                    </span>
+                </div>
+                <div className={styles.detailItem}>
+                    <Users size={16} /><span>For up to {roomType.capacity} people</span></div>
                 <div className={styles.detailItem}><MapPin size={16} /><span>{roomType.location_name}</span></div>
             </div>
 
