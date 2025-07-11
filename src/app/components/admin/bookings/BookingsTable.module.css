@@ -1,0 +1,91 @@
+.table {
+    width: 100%;
+    min-width: 800px; /* Prevents content from squishing too much on small screens */
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid hsl(var(--border));
+    white-space: nowrap; /* Prevents text from wrapping awkwardly */
+}
+
+.table th {
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    background-color: hsl(var(--secondary) / 0.5);
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table tbody tr:hover {
+    background-color: hsl(var(--accent));
+}
+
+.subtext {
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+    margin-top: 2px;
+}
+
+.statusBadge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Status colors */
+.statusBadge.confirmed {
+    background-color: hsl(var(--primary) / 0.1);
+    color: hsl(var(--primary));
+}
+.statusBadge.cancelled {
+    background-color: hsl(var(--destructive) / 0.1);
+    color: hsl(var(--destructive));
+}
+.statusBadge.completed,
+.statusBadge.unknown {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+}
+
+.actions {
+    text-align: right;
+}
+
+.iconButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    border-radius: var(--radius);
+    color: hsl(var(--muted-foreground));
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+
+.iconButton:hover {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+}
+
+.iconButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.deleteButton:hover {
+    background-color: hsl(var(--destructive) / 0.1);
+    color: hsl(var(--destructive));
+}

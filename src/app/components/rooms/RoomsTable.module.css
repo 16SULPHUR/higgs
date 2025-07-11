@@ -65,3 +65,8 @@
   color: hsl(var(--primary));
   text-decoration: underline;
 }
+
+.subtext {
+    font-size: 0.8rem;
+    color: hsl(var(--muted-foreground));
+}

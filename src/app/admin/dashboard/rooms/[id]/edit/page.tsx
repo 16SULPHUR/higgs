@@ -6,14 +6,14 @@ import styles from '../../RoomsPage.module.css';
 import { use } from 'react';
 
 interface EditRoomPageProps {
-  params: Promise<{
-    id: string;
-  }>;
+  params?: {
+    id?: string;
+  };
 }
 
 export default async function EditRoomPage({ params }: EditRoomPageProps) {
-  
-  const {id} = use(params)
+
+  const { id } = params ?? {}
   const [room, roomTypes] = await Promise.all([
     api.get(`/api/admin/rooms/${id}`),
     api.get('/api/admin/room-types')
