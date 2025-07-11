@@ -3,17 +3,18 @@ import Link from 'next/link';
 import { CheckCircle, Users } from 'lucide-react';
 import InviteGuestForm from '@/components/bookings/InviteGuestForm';
 import styles from './BookingSuccessPage.module.css';
+import { displayDate, displayTime } from '@/lib/displayDateAndTime';
 
 export default async function BookingSuccessPage({ params }: { params?: { bookingId?: string } }) {
     const { bookingId } = params ?? {};
-    
+
     const [booking, invitedGuests] = await Promise.all([
         api.get(`/api/bookings/${bookingId}`),
         api.get(`/api/bookings/${bookingId}/invitations`, ['invitations'])
     ]);
 
-    const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full' });
-    const formatTime = (d: string) => new Date(d).toLocaleTimeString('en-US', { timeStyle: 'short' });
+    // const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full' });
+    // const formatTime = (d: string) => new Date(d).toLocaleTimeString('en-US', { timeStyle: 'short' });
 
     return (
         <div className={styles.container}>
@@ -28,8 +29,8 @@ export default async function BookingSuccessPage({ params }: { params?: { bookin
                     <h2 className={styles.cardTitle}>Your Booking Details</h2>
                     <div className={styles.detailList}>
                         <p><strong>Room:</strong> {booking.room_type_name} ({booking.room_instance_name})</p>
-                        <p><strong>Date:</strong> {formatDate(booking.start_time)}</p>
-                        <p><strong>Time:</strong> {formatTime(booking.start_time)} - {formatTime(booking.end_time)}</p>
+                        <p><strong>Date:</strong> {displayDate(booking.start_time)}</p>
+                        <p><strong>Time:</strong> {displayTime(booking.start_time)} - {displayTime(booking.end_time)}</p>
                     </div>
                     <Link href="/dashboard/my-bookings" className={styles.ctaButton}>View All My Bookings</Link>
                 </div>
