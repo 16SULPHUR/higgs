@@ -1,7 +1,7 @@
 import { api } from '@/lib/apiClient';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import styles from '../../../organizations/[id]/members/ManageMembers.module.css'; 
+import styles from '@/admin/dashboard/organizations/[id]/members/ManageMembers.module.css'; 
 import { use } from 'react';
 
 export default async function EventRegistrationsPage({params}: {params?: { id?: string }}) {

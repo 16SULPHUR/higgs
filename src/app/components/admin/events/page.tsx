@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { api } from '@/lib/apiClient';
-import styles from '../rooms/RoomsPage.module.css';
+import styles from '@/admin/dashboard/rooms/RoomsPage.module.css';
 import { Plus } from 'lucide-react';
 import EventList from '@/components/events/EventList';
 
