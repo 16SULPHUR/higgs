@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { createBookingAction } from '@/actions/bookingActions';
 import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin } from 'lucide-react';
-import styles from './BookingConfirmationForm.module.css'; 
+import styles from './BookingConfirmationForm.module.css';
 
 export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date }) {
     const [isPending, startTransition] = useTransition();
@@ -14,25 +14,63 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
         startTransition(async () => {
             const payload = {
                 type_of_room_id: roomType.id,
-                start_time: startDateTime.toISOString(),
-                end_time: endDateTime.toISOString()
+                start_time: formatDateInKolkata(startDateTime),
+                end_time: formatDateInKolkata(endDateTime),
             };
-            console.log("payload")
-            console.log(payload)
+
+            console.log("payload", payload);
+
             const result = await createBookingAction(payload);
-            
             if (result?.success === false) {
                 setError(result.message);
             }
         });
     };
- 
+
+
+    // function getLocalOffset(date: Date): string {
+    //     const offset = -date.getTimezoneOffset(); 
+    //     const sign = offset >= 0 ? "+" : "-";
+    //     const absOffset = Math.abs(offset);
+    //     const hours = String(Math.floor(absOffset / 60)).padStart(2, '0');
+    //     const minutes = String(absOffset % 60).padStart(2, '0');
+    //     return `${sign}${hours}:${minutes}`;
+    // }
+
+    function formatDateInKolkata(date: Date): string {
+        const formatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Kolkata',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hourCycle: 'h23',
+        });
+
+        const parts = formatter.formatToParts(date);
+        const get = (type: string) => parts.find(p => p.type === type)?.value;
+
+        const year = get('year');
+        const month = get('month');
+        const day = get('day');
+        const hour = get('hour');
+        const minute = get('minute');
+        const second = get('second');
+
+        // Hardcode the +05:30 offset because Asia/Kolkata is always UTC+05:30
+        return `${year}-${month}-${day}T${hour}:${minute}:${second}+05:30`;
+    }
+
+
+
     const durationInMinutes = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60);
     const totalCost = (durationInMinutes / 30) * roomType.credits_per_booking;
-    const userCredits = liveUserData.role === 'INDIVIDUAL_USER' 
-        ? liveUserData.individual_credits 
+    const userCredits = liveUserData.role === 'INDIVIDUAL_USER'
+        ? liveUserData.individual_credits
         : liveUserData.organization_credits_pool;
-    
+
     const hasEnoughCredits = userCredits >= totalCost;
 
     const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
@@ -41,7 +79,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
     return (
         <div className={styles.wrapper}>
             <h2 className={styles.roomName}>{roomType.name}</h2>
-            
+
             <div className={styles.detailGrid}>
                 <div className={styles.detailItem}><Calendar size={16} /><span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span></div>
                 <div className={styles.detailItem}><Clock size={16} /><span>{startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({durationInMinutes} mins)</span></div>
@@ -59,9 +97,9 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
                     <p className={styles.costValue}>{userCredits ?? 'N/A'}</p>
                 </div>
             </div>
-            
+
             {error && <p className={styles.error}>{error}</p>}
-            
+
             {!hasEnoughCredits && !error &&
                 <p className={styles.error}>You do not have enough credits for this booking.</p>
             }
