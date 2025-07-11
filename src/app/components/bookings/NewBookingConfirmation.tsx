@@ -84,6 +84,9 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
     const dateOptions: Intl.DateTimeFormatOptions = { weekday: 'long', month: 'long', day: 'numeric' };
     const timeOptions: Intl.DateTimeFormatOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
 
+    console.log(startDateTime, endDateTime)
+    console.log(displayTime(startDateTime.toString()), displayTime(endDateTime.toString()))
+
     return (
         <div className={styles.wrapper}>
             <h2 className={styles.roomName}>{roomType.name}</h2>
