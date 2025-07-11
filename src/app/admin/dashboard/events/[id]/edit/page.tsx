@@ -8,7 +8,7 @@ type PageProps = {
   };
 };
 
-export default async function EditEventPage({params}: {params: Promise<{ id: string }>}) {
+export default async function EditEventPage({params}: {params?: { id?: string }}) {
   const { id } = params;
 
   const event = await api.get(`/api/admin/events/${id}`);
