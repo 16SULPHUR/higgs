@@ -1,29 +1,26 @@
-import { getSession } from '@/lib/session';
+ 
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import SignOutButton from '@/components/SignOutButton';
-import InstallPwaButton from '@/components/common/InstallPwaButton';
 import { ArrowRight, BookUser, CalendarCheck, CalendarDays, Contact } from 'lucide-react';
 import styles from './Dashboard.module.css';
-import { InstallPrompt } from '@/components/common/InstallPrompt';
+import InstallPwaButton from "@/components/common/InstallPwaButton";
+import { getSession } from '@/lib/session';
 
 export default async function MembersDashboardPage() {
   const session = await getSession();
 
-  if (!session) { redirect('/login'); }
-  if (session?.user?.role === "SUPER_ADMIN") { redirect('/admin/dashboard'); }
+  if (!session?.user) { redirect('/login'); }
+  if (session.user.role === "SUPER_ADMIN") { redirect('/admin/dashboard'); }
 
   return (
-    <div className={styles.pageContainer}>
-      <InstallPrompt />
+    <div>
       <header className={styles.header}>
         <div className={styles.welcomeMessage}>
-          <h1 className={styles.welcomeTitle}>Welcome, {session?.user?.name}!</h1>
-          <p className={styles.welcomeSubtitle}>Your workspace dashboard is ready.</p>
+          <h1 className={styles.welcomeTitle}>Dashboard</h1>
+          <p className={styles.welcomeSubtitle}>Welcome back, {session.user.name}! Here are your quick actions.</p>
         </div>
         <div className={styles.headerActions}>
           <InstallPwaButton />
-          <SignOutButton />
         </div>
       </header>
       <main className={styles.mainContent}>

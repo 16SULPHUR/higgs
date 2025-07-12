@@ -7,6 +7,7 @@ export interface AdminSession {
     email: string;
     role: string;
     backendToken: string;
+    profile_picture?: string;
   }
 }
 

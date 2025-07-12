@@ -1,0 +1,11 @@
+.menuContainer { position: relative; }
+.avatarButton { background: none; border: none; padding: 0; border-radius: 50%; cursor: pointer; display: flex; }
+.avatar, .avatarFallback { width: 32px; height: 32px; border-radius: 50%; }
+.avatarFallback { background-color: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); display: flex; align-items: center; justify-content: center; font-weight: 500; }
+.dropdown { visibility: hidden; opacity: 0; position: absolute; top: calc(100% + 0.5rem); right: 0; background-color: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: var(--radius); width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: opacity 0.2s, visibility 0.2s; }
+.menuContainer:hover .dropdown { visibility: visible; opacity: 1; }
+.dropdownHeader { padding: 0.75rem 1rem; border-bottom: 1px solid hsl(var(--border)); }
+.dropdownName { font-weight: 600; font-size: 0.875rem; }
+.dropdownEmail { font-size: 0.8rem; color: hsl(var(--muted-foreground)); }
+.dropdownItem { display: flex; align-items: center; gap: 0.75rem; width: 100%; text-align: left; padding: 0.75rem 1rem; font-size: 0.875rem; background: none; border: none; cursor: pointer; text-decoration: none; color: inherit; }
+.dropdownItem:hover { background-color: hsl(var(--accent)); }
