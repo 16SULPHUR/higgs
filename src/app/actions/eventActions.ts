@@ -3,6 +3,7 @@
 import { revalidateTag } from 'next/cache';
 import { api } from '@/lib/apiClient';
 import { cookies } from 'next/headers';
+import { getSession } from '@/lib/session';
 
 interface EventFormData {
     title: string;
@@ -27,7 +28,7 @@ export async function saveEvent(formData: EventFormData, eventId?: string) {
             headers['Content-Type'] = 'application/json';
         }
 
-        const token = (await cookies()).get('auth-token')?.value;
+        const token = (await getSession())?.user?.backendToken;
         if (token) headers['Authorization'] = `Bearer ${token}`;
 
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
