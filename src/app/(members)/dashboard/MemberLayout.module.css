@@ -3,6 +3,7 @@
   min-height: 100vh;
 }
 .sidebar {
+  top: 0;
   width: 240px;
   background-color: hsl(var(--card));
   border-right: 1px solid hsl(var(--border));

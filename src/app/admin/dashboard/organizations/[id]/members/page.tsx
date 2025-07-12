@@ -16,7 +16,7 @@ export default async function ManageMembersPage({ params }: ManageMembersPagePro
 
   const [org, allUsers] = await Promise.all([
     api.get(`/api/admin/orgs/${id}`),
-    api.get('/api/admin/users', ['users'])
+    api.get('/api/admin/users/summary', ['users'])
   ]);
 
   const currentMembers = allUsers.filter((user: any) => user.organization_id === org.id);

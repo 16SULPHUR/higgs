@@ -1,0 +1,58 @@
+
+
+.header {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: hsl(var(--foreground));
+}
+
+.description {
+    margin-top: 0.25rem;
+    color: hsl(var(--muted-foreground));
+    max-width: 600px;
+}
+
+.headerActions {
+    /* This can be used to wrap buttons if needed, ensuring they align correctly */
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.addButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: none;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.addButton:hover {
+    background-color: hsl(var(--primary) / 0.9);
+}
+
+.tableContainer {
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    overflow-x: auto; /* CRITICAL: Ensures the table can be scrolled horizontally on small screens */
+}

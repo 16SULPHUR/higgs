@@ -8,7 +8,7 @@ export default async function OrgsPage() {
   const [orgs, plans, users] = await Promise.all([
     api.get('/api/admin/orgs', ['orgs']),
     api.get('/api/admin/plans', ['plans']),
-    api.get('/api/admin/users', ['users'])        
+    api.get('/api/admin/users/summary', ['users'])        
   ]);
 
   return (

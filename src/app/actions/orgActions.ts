@@ -33,7 +33,7 @@ export async function addUserToOrg(userId: string, orgId: string) {
     }
     try {
         
-        await api.patch(`/api/admin/users/${userId}`, { organization_id: orgId });
+        await api.patch(`/api/admin/users/add-to-org/${userId}`, { organization_id: orgId });
 
         revalidateTag('users');
         revalidateTag('orgs');
@@ -91,7 +91,7 @@ export async function removeUserFromOrg(userId: string) {
     
     try {
         
-        await api.delete(`/api/admin/users/remove/${userId}`);
+        await api.delete(`/api/admin/users/remove-from-org/${userId}`);
 
         
         revalidateTag('users');
@@ -102,5 +102,22 @@ export async function removeUserFromOrg(userId: string) {
     } catch (error) {
         console.error("Remove user from org failed:", error);
         return { success: false, message: 'An error occurred while removing the user.' };
+    }
+}
+ 
+export async function updateOrgProfileAction(formData: FormData) {
+    try {
+        console.log("formData")
+        console.log(formData)
+        const result = await api.patch('/api/orgs/profile', formData);
+        revalidateTag('org-profile');
+        return { success: true, message: 'Organization profile updated successfully!', data: result };
+    } catch (error: any) {
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'Failed to update profile.' };
+        } catch (e) {
+            return { success: false, message: 'A server error occurred.' };
+        }
     }
 }
