@@ -4,9 +4,10 @@ import { ArrowLeft } from 'lucide-react';
 import CreateUserForm from '@/components/admin/users/CreateUserForm';
 import styles from '../../../rooms/RoomsPage.module.css';
 
-export default async function EditUserPage({ params }: { params: { id: string } }) {
+export default async function EditUserPage({ params }: { params?: { id?: string } }) {
+  const { id } = params ?? {};
   const [user, organizations] = await Promise.all([
-      api.get(`/api/admin/users/${params.id}`),
+      api.get(`/api/admin/users/${id}`),
       api.get('/api/admin/orgs')
   ]);
 

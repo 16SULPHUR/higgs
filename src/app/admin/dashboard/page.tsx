@@ -1,11 +1,12 @@
-import { getAdminSession } from '@/lib/adminSession';
+
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import styles from './Dashboard.module.css';
 import { UserPlus, PlusCircle } from 'lucide-react';
+import { getSession } from '@/lib/session';
 
 export default async function AdminDashboardPage() {
-  const session = await getAdminSession();
+  const session = await getSession();
   if (!session) {
     redirect('/admin/login');
   }
@@ -15,7 +16,7 @@ export default async function AdminDashboardPage() {
       <header className={styles.header}>
         <div className={styles.welcomeMessage}>
           <h1 className={styles.welcomeTitle}>Admin Dashboard</h1>
-          <p className={styles.welcomeText}>Welcome back, {session?.name}! Here is the platform overview.</p>
+          <p className={styles.welcomeText}>Welcome back, {session?.user?.name}! Here is the platform overview.</p>
         </div>
       </header>
 

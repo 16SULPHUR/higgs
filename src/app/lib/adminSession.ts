@@ -1,28 +1,28 @@
-import { getServerSession } from 'next-auth/next';
-import { adminAuthOptions } from './adminAuth';
+// import { adminAuthOptions } from './adminAuth';
+// import { getServerSession } from 'next-auth/next'; 
 
 
 
-interface AdminSession {
-    name?: string;
-    email?: string;
-    user: {
-        id: string;
-        role: string;
+// interface AdminSession {
+//     name?: string;
+//     email?: string;
+//     user: {
+//         id: string;
+//         role: string;
         
-    };
-    backendToken: string;
-}
+//     };
+//     backendToken: string;
+// }
 
 
-export async function getAdminSession(): Promise<AdminSession | null> {
+// export async function getAdminSession(): Promise<AdminSession | null> {
  
     
-    const session = await getServerSession(adminAuthOptions);
+//     const session = await getServerSession(adminAuthOptions);
 
-    if (!session || !session.user) {
-        return null;
-    }
+//     if (!session || !session.user) {
+//         return null;
+//     }
 
-    return session as AdminSession;
-}
+//     return session as AdminSession;
+// }

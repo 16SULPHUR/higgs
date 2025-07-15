@@ -21,7 +21,7 @@ export default function AdminLoginForm() {
       redirect: false,
       email: email,
       password: password,
-      type: "ADMIN",
+      userType: "ADMIN",
       callbackUrl: "/admin/dashboard"
     });
 

@@ -9,7 +9,7 @@ type FetchOptions = {
 async function apiClient(endpoint: string, options: FetchOptions = {}) {
     console.log(`[API Client] Requesting: ${options.method || 'GET'} ${endpoint}`);
     const session = await getSession();
-    const token = session?.user?.backendToken;
+    const token = session?.backendToken;
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
     console.log("token===========================================================================")
@@ -46,6 +46,8 @@ async function apiClient(endpoint: string, options: FetchOptions = {}) {
     }
 
     console.log(`[API Client] Fetching URL: ${fullUrl}`);
+    console.log(`[API Client] METHOD: ${options.method || 'GET'}`);
+    console.log(`[API Client] HEADERS}`);
     console.log(`[API Client] With token: ${!!token}`);
 
     const response = await fetch(fullUrl, config);

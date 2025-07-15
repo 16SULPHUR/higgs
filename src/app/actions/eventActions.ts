@@ -2,55 +2,53 @@
 
 import { revalidateTag } from 'next/cache';
 import { api } from '@/lib/apiClient';
-import { cookies } from 'next/headers';
-import { getSession } from '@/lib/session';
 
-interface EventFormData {
-    title: string;
-    description: string;
-    date: string; 
-    eventImage?: string;
-}
-
-export async function saveEvent(formData: EventFormData, eventId?: string) {
+export async function saveEvent(formData: FormData, eventId?: string) {
     try {
-        let body: FormData | string;
-        let headers: any = {};
+        // Step 1: Extract all data from the incoming FormData from the client.
+        const title = formData.get('title') as string;
+        const description = formData.get('description') as string;
+        const date = formData.get('date') as string;
+        const imageFile = formData.get('eventImage') as File | null;
 
-        if (formData.eventImage) {
-            body = new FormData();
-            body.append('title', formData.title);
-            body.append('description', formData.description);
-            body.append('date', formData.date);
-            body.append('eventImage', formData.eventImage); 
-        } else {
-            body = JSON.stringify(formData);
-            headers['Content-Type'] = 'application/json';
+        // Step 2: Create a NEW FormData object for the Node.js environment.
+        const nodeFormData = new FormData();
+
+        // Step 3: Append the text fields to the new FormData.
+        nodeFormData.append('title', title);
+        nodeFormData.append('description', description);
+        nodeFormData.append('date', date);
+        
+        // Step 4: If an image file exists, convert it to a Buffer and then a Blob.
+        if (imageFile && imageFile.size > 0) {
+            // Convert the File's ArrayBuffer to a Node.js Buffer
+            const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
+            // Create a Blob from the Buffer, which Node's fetch can handle reliably.
+            const imageBlob = new Blob([imageBuffer], { type: imageFile.type });
+            // Append the blob to the new form data with the original filename.
+            nodeFormData.append('eventImage', imageBlob, imageFile.name);
         }
 
-        const token = (await getSession())?.user?.backendToken;
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+        console.log("nodeFormData=========")
+        console.log(nodeFormData)
 
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-        const endpoint = eventId ? `/api/admin/events/${eventId}` : '/api/admin/events';
-        const method = eventId ? 'PATCH' : 'POST';
-
-        const response = await fetch(`${baseUrl}${endpoint}`, {
-            method,
-            headers,
-            body,
-        });
-
-        if (!response.ok) {
-            const errorBody = await response.text();
-            throw new Error(errorBody);
+        // Step 5: Pass the new, Node.js-compatible FormData to the apiClient.
+        if (eventId) {
+            await api.patch(`/api/admin/events/${eventId}`, nodeFormData);
+        } else {
+            await api.post('/api/admin/events', nodeFormData);
         }
 
         revalidateTag('events');
         return { success: true, message: `Event ${eventId ? 'updated' : 'created'} successfully.` };
-    } catch (error) {
-        console.error("Save event failed:", error);
-        return { success: false, message: 'Failed to save event. Please check the fields.' };
+
+    } catch (error: any) {
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'Failed to save event.' };
+        } catch (e) {
+            return { success: false, message: 'A server error occurred.' };
+        }
     }
 }
 
@@ -59,8 +57,7 @@ export async function deleteEvent(eventId: string) {
         await api.delete(`/api/admin/events/${eventId}`);
         revalidateTag('events');
         return { success: true };
-    } catch (error) {
-        console.error("Delete event failed:", error);
+    } catch (error: any) {
         return { success: false, message: 'Failed to delete event.' };
     }
 }

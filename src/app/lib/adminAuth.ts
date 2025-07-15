@@ -76,9 +76,10 @@
 // export const {
 //   handlers: { GET, POST },
   
-//   signIn: adminSignIn,     
+//   signIn: adminSignIn, 
   
 //   signOut: adminSignOut,
-//   auth: adminAuth,        
+
+//   auth: adminAuth,
   
 // } = NextAuth(adminAuthOptions);

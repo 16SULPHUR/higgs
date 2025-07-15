@@ -21,7 +21,7 @@ export default function LoginForm() {
       redirect: false,
       email: email,
       password: password,
-      type: "USER",
+      userType: "USER",
       callbackUrl: "/dashboard"
     });
 

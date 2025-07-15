@@ -1,5 +1,6 @@
 import EventForm from '@/components/events/EventForm';
 import { api } from '@/lib/apiClient';
+import { SessionProvider } from 'next-auth/react';
 import { use } from 'react';
 
 type PageProps = {
@@ -17,8 +18,8 @@ export default async function EditEventPage({ params }: { params?: { id?: string
     <div>
       <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '2rem' }}>
         Edit "{event.title}"
-      </h1>
-      <EventForm initialData={event} />
+      </h1> 
+        <EventForm initialData={event} /> 
     </div>
   );
 }
