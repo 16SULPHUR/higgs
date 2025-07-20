@@ -5,19 +5,20 @@ import styles from './OrganizationDetailPage.module.css';
 import CancelPlanButton from '@/components/orgs/CancelPlanButton';
 
 interface OrgDetailPageProps {
-  params: { 
-    id: string; 
+  params?: { 
+    id?: string; 
   };
 }
 
 export default async function OrganizationDetailPage({ params }: OrgDetailPageProps) {
-  const { id } = params;
+  const { id } = params ?? {};
+
   const org = await api.get(`/api/admin/orgs/${id}`, [`org-detail-${id}`]);
   const hasPlan = !!org.plan_name;
 
   return (
     <div>
-      <div className={styles.header}>
+      <div className={styles.header}> 
         <Link href="/admin/dashboard/organizations" className={styles.backButton}>
           <ArrowLeft size={16} />
           <span>Back to Organizations</span>

@@ -3,10 +3,11 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import UpdateStatusForm from '@/components/admin/tickets/UpdateStatusForm';
 import styles from './AdminTicketDetailPage.module.css';
+import { displayDate, displayTime } from '@/lib/displayDateAndTime';
 
-export default async function AdminTicketDetailPage({ params }: { params: { ticketId: number } }) {
-    const ticket = await api.get(`/api/admin/support-tickets/${params.ticketId}`, [`admin-ticket-${params.ticketId}`]);
-    const formatDate = (d: string) => new Date(d).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
+export default async function AdminTicketDetailPage({ params }: { params?: { ticketId?: number } }) {
+    const { ticketId } = params ?? {};
+    const ticket = await api.get(`/api/admin/support-tickets/${ticketId}`, [`admin-ticket-${ticketId}`]);
 
     return (
         <div>
@@ -14,7 +15,7 @@ export default async function AdminTicketDetailPage({ params }: { params: { tick
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.subject}>Ticket #{ticket.id}: {ticket.subject}</h1>
-                    <p className={styles.meta}>From: {ticket.user_name} ({ticket.user_email}) on {formatDate(ticket.created_at)}</p>
+                    <p className={styles.meta}>From: {ticket.user_name} ({ticket.user_email}) on {displayDate(ticket.created_at)} at {displayTime(ticket.created_at)}</p>
                 </div>
             </div>
             <div className={styles.grid}>
