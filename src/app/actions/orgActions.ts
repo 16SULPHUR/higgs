@@ -121,3 +121,22 @@ export async function updateOrgProfileAction(formData: FormData) {
         }
     }
 }
+
+export async function cancelOrgSubscriptionAction(orgId: string) {
+    if (!orgId) {
+        return { success: false, message: 'Organization ID is required.' };
+    }
+    try {
+        const result = await api.delete(`/api/admin/orgs/${orgId}/plan`);
+        revalidateTag('orgs');
+        revalidateTag(`org-detail-${orgId}`);
+        return { success: true, message: result.message || 'Plan cancelled successfully.' };
+    } catch (error: any) {
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'Failed to cancel plan.' };
+        } catch (e) {
+            return { success: false, message: 'A server error occurred.' };
+        }
+    }
+}

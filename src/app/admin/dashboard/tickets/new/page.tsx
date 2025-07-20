@@ -1,0 +1,28 @@
+import { api } from '@/lib/apiClient';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import CreateTicketForUserForm from '@/components/admin/tickets/CreateTicketForUserForm';
+import styles from '../AdminTicketsPage.module.css'; // Reusing page styles
+
+export default async function NewTicketForUserPage() {
+  // Fetch all users so the admin can select one
+  const users = await api.get('/api/admin/users');
+
+  return (
+    <div>
+      <div className={styles.header}>
+        <div>
+          <Link href="/admin/dashboard/tickets" className={styles.backButton}>
+            <ArrowLeft size={16} />
+            <span>Back to All Tickets</span>
+          </Link>
+          <h1 className={styles.title}>Create Ticket for User</h1>
+          <p className={styles.description}>
+            Open a new support ticket on behalf of a specific user.
+          </p>
+        </div>
+      </div>
+      <CreateTicketForUserForm users={users} />
+    </div>
+  );
+}

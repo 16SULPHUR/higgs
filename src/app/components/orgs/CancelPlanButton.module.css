@@ -1,0 +1,25 @@
+.cancelButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    background-color: hsl(var(--destructive));
+    color: hsl(var(--destructive-foreground));
+    border: none;
+    border-radius: calc(var(--radius) - 2px);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.cancelButton:hover {
+    background-color: hsl(var(--destructive) / 0.9);
+}
+
+.cancelButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

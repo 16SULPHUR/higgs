@@ -1,0 +1,76 @@
+.listContainer {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+.listHeader {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  padding: 0.75rem 1.5rem;
+  background-color: hsl(var(--secondary) / 0.5);
+  border-bottom: 1px solid hsl(var(--border));
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+.ticketItem {
+  display: grid;
+  grid-template-columns: 3fr 1fr 1fr;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s;
+}
+.ticketItem:last-child {
+  border-bottom: none;
+}
+.ticketItem:hover {
+  background-color: hsl(var(--accent));
+}
+.subject {
+  font-weight: 600;
+}
+.ticketId {
+  color: hsl(var(--muted-foreground));
+  font-weight: 400;
+}
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.statusBadge.open {
+  background-color: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+}
+.statusBadge.closed {
+  background-color: hsl(var(--accent));
+  color: hsl(var(--accent-foreground));
+}
+.lastUpdated {
+  text-align: right;
+  color: hsl(var(--muted-foreground));
+}
+.emptyState {
+  padding: 3rem;
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+}
+.newTicketButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  padding: 0 1rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  text-decoration: none;
+}

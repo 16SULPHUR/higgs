@@ -1,0 +1,47 @@
+.form {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.inputGroup label {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+.input {
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--secondary) / 0.5);
+}
+.error {
+  color: hsl(var(--destructive));
+  font-size: 0.875rem;
+  text-align: center;
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.button {
+  height: 2.75rem;
+  padding: 0 1.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+}
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

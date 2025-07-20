@@ -1,6 +1,6 @@
 import { ReactNode, Suspense } from 'react';
 import Link from 'next/link';
-import { BookUser, CalendarCheck, CalendarDays, Contact, User, Home, Loader2 } from 'lucide-react';
+import { BookUser, CalendarCheck, CalendarDays, Contact, User, Home, Loader2, LifeBuoy } from 'lucide-react';
 import UserProfileMenu from '@/components/common/UserProfileMenu';
 import styles from './MemberLayout.module.css';
 
@@ -17,6 +17,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
                     <Link href="/dashboard/my-bookings" className={styles.navLink}><BookUser size={18} /><span>My Bookings</span></Link>
                     <Link href="/dashboard/events" className={styles.navLink}><CalendarDays size={18} /><span>Events</span></Link>
                     <Link href="/dashboard/member-book" className={styles.navLink}><Contact size={18} /><span>Member Directory</span></Link>
+                    <Link href="/dashboard/support" className={styles.navLink}><LifeBuoy size={18} /><span>Support</span></Link>
                 </nav>
             </aside>
             <div className={styles.mainContentWrapper}>

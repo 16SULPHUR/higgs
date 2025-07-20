@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 import Link from 'next/link';
-import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, SquareStack, Users } from 'lucide-react';
+import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, SquareStack, Users } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import MobileMenuButton from '@/components/MobileMenuButton';
 import styles from './DashboardLayout.module.css';
@@ -30,6 +30,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         <Link href="/admin/dashboard/room-types" className={styles.navLink} onClick={closeSidebar}><SquareStack size={18} /><span>Room Types</span></Link>
                         <Link href="/admin/dashboard/rooms" className={styles.navLink} onClick={closeSidebar}><DoorOpen size={18} /><span>Room Instances</span></Link>
                         <Link href="/admin/dashboard/events" className={styles.navLink} onClick={closeSidebar}><CalendarDays size={18} /><span>Events</span></Link>
+                        <Link href="/admin/dashboard/tickets" className={styles.navLink} onClick={closeSidebar}>
+                            <LifeBuoy size={18} />
+                            <span>Support Tickets</span>
+                        </Link>
                     </nav>
                 </aside>
                 <div className={styles.mainContentWrapper}>
