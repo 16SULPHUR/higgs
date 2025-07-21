@@ -39,10 +39,10 @@ export default async function RescheduleConfirmPage({ searchParams }: Reschedule
 
     return (
         <div className={styles.container}>
-             <Link href={`/dashboard/reschedule/${originalBookingId}`} className={styles.backButton}>
+             <a href={`/dashboard/reschedule/${originalBookingId}`} className={styles.backButton}>
                 <ArrowLeft size={16} />
                 <span>Back to Reschedule Search</span>
-            </Link>
+            </a>
             <h1 className={styles.title}>Confirm Reschedule</h1>
             <p className={styles.description}>Review the new details and credit adjustment before confirming.</p>
             <div className={styles.card}>

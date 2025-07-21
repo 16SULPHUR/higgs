@@ -22,18 +22,18 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                         <h1 className={styles.logo}>Higgs Admin</h1>
                     </div>
                     <nav className={styles.nav}>
-                        <Link href="/admin/dashboard" className={styles.navLink} onClick={closeSidebar}><LayoutDashboard size={18} /><span>Overview</span></Link>
-                        <Link href="/admin/dashboard/bookings" className={styles.navLink} onClick={closeSidebar}><ClipboardCheck size={18} /><span>Bookings</span></Link>
-                        <Link href="/admin/dashboard/users" className={styles.navLink} onClick={closeSidebar}><Users size={18} /><span>Users</span></Link>
-                        <Link href="/admin/dashboard/organizations" className={styles.navLink} onClick={closeSidebar}><Building2 size={18} /><span>Organizations</span></Link>
-                        <Link href="/admin/dashboard/plans" className={styles.navLink} onClick={closeSidebar}><ClipboardList size={18} /><span>Plans</span></Link>
-                        <Link href="/admin/dashboard/room-types" className={styles.navLink} onClick={closeSidebar}><SquareStack size={18} /><span>Room Types</span></Link>
-                        <Link href="/admin/dashboard/rooms" className={styles.navLink} onClick={closeSidebar}><DoorOpen size={18} /><span>Room Instances</span></Link>
-                        <Link href="/admin/dashboard/events" className={styles.navLink} onClick={closeSidebar}><CalendarDays size={18} /><span>Events</span></Link>
-                        <Link href="/admin/dashboard/tickets" className={styles.navLink} onClick={closeSidebar}>
+                        <a href="/admin/dashboard" className={styles.navLink} onClick={closeSidebar}><LayoutDashboard size={18} /><span>Overview</span></a>
+                        <a href="/admin/dashboard/bookings" className={styles.navLink} onClick={closeSidebar}><ClipboardCheck size={18} /><span>Bookings</span></a>
+                        <a href="/admin/dashboard/users" className={styles.navLink} onClick={closeSidebar}><Users size={18} /><span>Users</span></a>
+                        <a href="/admin/dashboard/organizations" className={styles.navLink} onClick={closeSidebar}><Building2 size={18} /><span>Organizations</span></a>
+                        <a href="/admin/dashboard/plans" className={styles.navLink} onClick={closeSidebar}><ClipboardList size={18} /><span>Plans</span></a>
+                        <a href="/admin/dashboard/room-types" className={styles.navLink} onClick={closeSidebar}><SquareStack size={18} /><span>Room Types</span></a>
+                        <a href="/admin/dashboard/rooms" className={styles.navLink} onClick={closeSidebar}><DoorOpen size={18} /><span>Room Instances</span></a>
+                        <a href="/admin/dashboard/events" className={styles.navLink} onClick={closeSidebar}><CalendarDays size={18} /><span>Events</span></a>
+                        <a href="/admin/dashboard/tickets" className={styles.navLink} onClick={closeSidebar}>
                             <LifeBuoy size={18} />
                             <span>Support Tickets</span>
-                        </Link>
+                        </a>
                     </nav>
                 </aside>
                 <div className={styles.mainContentWrapper}>

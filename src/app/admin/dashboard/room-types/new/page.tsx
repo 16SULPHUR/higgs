@@ -12,10 +12,10 @@ export default async function NewRoomTypePage() {
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/room-types" className={styles.backButton}>
+          <a href="/admin/dashboard/room-types" className={styles.backButton}>
             <ArrowLeft size={16} />
             <span>Back to Room Types</span>
-          </Link>
+          </a>
           <h1 className={styles.title}>Create New Room Type</h1>
           <p className={styles.description}>
             Define a new blueprint for rooms, including its capacity, cost, and location.

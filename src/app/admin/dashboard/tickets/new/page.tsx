@@ -12,10 +12,10 @@ export default async function NewTicketForUserPage() {
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/tickets" className={styles.backButton}>
+          <a href="/admin/dashboard/tickets" className={styles.backButton}>
             <ArrowLeft size={16} />
             <span>Back to All Tickets</span>
-          </Link>
+          </a>
           <h1 className={styles.title}>Create Ticket for User</h1>
           <p className={styles.description}>
             Open a new support ticket on behalf of a specific user.

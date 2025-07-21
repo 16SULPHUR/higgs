@@ -58,9 +58,9 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
                 <tbody>
                     {organizations.map((org) => (
                         <tr key={org.id}>
-                            <td> <Link href={`/admin/dashboard/organizations/${org.id}`} className={styles.nameLink}>
+                            <td> <a href={`/admin/dashboard/organizations/${org.id}`} className={styles.nameLink}>
                                 {org.name}
-                            </Link></td>
+                            </a></td>
                             <td>{findPlanNameById(plans, org.plan_id)}</td>
 
                             <td>{org.admin_name || <span className={styles.muted}>Not Assigned</span>}</td>
@@ -69,15 +69,15 @@ export default function OrgsTable({ organizations, plans, users }: { organizatio
                                 <button onClick={() => openCreditsModal(org)} className={styles.iconButton} title="Assign Credits">
                                     <CircleDollarSign size={16} />
                                 </button>
-                                <Link href={`/admin/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members">
+                                <a href={`/admin/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members">
                                     <Users size={16} />
-                                </Link>
+                                </a>
                                 <button onClick={() => openSetAdminModal(org.id)} className={styles.iconButton} title="Set Admin">
                                     <UserCog size={16} />
                                 </button>
-                                <Link href={`/admin/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit">
+                                <a href={`/admin/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit">
                                     <Pencil size={16} />
-                                </Link>
+                                </a>
                                 <button onClick={() => handleDelete(org.id)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete">
                                     <Trash2 size={16} />
                                 </button>

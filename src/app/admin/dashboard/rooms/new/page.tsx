@@ -12,10 +12,10 @@ export default async function NewRoomPage() {
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/rooms" className={styles.backButton}>
+          <a href="/admin/dashboard/rooms" className={styles.backButton}>
             <ArrowLeft size={16} />
             <span>Back to Room Instances</span>
-          </Link>
+          </a>
           <h1 className={styles.title}>Create New Room Instance</h1>
           <p className={styles.description}>
             Create a physical, bookable room based on a predefined room type.

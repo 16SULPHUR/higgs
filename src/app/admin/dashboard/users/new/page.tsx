@@ -11,10 +11,10 @@ export default async function NewUserPage() {
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/users" className={styles.backButton}>
+          <a href="/admin/dashboard/users" className={styles.backButton}>
             <ArrowLeft size={16} />
             <span>Back to Users</span>
-          </Link>
+          </a>
           <h1 className={styles.title}>Create New User</h1>
           <p className={styles.description}>
             Create a new user account and send them a welcome email with their login credentials.

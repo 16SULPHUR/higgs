@@ -39,9 +39,9 @@ export default function BookingCard({ booking }: { booking: any }) {
             <div className={styles.card}>
                 {/* {isModifiable && (
                     <div className={styles.actions}>
-                        <Link href={`/dashboard/find-room?rescheduleBookingId=${booking.id}`} className={styles.modifyButton}>
+                        <a href={`/dashboard/find-room?rescheduleBookingId=${booking.id}`} className={styles.modifyButton}>
                             <Pencil size={16} /><span>Modify</span>
-                        </Link>
+                        </a>
 
                         <button onClick={() => setIsModalOpen(true)} className={styles.inviteButton} disabled={isPending}>
                             <UserPlus size={16} /><span>Invite Guest</span>
@@ -77,9 +77,9 @@ export default function BookingCard({ booking }: { booking: any }) {
 
                 {isModifiable && (
                     <div className={styles.actions}>
-                        <Link href={rescheduleUrl} className={styles.modifyButton}>
+                        <a href={rescheduleUrl} className={styles.modifyButton}>
                             <Pencil size={16} /><span>Modify</span>
-                        </Link>
+                        </a>
 
                         {/* <button onClick={() => setIsModalOpen(true)} className={styles.inviteButton} disabled={isPending}>
                             <UserPlus size={16} /><span>Invite Guest</span>

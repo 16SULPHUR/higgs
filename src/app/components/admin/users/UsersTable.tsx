@@ -62,7 +62,7 @@ export default function UsersTable({ users }: { users: any[] }) {
                             <button onClick={() => handleToggleStatus(user)} className={styles.iconButton} title={user.is_active ? 'Deactivate' : 'Activate'} disabled={isPending}>
                                 {user.is_active ? <UserX size={16} /> : <UserCheck size={16} />}
                             </button>
-                            <Link href={`/admin/dashboard/users/${user.id}/edit`} className={styles.iconButton} title="Edit User"><Pencil size={16} /></Link>
+                            <a href={`/admin/dashboard/users/${user.id}/edit`} className={styles.iconButton} title="Edit User"><Pencil size={16} /></a>
                             <button onClick={() => handleDelete(user)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete User" disabled={isPending}><Trash2 size={16} /></button>
                         </td>
                     </tr>

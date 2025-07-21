@@ -16,10 +16,10 @@ export default async function EventRegistrationsPage({ params }: { params?: { id
 
   return (
     <div>
-      <Link href="/admin/dashboard/events" className={styles.backButton} style={{ marginBottom: '1.5rem', display: 'inline-flex' }}>
+      <a href="/admin/dashboard/events" className={styles.backButton} style={{ marginBottom: '1.5rem', display: 'inline-flex' }}>
         <ArrowLeft size={16} />
         <span>Back to Events</span>
-      </Link>
+      </a>
       <h1 className={styles.title}>Registrations for "{event.title}"</h1>
       <p className={styles.description}>A total of {registrations.length} users have registered for this event.</p>
 

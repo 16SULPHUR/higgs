@@ -14,10 +14,10 @@ export default async function AdminUsersPage() {
             <h1 className={styles.title}>Manage Users</h1>
             <p className={styles.description}>View, edit, and manage all user accounts.</p>
         </div>
-        <Link href="/admin/dashboard/users/new" className={styles.addButton}>
+        <a href="/admin/dashboard/users/new" className={styles.addButton}>
             <Plus size={16} />
             <span>Add New User</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <UsersTable users={users} />

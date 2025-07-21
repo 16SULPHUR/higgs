@@ -14,10 +14,10 @@ export default async function EventsPage() {
           <h1 className={styles.title}>Community Events</h1>
           <p className={styles.description}>Create and manage events for your members.</p>
         </div>
-        <Link href="/admin/dashboard/events/new" className={styles.addButton}>
+        <a href="/admin/dashboard/events/new" className={styles.addButton}>
           <Plus size={16} />
           <span>Create Event</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <EventList  events={events}/>

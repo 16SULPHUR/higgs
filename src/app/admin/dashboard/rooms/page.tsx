@@ -14,10 +14,10 @@ export default async function RoomsInstancesPage() {
             <h1 className={styles.title}>Room Instances</h1>
             <p className={styles.description}>Manage individual physical rooms available for booking.</p>
         </div>
-        <Link href="/admin/dashboard/rooms/new" className={styles.addButton}>
+        <a href="/admin/dashboard/rooms/new" className={styles.addButton}>
             <Plus size={16} />
             <span>Add New Room</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <RoomsTable rooms={rooms} />

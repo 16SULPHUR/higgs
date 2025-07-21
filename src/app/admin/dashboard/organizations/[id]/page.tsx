@@ -19,10 +19,10 @@ export default async function OrganizationDetailPage({ params }: OrgDetailPagePr
   return (
     <div>
       <div className={styles.header}> 
-        <Link href="/admin/dashboard/organizations" className={styles.backButton}>
+        <a href="/admin/dashboard/organizations" className={styles.backButton}>
           <ArrowLeft size={16} />
           <span>Back to Organizations</span>
-        </Link>
+        </a>
         {hasPlan && (
           <CancelPlanButton orgId={org.id} orgName={org.name} />
         )}

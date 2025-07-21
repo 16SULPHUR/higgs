@@ -6,7 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 export default function FindRoomPage() {
   return (
     <div className={styles.container}>
-      <Link href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></Link>
+      <a href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></a>
       <div className={styles.header}>
         <h1 className={styles.title}>Find a Space</h1>
         <p className={styles.description}>

@@ -9,10 +9,10 @@ export default async function UserEventsPage() {
 
   return (
     <div className={styles.container}>
-      <Link href="/dashboard" className={styles.backButton}>
+      <a href="/dashboard" className={styles.backButton}>
         <ArrowLeft size={16} />
         <span>Back to Dashboard</span>
-      </Link>
+      </a>
       <div className={styles.header}>
         <h1 className={styles.title}>Community Events</h1>
         <p className={styles.description}>

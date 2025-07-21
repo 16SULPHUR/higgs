@@ -48,10 +48,10 @@ export default async function BookingConfirmationPage({ searchParams }: BookingP
 
     return (
         <div className={styles.container}>
-            <Link href="/dashboard/find-room" className={styles.backButton}>
+            <a href="/dashboard/find-room" className={styles.backButton}>
                 <ArrowLeft size={16} />
                 <span>Back to Search</span>
-            </Link>
+            </a>
             <h1 className={styles.title}>Confirm Your Booking</h1>
             <p className={styles.description}>Please review the details below before confirming.</p>
             <div className={styles.card}>

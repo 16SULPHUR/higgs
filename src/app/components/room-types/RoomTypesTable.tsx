@@ -28,7 +28,7 @@ export default function RoomTypesTable({ roomTypes, locationMap }: { roomTypes: 
                         <td>{type.capacity}</td>
                         <td>{type.credits_per_booking}</td>
                         <td className={styles.actions}>
-                            <Link href={`/admin/dashboard/room-types/${type.id}/edit`} className={styles.iconButton}><Pencil size={16} /></Link>
+                            <a href={`/admin/dashboard/room-types/${type.id}/edit`} className={styles.iconButton}><Pencil size={16} /></a>
                             <button onClick={() => handleDelete(type.id, type.name)} className={`${styles.iconButton} ${styles.deleteButton}`}><Trash2 size={16} /></button>
                         </td>
                     </tr>

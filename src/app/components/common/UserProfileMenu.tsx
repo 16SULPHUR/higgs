@@ -33,7 +33,7 @@ export default async function UserProfileMenu() {
                     <p className={styles.dropdownName}>{session.user.name}</p>
                     <p className={styles.dropdownEmail}>{session.user.email}</p>
                 </div>
-                <Link href="/dashboard/profile" className={styles.dropdownItem}><User size={14} /> My Profile</Link>
+                <a href="/dashboard/profile" className={styles.dropdownItem}><User size={14} /> My Profile</a>
                 <SignOutButton />
             </div>
         </div>

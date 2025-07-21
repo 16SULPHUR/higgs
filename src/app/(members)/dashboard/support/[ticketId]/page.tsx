@@ -11,7 +11,7 @@ export default async function TicketDetailPage({ params }: { params?: { ticketId
 
     return (
         <div className={styles.container}>
-            <Link href="/dashboard/support" className={styles.backButton}><ArrowLeft size={16} />Back to Tickets</Link>
+            <a href="/dashboard/support" className={styles.backButton}><ArrowLeft size={16} />Back to Tickets</a>
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.subject}>#{ticket.id}: {ticket.subject}</h1>

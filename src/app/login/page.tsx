@@ -12,7 +12,7 @@ export default async function LoginPage() {
 
   return (
     <main className={styles.container}>
-      <Link href='/admin/login' >Admin Login</Link>
+      <a href='/admin/login' >Admin Login</a>
       <LoginForm />
     </main>
   );

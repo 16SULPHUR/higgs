@@ -11,7 +11,7 @@ export default async function MyBookingsPage() {
 
     return (
         <div className={styles.container}>
-            <Link href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></Link>
+            <a href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></a>
             <div className={styles.header}>
                 <h1 className={styles.title}>My Bookings</h1>
                 <p className={styles.description}>View your past and upcoming meeting room reservations.</p>
@@ -23,10 +23,10 @@ export default async function MyBookingsPage() {
                 <div className={styles.emptyState}>
                     <h2>You have no bookings yet.</h2>
                     <p>Ready to find your next workspace?</p>
-                    <Link href="/dashboard/find-room" className={styles.ctaButton}>
+                    <a href="/dashboard/find-room" className={styles.ctaButton}>
                         <PlusCircle size={18} />
                         Book a Room
-                    </Link>
+                    </a>
                 </div>
             )}
         </div>

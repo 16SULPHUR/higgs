@@ -38,7 +38,7 @@ export default async function MembersDashboardPage() {
         <div className={styles.actionGrid}>
           {/* --- THIS IS THE NEW CONDITIONAL CARD --- */}
           {isOrgAdmin && (
-            <Link href="/dashboard/manage-organization" className={styles.actionCard}>
+            <a href="/dashboard/manage-organization" className={styles.actionCard}>
               <div className={styles.cardIconWrapper}>
                 <Building size={28} className={styles.cardIcon} />
               </div>
@@ -47,14 +47,14 @@ export default async function MembersDashboardPage() {
                 <p className={styles.cardDescription}>Update your organization's profile, logo, and details.</p>
               </div>
               <ArrowRight size={20} className={styles.cardArrow} />
-            </Link>
+            </a>
           )}
 
           {/* Existing Action Cards */}
-          <Link href="/dashboard/find-room" className={styles.actionCard}><div className={styles.cardIconWrapper}><CalendarCheck size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Book a Space</h2><p className={styles.cardDescription}>Find and reserve an available meeting room or private office.</p></div><ArrowRight size={20} className={styles.cardArrow} /></Link>
-          <Link href="/dashboard/my-bookings" className={styles.actionCard}><div className={styles.cardIconWrapper}><BookUser size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>My Bookings</h2><p className={styles.cardDescription}>View your upcoming reservations and booking history.</p></div><ArrowRight size={20} className={styles.cardArrow} /></Link>
-          <Link href="/dashboard/member-book" className={styles.actionCard}><div className={styles.cardIconWrapper}><Contact size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Member Directory</h2><p className={styles.cardDescription}>Connect with other members in your workspace.</p></div><ArrowRight size={20} className={styles.cardArrow} /></Link>
-          <Link href="/dashboard/events" className={styles.actionCard}><div className={styles.cardIconWrapper}><CalendarDays size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Community Events</h2><p className={styles.cardDescription}>View upcoming events and manage your registrations.</p></div><ArrowRight size={20} className={styles.cardArrow} /></Link>
+          <a href="/dashboard/find-room" className={styles.actionCard}><div className={styles.cardIconWrapper}><CalendarCheck size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Book a Space</h2><p className={styles.cardDescription}>Find and reserve an available meeting room or private office.</p></div><ArrowRight size={20} className={styles.cardArrow} /></a>
+          <a href="/dashboard/my-bookings" className={styles.actionCard}><div className={styles.cardIconWrapper}><BookUser size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>My Bookings</h2><p className={styles.cardDescription}>View your upcoming reservations and booking history.</p></div><ArrowRight size={20} className={styles.cardArrow} /></a>
+          <a href="/dashboard/member-book" className={styles.actionCard}><div className={styles.cardIconWrapper}><Contact size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Member Directory</h2><p className={styles.cardDescription}>Connect with other members in your workspace.</p></div><ArrowRight size={20} className={styles.cardArrow} /></a>
+          <a href="/dashboard/events" className={styles.actionCard}><div className={styles.cardIconWrapper}><CalendarDays size={28} className={styles.cardIcon} /></div><div><h2 className={styles.cardTitle}>Community Events</h2><p className={styles.cardDescription}>View upcoming events and manage your registrations.</p></div><ArrowRight size={20} className={styles.cardArrow} /></a>
         </div>
       </main>
     </div>

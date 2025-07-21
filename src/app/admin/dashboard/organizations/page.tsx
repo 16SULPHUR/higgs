@@ -18,10 +18,10 @@ export default async function OrgsPage() {
           <h1 className={styles.title}>Organizations</h1>
           <p className={styles.description}>Create and manage client organizations and their plans.</p>
         </div>
-        <Link href="/admin/dashboard/organizations/new" className={styles.addButton}>
+        <a href="/admin/dashboard/organizations/new" className={styles.addButton}>
           <Plus size={16} />
           <span>Create Organization</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <OrgsTable organizations={orgs} plans={plans} users={users} />

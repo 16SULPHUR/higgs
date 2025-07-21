@@ -28,7 +28,7 @@ export default function RoomsTable({ rooms }: { rooms: any[] }) {
                         <td>{room.location_name}</td>
                         <td><span className={room.is_active ? styles.active : styles.inactive}>{room.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td className={styles.actions}>
-                            <Link href={`/admin/dashboard/rooms/${room.id}/edit`} className={styles.iconButton}><Pencil size={16} /></Link>
+                            <a href={`/admin/dashboard/rooms/${room.id}/edit`} className={styles.iconButton}><Pencil size={16} /></a>
                             <button onClick={() => handleDelete(room.id, room.name)} className={`${styles.iconButton} ${styles.deleteButton}`}><Trash2 size={16} /></button>
                         </td>
                     </tr>

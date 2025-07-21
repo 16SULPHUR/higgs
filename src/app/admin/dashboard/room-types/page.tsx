@@ -19,10 +19,10 @@ export default async function RoomTypesPage() {
             <h1 className={styles.title}>Room Types</h1>
             <p className={styles.description}>Manage the blueprints for your meeting rooms.</p>
         </div>
-        <Link href="/admin/dashboard/room-types/new" className={styles.addButton}>
+        <a href="/admin/dashboard/room-types/new" className={styles.addButton}>
             <Plus size={16} />
             <span>Add New Type</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <RoomTypesTable roomTypes={roomTypes} locationMap={locationMap} />

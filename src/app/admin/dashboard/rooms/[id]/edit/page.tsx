@@ -23,10 +23,10 @@ export default async function EditRoomPage({ params }: EditRoomPageProps) {
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/rooms" className={styles.backButton}>
+          <a href="/admin/dashboard/rooms" className={styles.backButton}>
             <ArrowLeft size={16} />
             <span>Back to Room Instances</span>
-          </Link>
+          </a>
           <h1 className={styles.title}>Edit "{room.name}"</h1>
           <p className={styles.description}>
             Update the details for this specific room instance.

@@ -12,12 +12,12 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
                     <h1 className={styles.logo}>Higgs</h1>
                 </div>
                 <nav className={styles.nav}>
-                    <Link href="/dashboard" className={styles.navLink}><Home size={18} /><span>Dashboard</span></Link>
-                    <Link href="/dashboard/find-room" className={styles.navLink}><CalendarCheck size={18} /><span>Book a Space</span></Link>
-                    <Link href="/dashboard/my-bookings" className={styles.navLink}><BookUser size={18} /><span>My Bookings</span></Link>
-                    <Link href="/dashboard/events" className={styles.navLink}><CalendarDays size={18} /><span>Events</span></Link>
-                    <Link href="/dashboard/member-book" className={styles.navLink}><Contact size={18} /><span>Member Directory</span></Link>
-                    <Link href="/dashboard/support" className={styles.navLink}><LifeBuoy size={18} /><span>Support</span></Link>
+                    <a href="/dashboard" className={styles.navLink}><Home size={18} /><span>Dashboard</span></a>
+                    <a href="/dashboard/find-room" className={styles.navLink}><CalendarCheck size={18} /><span>Book a Space</span></a>
+                    <a href="/dashboard/my-bookings" className={styles.navLink}><BookUser size={18} /><span>My Bookings</span></a>
+                    <a href="/dashboard/events" className={styles.navLink}><CalendarDays size={18} /><span>Events</span></a>
+                    <a href="/dashboard/member-book" className={styles.navLink}><Contact size={18} /><span>Member Directory</span></a>
+                    <a href="/dashboard/support" className={styles.navLink}><LifeBuoy size={18} /><span>Support</span></a>
                 </nav>
             </aside>
             <div className={styles.mainContentWrapper}>

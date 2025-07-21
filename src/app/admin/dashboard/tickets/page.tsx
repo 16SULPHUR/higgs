@@ -14,10 +14,10 @@ export default async function AdminTicketsPage() {
             <h1 className={styles.title}>Support Tickets</h1>
             <p className={styles.description}>View, manage, and respond to all user support tickets.</p>
         </div>
-        <Link href="/admin/dashboard/tickets/new" className={styles.newTicketButton}>
+        <a href="/admin/dashboard/tickets/new" className={styles.newTicketButton}>
             <PlusCircle size={18} />
             <span>Create Ticket for User</span>
-        </Link>
+        </a>
       </div>
       <div className={styles.tableContainer}>
         <AdminTicketsTable tickets={tickets} />

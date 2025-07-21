@@ -15,9 +15,9 @@ export default function RoomResultCard({ room, searchCriteria }: { room: any, se
         <span className={styles.detailItem}><Users size={14} /> Up to {room.capacity} people</span>
         <span className={styles.detailItem}><DollarSign size={14} /> {room.credits_per_booking} credits</span>
       </div>
-      <Link href={`${bookingUrl}`} className={styles.bookButton}>
+      <a href={`${bookingUrl}`} className={styles.bookButton}>
         Book Now
-      </Link>   
+      </a>   
     </div>
   );
 }

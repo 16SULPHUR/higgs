@@ -13,7 +13,7 @@ export default function TicketList({ tickets }: { tickets: any[] }) {
             </div>
             {tickets.length > 0 ? (
                 tickets.map(ticket => (
-                    <Link href={`/dashboard/support/${ticket.id}`} key={ticket.id} className={styles.ticketItem}>
+                    <a href={`/dashboard/support/${ticket.id}`} key={ticket.id} className={styles.ticketItem}>
                         <div className={styles.subject}>
                             <span className={styles.ticketId}>#{ticket.id}</span> {ticket.subject}
                         </div>
@@ -24,7 +24,7 @@ export default function TicketList({ tickets }: { tickets: any[] }) {
                             </span>
                         </div>
                         <div className={styles.lastUpdated}>{formatDate(ticket.updated_at)}</div>
-                    </Link>
+                    </a>
                 ))
             ) : (
                 <div className={styles.emptyState}>

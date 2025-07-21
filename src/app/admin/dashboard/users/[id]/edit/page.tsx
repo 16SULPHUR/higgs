@@ -15,7 +15,7 @@ export default async function EditUserPage({ params }: { params?: { id?: string 
     <div>
       <div className={styles.header}>
         <div>
-          <Link href="/admin/dashboard/users" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Users</span></Link>
+          <a href="/admin/dashboard/users" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Users</span></a>
           <h1 className={styles.title}>Edit User: {user.name}</h1>
           <p className={styles.description}>Update user details and permissions.</p>
         </div>

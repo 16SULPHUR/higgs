@@ -44,9 +44,9 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
         <span className={styles.detailItem}><Users size={14} /> Up to {roomType.capacity} people</span>
         <span className={styles.detailItem}><DollarSign size={14} /> {roomType.credits_per_booking} credits per 30 min</span>
       </div>
-      <Link href={finalUrl} className={styles.bookButton}>
+      <a href={finalUrl} className={styles.bookButton}>
         {isReschedule ? 'Select New Slot' : 'Book This Space'}
-      </Link>
+      </a>
     </div>
   );
 }

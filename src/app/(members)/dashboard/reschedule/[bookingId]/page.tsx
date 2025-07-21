@@ -12,10 +12,10 @@ export default async function ReschedulePage({ params }: { params?: { bookingId?
 
     return (
         <div className={styles.container}>
-            <Link href="/dashboard/my-bookings" className={styles.backButton}>
+            <a href="/dashboard/my-bookings" className={styles.backButton}>
                 <ArrowLeft size={16} />
                 <span>Back to My Bookings</span>
-            </Link>
+            </a>
 
             <div className={styles.grid}> 
                 <aside className={styles.currentBookingSection}>

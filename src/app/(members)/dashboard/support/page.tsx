@@ -9,10 +9,10 @@ export default async function SupportPage() {
 
   return (
     <div className={styles.container}>
-      <Link href="/dashboard/dashboard" className={styles.backButton}>
+      <a href="/dashboard/dashboard" className={styles.backButton}>
         <ArrowLeft size={16} />
         <span>Back to Dashboard</span>
-      </Link>
+      </a>
       <div className={styles.header}>
         <h1 className={styles.title}>Support Center</h1>
         <p className={styles.description}>
@@ -20,10 +20,10 @@ export default async function SupportPage() {
         </p>
       </div>
       <div className={styles.actions}>
-        <Link href="/dashboard/support/new" className={styles.newTicketButton}>
+        <a href="/dashboard/support/new" className={styles.newTicketButton}>
           <PlusCircle size={18} />
           Create New Ticket
-        </Link>
+        </a>
       </div>
       <TicketList tickets={tickets} />
     </div>
