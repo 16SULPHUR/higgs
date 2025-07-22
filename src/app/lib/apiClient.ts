@@ -49,27 +49,20 @@ async function apiClient(endpoint: string, options: FetchOptions = {}) {
     let response = await fetch(fullUrl, config);
  
     if (response.status === 401) {
-        console.log('[API Client] Access token expired or invalid. Attempting refresh via Server Action...');
+        console.log('[API Client] Access token expired. Triggering refresh action...');
         
-        try {
-           await refreshAuthSession();
+        await refreshAuthSession();
 
-            console.log('[API Client] Refresh successful. Retrying original request...');
-            const newSession = await getSession(); 
-            const newToken = newSession?.accessToken;
+        console.log('[API Client] Refresh successful. Retrying original request...');
+        const newSession = await getSession();
+        const newToken = newSession?.accessToken;
 
-            if (newToken) {
-                (config.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
-            }
-             
-            response = await fetch(fullUrl, config);
-
-        } catch (error) {
-             console.error('[API Client] The refresh action failed and likely redirected. Throwing original error.', error);
-             
-             throw new Error(JSON.stringify({ message: "Session expired and refresh failed." }));
+        if (newToken) {
+            (config.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
         }
-    } 
+        
+        response = await fetch(`${baseUrl}${endpoint}`, config);
+    }
 
     console.log(`[API Client] Response Status: ${response.status} for ${endpoint}`);
 
