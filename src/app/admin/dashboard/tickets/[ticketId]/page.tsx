@@ -4,8 +4,9 @@ import { ArrowLeft } from 'lucide-react';
 import UpdateStatusForm from '@/components/admin/tickets/UpdateStatusForm';
 import styles from './AdminTicketDetailPage.module.css';
 
-export default async function AdminTicketDetailPage({ params }: { params: { ticketId: number } }) {
-    const ticket = await api.get(`/api/admin/support-tickets/${params.ticketId}`, [`admin-ticket-${params.ticketId}`]);
+export default async function AdminTicketDetailPage({ params }: { params?: { ticketId?: number } }) {
+    const { ticketId } = params ?? {};
+    const ticket = await api.get(`/api/admin/support-tickets/${ticketId}`, [`admin-ticket-${ticketId}`]);
     const formatDate = (d: string) => new Date(d).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
 
     return (
