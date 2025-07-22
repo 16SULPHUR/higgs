@@ -14,17 +14,27 @@ export async function createTicketForUserAction(payload: any) {
     }
 }
 
-export async function updateTicketStatusAction(ticketId: number, status: string) {
+interface UpdateTicketPayload {
+    status: string;
+    response?: string;
+}
+
+export async function updateTicketStatusAction(ticketId: number, payload: UpdateTicketPayload) {
     try {
-        await api.patch(`/api/admin/support-tickets/${ticketId}/status`, { status });
+        await api.patch(`/api/admin/support-tickets/${ticketId}/status`, payload);
         revalidateTag('admin-tickets');
         revalidateTag(`admin-ticket-${ticketId}`);
-        return { success: true, message: 'Ticket status updated successfully.' };
+        return { success: true, message: 'Ticket updated successfully.' };
     } catch (error: any) {
-        const errorBody = JSON.parse(error.message || '{}');
-        return { success: false, message: errorBody.message || 'Failed to update status.' };
+        try {
+            const errorBody = JSON.parse(error.message);
+            return { success: false, message: errorBody.message || 'Failed to update status.' };
+        } catch (e) {
+            return { success: false, message: 'A server error occurred.' };
+        }
     }
 }
+
 
 export async function deleteTicketByAdminAction(ticketId: number) {
     try {

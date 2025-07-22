@@ -43,7 +43,9 @@
 }
 .org {
     font-size: 0.875rem;
-    color: hsl(var(--muted-foreground));
+    color: hsl(var(--primary));
+    margin-top: 0.25rem;
+    text-decoration: none;
 }
 .email {
     font-size: 0.875rem;

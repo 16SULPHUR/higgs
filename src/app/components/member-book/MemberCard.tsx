@@ -30,7 +30,6 @@ export default function MemberCard({ user }: { user: any }) {
             <div className={styles.info}>
                 <h3 className={styles.name}>{user.name}</h3>
                 <p className={styles.org}>{user.organization_name || 'Individual Member'}</p>
-                <a href={`mailto:${user.email}`} className={styles.email}>{user.email}</a>
             </div>
         </div>
     );

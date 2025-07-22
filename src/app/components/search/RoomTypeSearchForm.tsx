@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useTransition } from 'react';
+import { useState, useEffect, useMemo, useTransition } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Search, Loader2 } from 'lucide-react';
 import { searchAvailableRoomTypesAction } from '@/actions/bookingActions';
@@ -9,13 +9,32 @@ import RoomTypeResultCard from './RoomTypeResultCard';
 import styles from './RoomSearchForm.module.css';
 
 const timeSlots = generate30MinSlots();
+ 
+const getNextAvailableSlot = () => { 
+    const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+ 
+    const nextSlot = timeSlots.find(slot => {
+        const [hour, minute] = slot.value.split(':').map(Number);
+        const slotMinutes = hour * 60 + minute;
+        return slotMinutes > currentMinutes;
+    });
+ 
+    return nextSlot || timeSlots[0];
+};
 
-export default function RoomTypeSearchForm({ rescheduleBookingId }: { rescheduleBookingId?: string }) {
-    const [criteria, setCriteria] = useState({
-        date: new Date().toISOString().split('T')[0],
-        startTime: '09:00',
-        endTime: '09:30',
-        capacity: '2',
+export default function RoomTypeSearchForm({ rescheduleBookingId }: { rescheduleBookingId?: string }) { 
+    const [criteria, setCriteria] = useState(() => {
+        const nextSlot = getNextAvailableSlot();
+        const nextSlotIndex = timeSlots.findIndex(s => s.value === nextSlot.value);
+        const endSlot = timeSlots[nextSlotIndex + 1] || nextSlot;
+
+        return {
+            date: new Date().toISOString().split('T')[0],
+            startTime: nextSlot.value,
+            endTime: endSlot.value,
+            capacity: '2',
+        };
     });
 
     const [results, setResults] = useState<any[]>([]);

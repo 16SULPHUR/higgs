@@ -1,4 +1,5 @@
-import { refreshAuthSession } from '@/actions/authActions'; // Use the Server Action for refreshing
+
+import { refreshAuthSession } from '@/actions/authActions';
 import { getSession } from './session';
 
 type FetchOptions = {
@@ -10,8 +11,9 @@ type FetchOptions = {
 async function apiClient(endpoint: string, options: FetchOptions = {}) {
     console.log(`[API Client] Requesting: ${options.method || 'GET'} ${endpoint}`);
     const session = await getSession();
-    let token = session?.accessToken; // Use the short-lived accessToken
+    let token = session?.accessToken;
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    console.log("session", session);
 
     if (!baseUrl) {
         throw new Error(JSON.stringify({ message: "API base URL is not configured." }));
@@ -38,33 +40,36 @@ async function apiClient(endpoint: string, options: FetchOptions = {}) {
     }
     config.headers = headers;
 
+    console.log(config)
+    
     const fullUrl = `${baseUrl}${endpoint}`;
     console.log(`[API Client] Fetching URL: ${fullUrl}`);
     console.log(`[API Client] With token: ${!!token}`);
 
     let response = await fetch(fullUrl, config);
-
+ 
     if (response.status === 401) {
         console.log('[API Client] Access token expired or invalid. Attempting refresh via Server Action...');
+        
+        try {
+           await refreshAuthSession();
 
-        const refreshResult = await refreshAuthSession();
+            console.log('[API Client] Refresh successful. Retrying original request...');
+            const newSession = await getSession(); 
+            const newToken = newSession?.accessToken;
 
-        if (refreshResult?.error) {
-            console.error('[API Client] Refresh failed:', refreshResult.error);
-            // This error will be caught by the calling server action and sent to the client
-            throw new Error(JSON.stringify({ message: refreshResult.error }));
+            if (newToken) {
+                (config.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
+            }
+             
+            response = await fetch(fullUrl, config);
+
+        } catch (error) {
+             console.error('[API Client] The refresh action failed and likely redirected. Throwing original error.', error);
+             
+             throw new Error(JSON.stringify({ message: "Session expired and refresh failed." }));
         }
-
-        console.log('[API Client] Refresh successful. Retrying original request...');
-        const newSession = await getSession(); // Re-fetch the session to get the new token
-        const newToken = newSession?.accessToken;
-
-        if (newToken) {
-            (config.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
-        }
-
-        response = await fetch(fullUrl, config); // Retry the original request
-    }
+    } 
 
     console.log(`[API Client] Response Status: ${response.status} for ${endpoint}`);
 
