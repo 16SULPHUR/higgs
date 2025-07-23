@@ -3,8 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
 }
-
-/* --- Header Section --- */
+ 
 .header {
   display: flex;
   justify-content: space-between;

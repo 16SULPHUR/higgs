@@ -1,5 +1,3 @@
-
-import { refreshAuthSession } from '@/actions/authActions';
 import { getSession } from './session';
 
 type FetchOptions = {
@@ -40,28 +38,19 @@ async function apiClient(endpoint: string, options: FetchOptions = {}) {
     }
     config.headers = headers;
 
-    console.log(config)
+    console.log(config);
     
     const fullUrl = `${baseUrl}${endpoint}`;
     console.log(`[API Client] Fetching URL: ${fullUrl}`);
     console.log(`[API Client] With token: ${!!token}`);
 
-    let response = await fetch(fullUrl, config);
- 
+    const response = await fetch(fullUrl, config);
+
     if (response.status === 401) {
-        console.log('[API Client] Access token expired. Triggering refresh action...');
+        console.warn('[API Client] Received 401 Unauthorized. No refresh attempted.');
         
-        await refreshAuthSession();
-
-        console.log('[API Client] Refresh successful. Retrying original request...');
-        const newSession = await getSession();
-        const newToken = newSession?.accessToken;
-
-        if (newToken) {
-            (config.headers as Record<string, string>)['Authorization'] = `Bearer ${newToken}`;
-        }
-        
-        response = await fetch(`${baseUrl}${endpoint}`, config);
+        const errorBody = await response.text();
+        throw new Error(`Unauthorized: ${errorBody}`);
     }
 
     console.log(`[API Client] Response Status: ${response.status} for ${endpoint}`);

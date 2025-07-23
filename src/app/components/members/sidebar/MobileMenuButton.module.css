@@ -1,0 +1,17 @@
+.menuButton {
+  display: none;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .menuButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

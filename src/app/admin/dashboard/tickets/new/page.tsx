@@ -2,10 +2,9 @@ import { api } from '@/lib/apiClient';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import CreateTicketForUserForm from '@/components/admin/tickets/CreateTicketForUserForm';
-import styles from '../AdminTicketsPage.module.css'; // Reusing page styles
+import styles from '../AdminTicketsPage.module.css';
 
 export default async function NewTicketForUserPage() {
-  // Fetch all users so the admin can select one
   const users = await api.get('/api/admin/users');
 
   return (

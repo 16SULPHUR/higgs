@@ -11,7 +11,7 @@ export default async function AdminTicketDetailPage({ params }: { params?: { tic
 
     return (
         <div>
-            <Link href="/admin/dashboard/tickets" className={styles.backButton}><ArrowLeft size={16} />Back to All Tickets</Link>
+            <a href="/admin/dashboard/tickets" className={styles.backButton}><ArrowLeft size={16} />Back to All Tickets</a>
             <div className={styles.header}>
                 <div>
                     <h1 className={styles.subject}>Ticket #{ticket.id}: {ticket.subject}</h1>
