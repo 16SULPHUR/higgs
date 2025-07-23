@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { updateUserProfileAction } from '@/actions/profileActions'; 
+import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api.client';
 import styles from './ProfileForm.module.css';
 import { User, Mail, Phone, Save } from 'lucide-react';
 
 export default function ProfileForm({ initialData }: { initialData: any }) {
-    const [isPending, startTransition] = useTransition();
+    const { data: session, status, update: updateSession } = useSession();
+    const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
@@ -17,10 +19,7 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
 
     useEffect(() => {
         if (initialData) {
-            setFormData({
-                name: initialData.name || '',
-                phone: initialData.phone || '',
-            });
+            setFormData({ name: initialData.name || '', phone: initialData.phone || '' });
             if (initialData.profile_picture) {
                 setImagePreview(initialData.profile_picture);
             }
@@ -34,8 +33,7 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
-        try { 
+        try {
             setImageFile(file);
             setImagePreview(URL.createObjectURL(file));
         } catch (err) {
@@ -43,24 +41,28 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
-        startTransition(async () => {
-            const data = new FormData();
-            data.append('name', formData.name);
-            data.append('phone', formData.phone);
-            if (imageFile) {
-                data.append('profile_picture', imageFile);
-            }
-            const result = await updateUserProfileAction(data);
-            if (result.success) {
-                setSuccess(result.message);
-            } else {
-                setError(result.message);
-            }
-        });
+        setIsPending(true);
+
+        const data = new FormData();
+        data.append('name', formData.name);
+        data.append('phone', formData.phone);
+        if (imageFile) {
+            data.append('profile_picture', imageFile);
+        }
+
+        try {
+            const updatedUser = await api.patch('/api/profile', data);
+            setSuccess('Profile updated successfully!');
+            await updateSession({ user: updatedUser });
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsPending(false);
+        }
     };
 
     return (
@@ -76,7 +78,7 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
                     <input id="profile_picture" type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                 </div>
                 <div className={styles.headerInfo}>
-                    <h2 className={styles.userName}>{initialData.name}</h2>
+                    <h2 className={styles.userName}>{session?.user?.name || initialData.name}</h2>
                     <p className={styles.userEmail}>{initialData.email}</p>
                 </div>
             </div>
@@ -84,31 +86,22 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
             <div className={styles.formContent}>
                 <div className={styles.inputGroup}>
                     <label htmlFor="name">Full Name</label>
-                    <div className={styles.inputWrapper}>
-                        <User size={18} className={styles.inputIcon} />
-                        <input id="name" name="name" type="text" value={formData.name} onChange={handleTextChange} required className={styles.input} />
-                    </div>
+                    <div className={styles.inputWrapper}><User size={18} className={styles.inputIcon} /><input id="name" name="name" type="text" value={formData.name} onChange={handleTextChange} required className={styles.input} /></div>
                 </div>
                 <div className={styles.inputGroup}>
                     <label htmlFor="email">Email Address</label>
-                    <div className={styles.inputWrapper}>
-                        <Mail size={18} className={styles.inputIcon} />
-                        <input id="email" name="email" type="email" value={initialData.email} disabled className={styles.input} title="Email cannot be changed." />
-                    </div>
+                    <div className={styles.inputWrapper}><Mail size={18} className={styles.inputIcon} /><input id="email" name="email" type="email" value={initialData.email} disabled className={styles.input} title="Email cannot be changed." /></div>
                 </div>
                 <div className={styles.inputGroup}>
                     <label htmlFor="phone">Phone Number</label>
-                    <div className={styles.inputWrapper}>
-                        <Phone size={18} className={styles.inputIcon} />
-                        <input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleTextChange} className={styles.input} />
-                    </div>
+                    <div className={styles.inputWrapper}><Phone size={18} className={styles.inputIcon} /><input id="phone" name="phone" type="tel" value={formData.phone} onChange={handleTextChange} className={styles.input} /></div>
                 </div>
             </div>
 
             <div className={styles.formFooter}>
                 {error && <p className={styles.messageText} style={{ color: 'hsl(var(--destructive))' }}>{error}</p>}
                 {success && <p className={styles.messageText} style={{ color: 'hsl(var(--primary))' }}>{success}</p>}
-                <button type="submit" disabled={isPending} className={styles.saveButton}>
+                <button type="submit" disabled={isPending || status !== 'authenticated'} className={styles.saveButton}>
                     <Save size={16} />
                     <span>{isPending ? 'Saving...' : 'Save Changes'}</span>
                 </button>

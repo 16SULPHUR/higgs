@@ -1,25 +1,47 @@
-import { api } from '@/lib/apiClient';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { ArrowLeft, PlusCircle } from 'lucide-react';
+import { ArrowLeft, PlusCircle, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api.client';
 import UserBookingsList from '@/components/bookings/UserBookingsList';
 import styles from './MyBookingsPage.module.css';
 
-export default async function MyBookingsPage() { 
-    const bookings = await api.get('/api/bookings', ['bookings']);
+export default function MyBookingsPage() {
+    const { status } = useSession();
+    const [bookings, setBookings] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    console.log(bookings)
+    const fetchBookings = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const data = await api.get('/api/bookings');
+            setBookings(data);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    return (
-        <div className={styles.container}>
-            <a href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></a>
-            <div className={styles.header}>
-                <h1 className={styles.title}>My Bookings</h1>
-                <p className={styles.description}>View your past and upcoming meeting room reservations.</p>
-            </div>
- 
-            {bookings && bookings.length > 0 ? (
-                <UserBookingsList bookings={bookings} />
-            ) : (
+    useEffect(() => {
+        if (status === 'authenticated') {
+            fetchBookings();
+        }
+    }, [status]);
+
+    const renderContent = () => {
+        if (isLoading || status === 'loading') {
+            return <div className={styles.loadingState}><Loader2 className={styles.loaderIcon} /></div>;
+        }
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+        if (bookings.length === 0) {
+            return (
                 <div className={styles.emptyState}>
                     <h2>You have no bookings yet.</h2>
                     <p>Ready to find your next workspace?</p>
@@ -28,7 +50,19 @@ export default async function MyBookingsPage() {
                         Book a Room
                     </a>
                 </div>
-            )}
+            );
+        }
+        return <UserBookingsList bookings={bookings} onUpdate={fetchBookings} />;
+    };
+
+    return (
+        <div className={styles.container}>
+            <a href="/dashboard" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Dashboard</span></a>
+            <div className={styles.header}>
+                <h1 className={styles.title}>My Bookings</h1>
+                <p className={styles.description}>View your past and upcoming meeting room reservations.</p>
+            </div>
+            {renderContent()}
         </div>
     );
 }

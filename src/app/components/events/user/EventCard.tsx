@@ -1,27 +1,42 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
-import { Calendar, Check, Users, X } from 'lucide-react';
-import { registerForEventAction, withdrawFromEventAction } from '@/actions/eventRegistrationActions';
+import { Calendar, Check, Users, X, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api.client';
 import styles from './EventCard.module.css';
 
-export default function EventCard({ event }: { event: any }) {
-    const [isPending, startTransition] = useTransition();
+interface EventCardProps {
+  event: any;
+  onUpdate: () => void;
+}
 
-    const handleRegister = () => {
-        startTransition(async () => {
-            const result = await registerForEventAction(event.id);
-            if (!result.success) { alert(`Error: ${result.message}`); }
-        });
+export default function EventCard({ event, onUpdate }: EventCardProps) {
+    const [isPending, setIsPending] = useState(false);
+
+    const handleRegister = async () => {
+        setIsPending(true);
+        try {
+            await api.post(`/api/events/${event.id}/register`, {});
+            onUpdate(); // Trigger a re-fetch of the event list
+        } catch (error: any) {
+            alert(`Error: ${error.message}`);
+        } finally {
+            setIsPending(false);
+        }
     };
 
-    const handleWithdraw = () => {
+    const handleWithdraw = async () => {
         if (confirm("Are you sure you want to withdraw from this event?")) {
-            startTransition(async () => {
-                const result = await withdrawFromEventAction(event.id);
-                if (!result.success) { alert(`Error: ${result.message}`); }
-            });
+            setIsPending(true);
+            try {
+                await api.delete(`/api/events/${event.id}/cancel-registration`);
+                onUpdate(); // Trigger a re-fetch
+            } catch (error: any) {
+                alert(`Error: ${error.message}`);
+            } finally {
+                setIsPending(false);
+            }
         }
     };
 
@@ -44,11 +59,13 @@ export default function EventCard({ event }: { event: any }) {
                     <span className={styles.registrations}><Users size={14} />{event.registration_count} Registered</span>
                     {event.is_registered ? (
                         <button onClick={handleWithdraw} disabled={isPending} className={`${styles.actionButton} ${styles.withdrawButton}`}>
-                            <X size={16}/><span>{isPending ? 'Withdrawing...' : 'Withdraw'}</span>
+                            {isPending ? <Loader2 size={16} className={styles.spinner} /> : <X size={16}/>}
+                            <span>{isPending ? 'Withdrawing...' : 'Withdraw'}</span>
                         </button>
                     ) : (
                         <button onClick={handleRegister} disabled={isPending} className={`${styles.actionButton} ${styles.registerButton}`}>
-                            <Check size={16}/><span>{isPending ? 'Registering...' : 'Register'}</span>
+                            {isPending ? <Loader2 size={16} className={styles.spinner} /> : <Check size={16}/>}
+                            <span>{isPending ? 'Registering...' : 'Register'}</span>
                         </button>
                     )}
                 </div>

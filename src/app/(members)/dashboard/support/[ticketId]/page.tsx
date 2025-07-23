@@ -1,12 +1,65 @@
-import { api } from '@/lib/apiClient';
-import Link from 'next/link';
-import { ArrowLeft, Trash2 } from 'lucide-react';
-import styles from './TicketDetailPage.module.css';
-import { deleteTicketAction } from '@/actions/usersTicketActions';
+'use client';
 
-export default async function TicketDetailPage({ params }: { params?: { ticketId?: number } }) {
-    const { ticketId } = params ?? {};
-    const ticket = await api.get(`/api/support-tickets/${ticketId}`);
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { ArrowLeft, Trash2, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api.client';
+import styles from './TicketDetailPage.module.css';
+
+export default function TicketDetailPage() {
+    const router = useRouter();
+    const params = useParams();
+    const { status } = useSession();
+    const [ticket, setTicket] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const ticketId = params.ticketId as string;
+
+    useEffect(() => {
+        if (status === 'authenticated' && ticketId) {
+            const fetchTicket = async () => {
+                try {
+                    const data = await api.get(`/api/support-tickets/${ticketId}`);
+                    setTicket(data);
+                } catch (err: any) {
+                    setError(err.message);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchTicket();
+        }
+    }, [status, ticketId]);
+
+    const handleDelete = async () => {
+        if (confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
+            setIsDeleting(true);
+            try {
+                await api.delete(`/api/support-tickets/${ticket.id}`);
+                alert('Ticket deleted successfully.');
+                router.push('/dashboard/support');
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setIsDeleting(false);
+            }
+        }
+    };
+
+    if (isLoading || status === 'loading') {
+        return <div className={styles.container}><Loader2 className={styles.loaderIcon} /></div>;
+    }
+    if (error) {
+        return <div className={styles.container}><p>Error: {error}</p></div>;
+    }
+    if (!ticket) {
+        return <div className={styles.container}><p>Ticket not found.</p></div>;
+    }
+
     const formatDate = (d: string) => new Date(d).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' });
 
     return (
@@ -22,11 +75,21 @@ export default async function TicketDetailPage({ params }: { params?: { ticketId
             <div className={styles.body}>
                 <h2 className={styles.sectionTitle}>Your Message</h2>
                 <p className={styles.description}>{ticket.description}</p>
+                 {ticket.response && (
+                    <>
+                        <h2 className={`${styles.sectionTitle} ${styles.responseTitle}`}>Admin's Response</h2>
+                        <div className={styles.responseBlock}>
+                            <p>{ticket.response}</p>
+                        </div>
+                    </>
+                )}
             </div>
-            {ticket.status === 'OPEN' && (
-                <form action={deleteTicketAction.bind(null, ticket.id)} className={styles.deleteForm}>
-                    <button type="submit" className={styles.deleteButton}><Trash2 size={14} /> Delete Ticket</button>
-                </form>
+             {ticket.status === 'OPEN' && (
+                <div className={styles.deleteForm}>
+                    <button onClick={handleDelete} disabled={isDeleting} className={styles.deleteButton}>
+                        <Trash2 size={14}/> {isDeleting ? 'Deleting...' : 'Delete Ticket'}
+                    </button>
+                </div>
             )}
         </div>
     );

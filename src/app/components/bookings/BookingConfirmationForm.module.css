@@ -74,3 +74,22 @@
 }
 
 .rescheduleSubtext { color: hsl(var(--muted-foreground)); margin-top: -1.25rem; margin-bottom: 1.5rem; font-weight: 500; }
+
+.stateContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    min-height: 200px;
+}
+.loaderIcon {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.errorText {
+    color: hsl(var(--destructive));
+    font-weight: 500;
+}

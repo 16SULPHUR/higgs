@@ -1,4 +1,4 @@
-import Link from 'next/link';
+'use client';
 import { ArrowLeft } from 'lucide-react';
 import CreateTicketForm from '@/components/tickets/CreateTicketForm';
 import styles from '../SupportPage.module.css';

@@ -25,3 +25,14 @@
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
 }
+.loadingState {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem;
+    min-height: 200px;
+}
+.loaderIcon {
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

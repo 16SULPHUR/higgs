@@ -4,8 +4,9 @@ import MemberLayoutClient from './MemberLayoutClient'; // We will create this ne
 
 export default async function MemberPortalLayout({ children }: { children: ReactNode }) {
     return (
+        
         <MemberLayoutClient
-            userProfileMenu={<UserProfileMenu />} // Pass the Server Component as a prop
+            userProfileMenu={<UserProfileMenu />} 
         >
             {children}
         </MemberLayoutClient>

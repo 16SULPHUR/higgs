@@ -25,3 +25,13 @@
   font-size: 1rem;
   color: hsl(var(--muted-foreground));
 }
+.loadingState, .errorState {
+    text-align: center;
+    padding: 4rem;
+    color: hsl(var(--muted-foreground));
+}
+.loaderIcon {
+    margin: 0 auto 1rem;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

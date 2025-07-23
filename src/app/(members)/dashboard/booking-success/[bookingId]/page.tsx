@@ -1,20 +1,56 @@
-import { api } from '@/lib/apiClient';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { CheckCircle, Users } from 'lucide-react';
+import { CheckCircle, Loader2 } from 'lucide-react';
+import { api } from '@/lib/api.client';
 import InviteGuestForm from '@/components/bookings/InviteGuestForm';
 import styles from './BookingSuccessPage.module.css';
 import { displayDate, displayTime } from '@/lib/displayDateAndTime';
 
-export default async function BookingSuccessPage({ params }: { params?: { bookingId?: string } }) {
-    const { bookingId } = params ?? {};
+export default function BookingSuccessPage() {
+    const params = useParams();
+    const { status } = useSession();
+    const [booking, setBooking] = useState<any>(null);
+    const [invitedGuests, setInvitedGuests] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    
+    const bookingId = params.bookingId as string;
 
-    const [booking, invitedGuests] = await Promise.all([
-        api.get(`/api/bookings/${bookingId}`),
-        api.get(`/api/bookings/${bookingId}/invitations`, ['invitations'])
-    ]);
+    const fetchAllData = async () => {
+        if (!bookingId) return;
+        try {
+            const [bookingData, guestsData] = await Promise.all([
+                api.get(`/api/bookings/${bookingId}`),
+                api.get(`/api/bookings/${bookingId}/invitations`)
+            ]);
+            setBooking(bookingData);
+            setInvitedGuests(guestsData);
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-    // const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full' });
-    // const formatTime = (d: string) => new Date(d).toLocaleTimeString('en-US', { timeStyle: 'short' });
+    useEffect(() => {
+        if (status === 'authenticated') {
+            fetchAllData();
+        }
+    }, [status, bookingId]);
+
+    if (isLoading || status === 'loading') {
+        return <div className={styles.container}><Loader2 className={styles.loaderIcon} /></div>;
+    }
+    if (error) {
+        return <div className={styles.container}><p>{error}</p></div>;
+    }
+    if (!booking) {
+        return <div className={styles.container}><p>Booking details not found.</p></div>;
+    }
 
     return (
         <div className={styles.container}>
@@ -37,7 +73,7 @@ export default async function BookingSuccessPage({ params }: { params?: { bookin
 
                 <div className={styles.card}>
                     <h2 className={styles.cardTitle}>Manage Guests</h2>
-                    <InviteGuestForm bookingId={bookingId} />
+                    <InviteGuestForm bookingId={bookingId} onInviteSuccess={fetchAllData} />
                     <hr className={styles.divider} />
                     <div className={styles.guestList}>
                         <h3 className={styles.guestListTitle}>Invited Guests ({invitedGuests.length})</h3>

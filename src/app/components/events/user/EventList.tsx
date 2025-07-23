@@ -3,12 +3,17 @@
 import EventCard from './EventCard';
 import styles from './EventList.module.css';
 
-export default function EventList({ initialEvents }: { initialEvents: any[] }) {
+interface EventListProps {
+  events: any[];
+  onUpdate: () => void;
+}
+
+export default function EventList({ events, onUpdate }: EventListProps) {
     return (
         <div>
-            {initialEvents.length > 0 ? (
+            {events.length > 0 ? (
                 <div className={styles.grid}>
-                    {initialEvents.map(event => <EventCard key={event.id} event={event} />)}
+                    {events.map(event => <EventCard key={event.id} event={event} onUpdate={onUpdate} />)}
                 </div>
             ) : (
                 <div className={styles.emptyState}>
