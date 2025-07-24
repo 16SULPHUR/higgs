@@ -33,7 +33,7 @@ type DecodedToken = {
   exp: number;
 };
 
-export const authConfig = {
+export const authConfig  = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -121,6 +121,9 @@ export const authConfig = {
         });
 
         const data = await res.json();
+
+        console.log("data=====================")
+        console.log(data)
         if (!res.ok || !data.accessToken) throw data;
 
         const decoded = jwtDecode<DecodedToken>(data.accessToken);

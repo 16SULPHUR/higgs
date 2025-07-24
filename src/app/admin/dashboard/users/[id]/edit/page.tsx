@@ -1,26 +1,41 @@
-import { api } from '@/lib/apiClient';
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { api } from '@/lib/api.client';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import CreateUserForm from '@/components/admin/users/CreateUserForm';
 import styles from '../../../rooms/RoomsPage.module.css';
 
-export default async function EditUserPage({ params }: { params?: { id?: string } }) {
-  const { id } = params ?? {};
-  const [user, organizations] = await Promise.all([
-      api.get(`/api/admin/users/${id}`),
-      api.get('/api/admin/orgs')
-  ]);
+export default function EditUserPage() {
+    const params = useParams();
+    const [data, setData] = useState<{ user: any, organizations: any[] } | null>(null);
+    const userId = params.id as string;
 
-  return (
-    <div>
-      <div className={styles.header}>
+    const fetchData = () => {
+        Promise.all([
+            api.get(`/api/admin/users/${userId}`),
+            api.get('/api/admin/orgs')
+        ]).then(([user, organizations]) => setData({ user, organizations }));
+    };
+
+    useEffect(() => {
+        if (userId) fetchData();
+    }, [userId]);
+
+    if (!data) return <div style={{padding: '4rem', textAlign: 'center'}}><Loader2 className="animate-spin"/></div>;
+
+    return (
         <div>
-          <a href="/admin/dashboard/users" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Users</span></a>
-          <h1 className={styles.title}>Edit User: {user.name}</h1>
-          <p className={styles.description}>Update user details and permissions.</p>
+            <div className={styles.header}>
+                <div>
+                    <a href="/admin/dashboard/users" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Users</span></a>
+                    <h1 className={styles.title}>Edit User: {data.user.name}</h1>
+                    <p className={styles.description}>Update user details and permissions.</p>
+                </div>
+            </div>
+            <CreateUserForm organizations={data.organizations} initialData={data.user} onUpdate={fetchData} />
         </div>
-      </div>
-      <CreateUserForm organizations={organizations} initialData={user} />
-    </div>
-  );
+    );
 }

@@ -1,32 +1,56 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { api } from '@/lib/apiClient';
-import RoomTypesTable from '@/components/room-types/RoomTypesTable';
+import { api } from '@/lib/api.client';
+import { Plus, Loader2 } from 'lucide-react'; 
+import TableSkeleton from '@/components/common/TableSkeleton';
 import styles from '../rooms/RoomsPage.module.css';
-import { Plus } from 'lucide-react';
+import RoomTypesTable from '@/components/room-types/RoomTypesTable';
 
-export default async function RoomTypesPage() {
-  const [roomTypes, locations] = await Promise.all([
-      api.get('/api/admin/room-types', ['room-types']),
-      api.get('/api/admin/locations')
-  ]);
+export default function RoomTypesPage() {
+    const { status } = useSession();
+    const [data, setData] = useState<{ roomTypes: any[], locations: any[] } | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-  const locationMap = new Map<string, string>(locations.map((loc: any) => [loc.id.toString(), loc.name.toString()]));
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const [roomTypesData, locationsData] = await Promise.all([
+                api.get('/api/admin/room-types'),
+                api.get('/api/admin/locations')
+            ]);
+            setData({ roomTypes: roomTypesData, locations: locationsData });
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  return (
-    <div>
-      <div className={styles.header}>
+    useEffect(() => {
+        if (status === 'authenticated') {
+            fetchData();
+        }
+    }, [status]);
+
+    const renderContent = () => {
+        if (isLoading || status === 'loading') {
+            return <div className={styles.tableContainer}><TableSkeleton cols={5} /></div>;
+        }
+        if (data) {
+            const locationMap = new Map(data.locations.map((loc: any) => [loc.id, loc.name]));
+            return <div className={styles.tableContainer}><RoomTypesTable roomTypes={data.roomTypes} locationMap={locationMap} onUpdate={fetchData} /></div>;
+        }
+        return <p>Failed to load data.</p>;
+    };
+
+    return (
         <div>
-            <h1 className={styles.title}>Room Types</h1>
-            <p className={styles.description}>Manage the blueprints for your meeting rooms.</p>
+            <div className={styles.header}>
+                <div><h1 className={styles.title}>Room Types</h1><p className={styles.description}>Manage the blueprints for your meeting rooms.</p></div>
+                <a href="/admin/dashboard/room-types/new" className={styles.addButton}><Plus size={16} /><span>Add New Type</span></a>
+            </div>
+            {renderContent()}
         </div>
-        <a href="/admin/dashboard/room-types/new" className={styles.addButton}>
-            <Plus size={16} />
-            <span>Add New Type</span>
-        </a>
-      </div>
-      <div className={styles.tableContainer}>
-        <RoomTypesTable roomTypes={roomTypes} locationMap={locationMap} />
-      </div>
-    </div>
-  );
+    );
 }

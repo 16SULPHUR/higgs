@@ -1,39 +1,41 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { api } from '@/lib/apiClient';
-import RoomForm from '@/components/rooms/RoomForm';
+import { api } from '@/lib/api.client';
+import { ArrowLeft, Loader2 } from 'lucide-react'; 
 import styles from '../../RoomsPage.module.css';
-import { use } from 'react';
+import RoomForm from '@/components/rooms/RoomForm';
 
-interface EditRoomPageProps {
-  params?: {
-    id?: string;
-  };
-}
+export default function EditRoomPage() {
+    const params = useParams();
+    const [data, setData] = useState<{ room: any, roomTypes: any[] } | null>(null);
+    const roomId = params.id as string;
 
-export default async function EditRoomPage({ params }: EditRoomPageProps) {
+    const fetchData = () => {
+        Promise.all([
+            api.get(`/api/admin/rooms/${roomId}`),
+            api.get('/api/admin/room-types')
+        ]).then(([room, roomTypes]) => setData({ room, roomTypes }));
+    };
 
-  const { id } = params ?? {}
-  const [room, roomTypes] = await Promise.all([
-    api.get(`/api/admin/rooms/${id}`),
-    api.get('/api/admin/room-types')
-  ]);
+    useEffect(() => {
+        if (roomId) fetchData();
+    }, [roomId]);
 
-  return (
-    <div>
-      <div className={styles.header}>
+    if (!data) return <div style={{padding: '4rem', textAlign: 'center'}}><Loader2 className="animate-spin"/></div>;
+
+    return (
         <div>
-          <a href="/admin/dashboard/rooms" className={styles.backButton}>
-            <ArrowLeft size={16} />
-            <span>Back to Room Instances</span>
-          </a>
-          <h1 className={styles.title}>Edit "{room.name}"</h1>
-          <p className={styles.description}>
-            Update the details for this specific room instance.
-          </p>
+            <div className={styles.header}>
+                <div>
+                    <a href="/admin/dashboard/rooms" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Room Instances</span></a>
+                    <h1 className={styles.title}>Edit "{data.room.name}"</h1>
+                    <p className={styles.description}>Update the details for this specific room instance.</p>
+                </div>
+            </div>
+            <RoomForm roomTypes={data.roomTypes} initialData={data.room} onUpdate={fetchData} />
         </div>
-      </div>
-      <RoomForm roomTypes={roomTypes} initialData={room} />
-    </div>
-  );
+    );
 }

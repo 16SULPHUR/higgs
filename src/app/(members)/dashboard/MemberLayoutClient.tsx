@@ -2,6 +2,7 @@
 
 import { ReactNode, Suspense, useState } from 'react';
 import { SessionProvider } from 'next-auth/react';
+import type { Session } from 'next-auth';
 import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy, Loader2 } from 'lucide-react';
 import styles from './MemberLayout.module.css';
 import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
@@ -9,7 +10,7 @@ import MobileMenuButton from '@/components/members/sidebar/MobileMenuButton';
 
 interface MemberLayoutClientProps {
     children: ReactNode;
-    userProfileMenu: ReactNode;
+    userProfileMenu: ReactNode; 
 }
 
 export default function MemberLayoutClient({ children, userProfileMenu }: MemberLayoutClientProps) {

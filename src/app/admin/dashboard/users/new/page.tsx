@@ -1,27 +1,28 @@
-import { api } from '@/lib/apiClient';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { api } from '@/lib/api.client';
 import { ArrowLeft } from 'lucide-react';
 import CreateUserForm from '@/components/admin/users/CreateUserForm';
 import styles from '../../rooms/RoomsPage.module.css';
 
-export default async function NewUserPage() {
-  const organizations = await api.get('/api/admin/orgs');
-  
+export default function NewUserPage() {
+  const [organizations, setOrganizations] = useState([]);
+  useEffect(() => {
+      api.get('/api/admin/orgs').then(setOrganizations);
+  }, []);
+
   return (
     <div>
       <div className={styles.header}>
         <div>
-          <a href="/admin/dashboard/users" className={styles.backButton}>
-            <ArrowLeft size={16} />
-            <span>Back to Users</span>
-          </a>
+          <a href="/admin/dashboard/users" className={styles.backButton}><ArrowLeft size={16} /><span>Back to Users</span></a>
           <h1 className={styles.title}>Create New User</h1>
-          <p className={styles.description}>
-            Create a new user account and send them a welcome email with their login credentials.
-          </p>
+          <p className={styles.description}>Create a user account and send them a welcome email with credentials.</p>
         </div>
       </div>
-      <CreateUserForm organizations={organizations} />
+      {organizations.length > 0 ? <CreateUserForm organizations={organizations} /> : <p>Loading organizations...</p>}
     </div>
   );
 }

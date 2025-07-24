@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import styles from './AdminTicketsTable.module.css';
 
-export default function AdminTicketsTable({ tickets }: { tickets: any[] }) {
+export default function AdminTicketsTable({ tickets, onUpdate }: { tickets: any[], onUpdate: () => void }) {
     const [filter, setFilter] = useState('OPEN');
     const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -25,12 +25,8 @@ export default function AdminTicketsTable({ tickets }: { tickets: any[] }) {
                 <thead><tr><th>User</th><th>Subject</th><th>Status</th><th>Last Updated</th></tr></thead>
                 <tbody>
                     {filteredTickets.map(ticket => (
-
                         <tr key={ticket.id}>
-                            <td>
-                                <div>{ticket.user_name}</div>
-                                <div className={styles.subtext}>{ticket.user_email}</div>
-                            </td>
+                            <td><div>{ticket.user_name}</div><div className={styles.subtext}>{ticket.user_email}</div></td>
                             <td><a href={`/admin/dashboard/tickets/${ticket.id}`} className={styles.subjectLink}>#{ticket.id}: {ticket.subject}</a></td>
                             <td><span className={`${styles.statusBadge} ${styles[ticket.status.toLowerCase()]}`}>{ticket.status}</span></td>
                             <td>{formatDate(ticket.updated_at)}</td>

@@ -1,15 +1,17 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { saveEvent } from '@/actions/eventActions';
-import styles from '../rooms/RoomForm.module.css';
+import { api } from '@/lib/api.client'; 
+import styles from '@/components/rooms/RoomForm.module.css';
 import imageStyles from './EventForm.module.css';
 
 export default function EventForm({ initialData }: { initialData?: any }) {
     const router = useRouter();
-    const [isPending, startTransition] = useTransition();
+    const { status } = useSession();
+    const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [statusText, setStatusText] = useState('');
 
@@ -38,10 +40,8 @@ export default function EventForm({ initialData }: { initialData?: any }) {
     const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-
         setStatusText('Compressing...');
-        setError(null);
-        try {
+        try { 
             setImageFile(file);
             setImagePreview(URL.createObjectURL(file));
         } catch (err) {
@@ -54,33 +54,29 @@ export default function EventForm({ initialData }: { initialData?: any }) {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        setStatusText('Saving...');
+        setIsPending(true);
 
-        startTransition(async () => {
-            // --- THIS IS THE FIX ---
-            // Create a plain payload object
-            const payload: any = {
-                title: formData.title,
-                description: formData.description,
-                date: new Date(formData.date).toISOString(),
-            };
+        const data = new FormData();
+        data.append('title', formData.title);
+        data.append('description', formData.description);
+        data.append('date', new Date(formData.date).toISOString());
+        if (imageFile) {
+            data.append('eventImage', imageFile);
+        }
 
-            // Add the file object to the payload if it exists
-            if (imageFile) {
-                payload.eventImage = imageFile;
-            }
+        const endpoint = initialData ? `/api/admin/events/${initialData.id}` : '/api/admin/events';
+        const method = initialData ? 'patch' : 'post';
 
-            // Pass the plain object to the server action
-            const result = await saveEvent(payload, initialData?.id);
-
-            if (result.success) {
-                alert(result.message);
-                router.push('/admin/dashboard/events');
-            } else {
-                setError(result.message);
-            }
-            setStatusText('');
-        });
+        try {
+            await api[method](endpoint, data);
+            alert(`Event ${initialData ? 'updated' : 'created'} successfully!`);
+            router.push('/admin/dashboard/events');
+            router.refresh();
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsPending(false);
+        }
     };
 
     const isProcessing = isPending || statusText !== '';
@@ -104,7 +100,7 @@ export default function EventForm({ initialData }: { initialData?: any }) {
             {error && <p className={styles.error}>{error}</p>}
             <div className={styles.formActions}>
                 <button type="button" onClick={() => router.back()} disabled={isProcessing} className={`${styles.button} ${styles.secondary}`}>Cancel</button>
-                <button type="submit" disabled={isProcessing} className={styles.button}>{statusText || (isPending ? 'Saving...' : 'Save Event')}</button>
+                <button type="submit" disabled={isProcessing} className={styles.button}>{isPending ? 'Saving...' : (initialData ? 'Update Event' : 'Create Event')}</button>
             </div>
         </form>
     );

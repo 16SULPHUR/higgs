@@ -1,23 +1,30 @@
 'use client';
 
-import { useTransition } from 'react';
-import { XCircle } from 'lucide-react';
-import { cancelBookingByAdmin } from '@/actions/adminBookingActions';
+import { useState } from 'react';
+import { api } from '@/lib/api.client';
+import { XCircle, Loader2 } from 'lucide-react';
 import styles from './BookingsTable.module.css';
 
-export default function BookingsTable({ bookings }: { bookings: any[] }) {
-    const [isPending, startTransition] = useTransition();
+interface BookingsTableProps {
+  bookings: any[];
+  onUpdate: () => void;
+}
 
-    const handleCancel = (bookingId: string) => {
+export default function BookingsTable({ bookings, onUpdate }: BookingsTableProps) {
+    const [isCancelling, setIsCancelling] = useState<string | null>(null);
+
+    const handleCancel = async (bookingId: string) => {
         if (confirm("Are you sure you want to cancel this booking? This will refund the user's credits.")) {
-            startTransition(async () => {
-                const result = await cancelBookingByAdmin(bookingId);
-                if (!result.success) {
-                    alert(`Error: ${result.message}`);
-                } else {
-                    alert(result.message);
-                }
-            });
+            setIsCancelling(bookingId);
+            try {
+                const result = await api.delete(`/api/admin/bookings/${bookingId}`);
+                alert(result.message || 'Booking cancelled successfully.');
+                onUpdate();
+            } catch (error: any) {
+                alert(`Error: ${error.message}`);
+            } finally {
+                setIsCancelling(null);
+            }
         }
     };
 
@@ -65,10 +72,10 @@ export default function BookingsTable({ bookings }: { bookings: any[] }) {
                                 <button
                                     onClick={() => handleCancel(booking.id)}
                                     className={`${styles.iconButton} ${styles.deleteButton}`}
-                                    disabled={isPending}
+                                    disabled={isCancelling === booking.id}
                                     title="Cancel Booking"
                                 >
-                                    <XCircle size={16} />
+                                    {isCancelling === booking.id ? <Loader2 size={16} className={styles.spinner} /> : <XCircle size={16} />}
                                 </button>
                             )}
                         </td>

@@ -2,21 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from '../rooms/RoomForm.module.css';
+import { api } from '@/lib/api.client';
+import styles from '@/components/rooms/RoomForm.module.css';
 
-import { saveOrganization } from '@/actions/orgActions'; 
-
-
-export default function OrgForm({ plans, initialData }: { plans: any[], initialData?: any }) {
+export default function OrgForm({ plans, initialData, onUpdate }: { plans: any[], initialData?: any, onUpdate?: () => void }) {
     const router = useRouter();
     const [formData, setFormData] = useState({ name: '', plan_id: '' });
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    
 
     useEffect(() => {
         if (initialData) {
-            setFormData({ name: initialData.name, plan_id: initialData.plan_id });
+            setFormData({ name: initialData.name, plan_id: initialData.plan_id || '' });
         }
     }, [initialData]);
 
@@ -28,47 +25,34 @@ export default function OrgForm({ plans, initialData }: { plans: any[], initialD
         e.preventDefault();
         setIsSubmitting(true);
         setError(null);
-
         
-        const result = await saveOrganization(formData, initialData?.id);
-
-        setIsSubmitting(false);
-
-        if (result.success) {
-            alert(result.message);
-            
-            router.push('/admin/dashboard/organizations');
-        } else {
-            
-            setError(result.message);
+        try {
+            if (initialData) {
+                await api.patch(`/api/admin/orgs/${initialData.id}`, formData);
+                alert('Organization updated successfully!');
+                if (onUpdate) onUpdate();
+            } else {
+                await api.post('/api/admin/orgs', formData);
+                alert('Organization created successfully!');
+                router.push('/admin/dashboard/organizations');
+            }
+        } catch (err: any) {
+            setError(err.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formGrid}>
-                <div className={styles.inputGroup}>
-                    <label htmlFor="name">Organization Name</label>
-                    <input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required className={styles.input} disabled={isSubmitting} />
-                </div>
-                <div className={styles.inputGroup}>
-                    <label htmlFor="plan_id">Subscription Plan</label>
-                    <select id="plan_id" name="plan_id" value={formData.plan_id} onChange={handleChange} required className={styles.input} disabled={isSubmitting}>
-                        <option value="" disabled>Select a plan...</option>
-                        {plans.map(plan => <option key={plan.id} value={plan.id}>{plan.name}</option>)}
-                    </select>
-                </div>
+                <div className={styles.inputGroup}><label htmlFor="name">Organization Name</label><input id="name" name="name" type="text" value={formData.name} onChange={handleChange} required className={styles.input} disabled={isSubmitting} /></div>
+                <div className={styles.inputGroup}><label htmlFor="plan_id">Subscription Plan</label><select id="plan_id" name="plan_id" value={formData.plan_id} onChange={handleChange} required className={styles.input} disabled={isSubmitting}><option value="" disabled>Select a plan...</option>{plans.map(plan => <option key={plan.id} value={plan.id}>{plan.name}</option>)}</select></div>
             </div>
-
             {error && <p className={styles.error}>{error}</p>}
-
             <div className={styles.formActions}>
-                <button type="button" onClick={() => router.back()} className={`${styles.button} ${styles.secondary}`} disabled={isSubmitting}>
-                    Cancel
-                </button>
-                <button type="submit" className={styles.button} disabled={isSubmitting}>
-                    {isSubmitting ? 'Saving...' : (initialData ? 'Update' : 'Create')}
-                </button>
+                <button type="button" onClick={() => router.back()} className={`${styles.button} ${styles.secondary}`} disabled={isSubmitting}>Cancel</button>
+                <button type="submit" className={styles.button} disabled={isSubmitting}>{isSubmitting ? 'Saving...' : (initialData ? 'Update' : 'Create')}</button>
             </div>
         </form>
     );

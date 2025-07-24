@@ -108,3 +108,19 @@
     z-index: 99; 
   }
 }
+
+.loadingState {
+  text-align: center;
+  padding: 4rem;
+}
+.loaderIcon {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

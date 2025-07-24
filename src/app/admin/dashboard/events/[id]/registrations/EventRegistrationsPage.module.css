@@ -1,0 +1,59 @@
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+.description {
+  margin-top: 0.25rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 2rem;
+}
+.card {
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  max-width: 800px;
+}
+.memberList {
+  list-style: none;
+}
+.memberItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
+  font-weight: 500;
+}
+.memberItem:last-child {
+  border-bottom: none;
+}
+.memberEmail {
+  color: hsl(var(--muted-foreground));
+}
+.noMembers {
+  padding: 3rem;
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+}
+.loadingState {
+  text-align: center;
+  padding: 4rem;
+}
+.loaderIcon {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

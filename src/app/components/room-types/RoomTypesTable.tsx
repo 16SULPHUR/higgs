@@ -1,18 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { Pencil, Trash2 } from 'lucide-react';
-import { deleteRoomType } from '@/actions/roomTypeActions';
+import { api } from '@/lib/api.client';
+import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import styles from '../rooms/RoomsTable.module.css';
 
-export default function RoomTypesTable({ roomTypes, locationMap }: { roomTypes: any[], locationMap: Map<string, string> }) {
+export default function RoomTypesTable({ roomTypes, locationMap, onUpdate }: { roomTypes: any[], locationMap: Map<string, string>, onUpdate: () => void }) {
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
     const handleDelete = async (typeId: string, typeName: string) => {
         if (confirm(`Delete "${typeName}"? This will fail if any room instances are using this type.`)) {
-            const result = await deleteRoomType(typeId);
-            if (!result.success) {
-                alert(`Error: ${result.message}`);
-            } else {
+            setIsDeleting(typeId);
+            try {
+                await api.delete(`/api/admin/room-types/${typeId}`);
                 alert('Room type deleted.');
+                onUpdate();
+            } catch (error: any) {
+                alert(`Error: ${error.message}`);
+            } finally {
+                setIsDeleting(null);
             }
         }
     };
@@ -29,7 +36,9 @@ export default function RoomTypesTable({ roomTypes, locationMap }: { roomTypes: 
                         <td>{type.credits_per_booking}</td>
                         <td className={styles.actions}>
                             <a href={`/admin/dashboard/room-types/${type.id}/edit`} className={styles.iconButton}><Pencil size={16} /></a>
-                            <button onClick={() => handleDelete(type.id, type.name)} className={`${styles.iconButton} ${styles.deleteButton}`}><Trash2 size={16} /></button>
+                            <button onClick={() => handleDelete(type.id, type.name)} className={`${styles.iconButton} ${styles.deleteButton}`} disabled={!!isDeleting}>
+                                {isDeleting === type.id ? <Loader2 size={16} className={styles.spinner}/> : <Trash2 size={16} />}
+                            </button>
                         </td>
                     </tr>
                 ))}

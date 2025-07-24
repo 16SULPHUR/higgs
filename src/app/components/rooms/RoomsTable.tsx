@@ -1,18 +1,25 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { Pencil, Trash2 } from 'lucide-react';
-import { deleteRoom } from '@/actions/roomActions';
+import { api } from '@/lib/api.client';
+import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import styles from './RoomsTable.module.css';
 
-export default function RoomsTable({ rooms }: { rooms: any[] }) {
+export default function RoomsTable({ rooms, onUpdate }: { rooms: any[], onUpdate: () => void }) {
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
     const handleDelete = async (roomId: string, roomName: string) => {
         if (confirm(`Are you sure you want to delete the room "${roomName}"?`)) {
-            const result = await deleteRoom(roomId);
-            if (!result.success) {
-                alert(`Error: ${result.message}`);
-            } else {
+            setIsDeleting(roomId);
+            try {
+                await api.delete(`/api/admin/rooms/${roomId}`);
                 alert('Room deleted.');
+                onUpdate();
+            } catch (error: any) {
+                alert(`Error: ${error.message}`);
+            } finally {
+                setIsDeleting(null);
             }
         }
     };
@@ -29,7 +36,9 @@ export default function RoomsTable({ rooms }: { rooms: any[] }) {
                         <td><span className={room.is_active ? styles.active : styles.inactive}>{room.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td className={styles.actions}>
                             <a href={`/admin/dashboard/rooms/${room.id}/edit`} className={styles.iconButton}><Pencil size={16} /></a>
-                            <button onClick={() => handleDelete(room.id, room.name)} className={`${styles.iconButton} ${styles.deleteButton}`}><Trash2 size={16} /></button>
+                            <button onClick={() => handleDelete(room.id, room.name)} className={`${styles.iconButton} ${styles.deleteButton}`} disabled={!!isDeleting}>
+                                {isDeleting === room.id ? <Loader2 size={16} className={styles.spinner}/> : <Trash2 size={16} />}
+                            </button>
                         </td>
                     </tr>
                 ))}

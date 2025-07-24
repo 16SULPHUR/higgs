@@ -12,6 +12,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const closeSidebar = () => setIsSidebarOpen(false);
+    
 
     return (
         <SessionProvider>

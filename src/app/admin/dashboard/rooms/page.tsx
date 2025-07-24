@@ -1,27 +1,50 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { api } from '@/lib/apiClient';
-import RoomsTable from '@/components/rooms/RoomsTable';
+import { api } from '@/lib/api.client';
+import { Plus, Loader2 } from 'lucide-react'; 
+import TableSkeleton from '@/components/common/TableSkeleton';
 import styles from './RoomsPage.module.css';
-import { Plus } from 'lucide-react';
+import RoomsTable from '@/components/rooms/RoomsTable';
 
-export default async function RoomsInstancesPage() {
-  const rooms = await api.get('/api/admin/rooms', ['rooms']);
+export default function RoomsInstancesPage() {
+    const { status } = useSession();
+    const [rooms, setRooms] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-  return (
-    <div>
-      <div className={styles.header}>
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const data = await api.get('/api/admin/rooms');
+            setRooms(data);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            fetchData();
+        }
+    }, [status]);
+    
+    return (
         <div>
-            <h1 className={styles.title}>Room Instances</h1>
-            <p className={styles.description}>Manage individual physical rooms available for booking.</p>
+            <div className={styles.header}>
+                <div>
+                    <h1 className={styles.title}>Room Instances</h1>
+                    <p className={styles.description}>Manage individual physical rooms available for booking.</p>
+                </div>
+                <a href="/admin/dashboard/rooms/new" className={styles.addButton}>
+                    <Plus size={16} />
+                    <span>Add New Room</span>
+                </a>
+            </div>
+            <div className={styles.tableContainer}>
+                {isLoading ? <TableSkeleton cols={5} /> : <RoomsTable rooms={rooms} onUpdate={fetchData} />}
+            </div>
         </div>
-        <a href="/admin/dashboard/rooms/new" className={styles.addButton}>
-            <Plus size={16} />
-            <span>Add New Room</span>
-        </a>
-      </div>
-      <div className={styles.tableContainer}>
-        <RoomsTable rooms={rooms} />
-      </div>
-    </div>
-  );
+    );
 }

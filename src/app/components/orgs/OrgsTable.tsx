@@ -2,106 +2,78 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { CircleDollarSign, Pencil, Trash2, UserCog, Users } from 'lucide-react';
+import { api } from '@/lib/api.client';
+import { CircleDollarSign, Pencil, Trash2, UserCog, Users, Loader2 } from 'lucide-react';
 import SetAdminModal from './SetAdminModal';
-import styles from '../rooms/RoomsTable.module.css'; 
-
 import AssignCreditsModal from './AssignCreditsModal';
-
+import styles from '@/components/rooms/RoomsTable.module.css';
 
 const findPlanNameById = (plans: any[], id: string) => plans.find(plan => plan.id === id)?.name || 'N/A';
 
-export default function OrgsTable({ organizations, plans, users }: { organizations: any[], plans: any[], users: any[] }) {
-    const router = useRouter();
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
+export default function OrgsTable({ organizations, plans, users, onUpdate }: { organizations: any[], plans: any[], users: any[], onUpdate: () => void }) {
+    const [isSetAdminModalOpen, setIsSetAdminModalOpen] = useState(false);
     const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<any | null>(null);
+    const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
-
-    const handleDelete = async (orgId: string) => {
-        if (confirm('Are you sure you want to delete this organization? This action cannot be undone.')) {
+    const handleDelete = async (orgId: string, orgName: string) => {
+        if (confirm(`Are you sure you want to delete "${orgName}"? This action cannot be undone.`)) {
+            setIsDeleting(orgId);
             try {
-                
-                await fetch(`/api/admin/orgs/${orgId}`, { method: 'DELETE' });
+                await api.delete(`/api/admin/orgs/${orgId}`);
                 alert('Organization deleted successfully.');
-                router.refresh();
-                
-            } catch (error) {
-                alert('Failed to delete organization.');
+                onUpdate();
+            } catch (error: any) {
+                alert(`Failed to delete organization: ${error.message}`);
+            } finally {
+                setIsDeleting(null);
             }
         }
     };
 
-    const openCreditsModal = (org: any) => {
+    const openModal = (type: 'admin' | 'credits', org: any) => {
         setSelectedOrg(org);
-        setIsCreditsModalOpen(true);
+        if (type === 'admin') setIsSetAdminModalOpen(true);
+        if (type === 'credits') setIsCreditsModalOpen(true);
     };
 
-    const openSetAdminModal = (orgId: string) => {
-        setSelectedOrgId(orgId);
-        setIsModalOpen(true);
+    const closeModal = () => {
+        setSelectedOrg(null);
+        setIsSetAdminModalOpen(false);
+        setIsCreditsModalOpen(false);
     };
 
     return (
         <>
             <table className={styles.table}>
                 <thead>
-                    <tr>
-                        <th>Organization Name</th>
-                        <th>Current Plan</th>
-                        <th>Org Admin</th>
-                        <th></th>
-                    </tr>
+                    <tr><th>Organization Name</th><th>Current Plan</th><th>Credits</th><th>Org Admin</th><th>Actions</th></tr>
                 </thead>
                 <tbody>
                     {organizations.map((org) => (
                         <tr key={org.id}>
-                            <td> <a href={`/admin/dashboard/organizations/${org.id}`} className={styles.nameLink}>
-                                {org.name}
-                            </a></td>
-                            <td>{findPlanNameById(plans, org.plan_id)}</td>
-
+                            <td><a href={`/admin/dashboard/organizations/${org.id}`} className={styles.nameLink}>{org.name}</a></td>
+                            <td>{findPlanNameById(plans, org.plan_id) || <span className={styles.muted}>No Plan</span>}</td>
+                            <td>{org.credits_pool}</td>
                             <td>{org.admin_name || <span className={styles.muted}>Not Assigned</span>}</td>
-
                             <td className={styles.actions}>
-                                <button onClick={() => openCreditsModal(org)} className={styles.iconButton} title="Assign Credits">
-                                    <CircleDollarSign size={16} />
-                                </button>
-                                <a href={`/admin/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members">
-                                    <Users size={16} />
-                                </a>
-                                <button onClick={() => openSetAdminModal(org.id)} className={styles.iconButton} title="Set Admin">
-                                    <UserCog size={16} />
-                                </button>
-                                <a href={`/admin/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit">
-                                    <Pencil size={16} />
-                                </a>
-                                <button onClick={() => handleDelete(org.id)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete">
-                                    <Trash2 size={16} />
+                                <button onClick={() => openModal('credits', org)} className={styles.iconButton} title="Assign Credits"><CircleDollarSign size={16} /></button>
+                                <a href={`/admin/dashboard/organizations/${org.id}/members`} className={styles.iconButton} title="Manage Members"><Users size={16} /></a>
+                                <button onClick={() => openModal('admin', org)} className={styles.iconButton} title="Set Admin"><UserCog size={16} /></button>
+                                <a href={`/admin/dashboard/organizations/${org.id}/edit`} className={styles.iconButton} title="Edit"><Pencil size={16} /></a>
+                                <button onClick={() => handleDelete(org.id, org.name)} className={`${styles.iconButton} ${styles.deleteButton}`} title="Delete" disabled={!!isDeleting}>
+                                    {isDeleting === org.id ? <Loader2 size={16} className={styles.spinner}/> : <Trash2 size={16} />}
                                 </button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
-            {selectedOrgId && (
-                <SetAdminModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    orgId={selectedOrgId}
-                    
-                    users={users.filter(u => u.organization_id === selectedOrgId)}
-                />
-            )}
-
             {selectedOrg && (
-                <AssignCreditsModal
-                    isOpen={isCreditsModalOpen}
-                    onClose={() => setIsCreditsModalOpen(false)}
-                    org={selectedOrg}
-                />
+                <>
+                    <SetAdminModal isOpen={isSetAdminModalOpen} onClose={closeModal} orgId={selectedOrg.id} users={users.filter(u => u.organization_id === selectedOrg.id)} onUpdate={onUpdate} />
+                    <AssignCreditsModal isOpen={isCreditsModalOpen} onClose={closeModal} org={selectedOrg} onUpdate={onUpdate} />
+                </>
             )}
         </>
     );
