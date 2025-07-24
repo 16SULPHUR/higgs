@@ -17,8 +17,8 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function EventDetailPage({ params }: { params: { eventId: string } }) {
-    const event = await getEvent(params.eventId);
+export default async function EventDetailPage({ params }: { params?: { eventId?: string } }) {
+    const event = await getEvent(params.eventId) ?? null;
     if (!event) { return <div>Event not found.</div>; }
 
     const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'Asia/Kolkata' });
