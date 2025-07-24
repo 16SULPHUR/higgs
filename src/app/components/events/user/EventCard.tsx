@@ -57,6 +57,7 @@ export default function EventCard({ event, onUpdate }: EventCardProps) {
                 <p className={styles.description}>{event.description}</p>
                 <div className={styles.footer}>
                     <span className={styles.registrations}><Users size={14} />{event.registration_count} Registered</span>
+                    <a href={`/dashboard/events/${event.id}`}>Details</a>
                     {event.is_registered ? (
                         <button onClick={handleWithdraw} disabled={isPending} className={`${styles.actionButton} ${styles.withdrawButton}`}>
                             {isPending ? <Loader2 size={16} className={styles.spinner} /> : <X size={16}/>}
