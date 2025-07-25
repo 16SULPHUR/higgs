@@ -9,15 +9,16 @@ import styles from './EventCard.module.css';
 interface EventCardProps {
   event: any;
   onUpdate: () => void;
+  session: any;
 }
 
-export default function EventCard({ event, onUpdate }: EventCardProps) {
+export default function EventCard({ event, onUpdate, session }: EventCardProps) {
     const [isPending, setIsPending] = useState(false);
 
     const handleRegister = async () => {
         setIsPending(true);
         try {
-            await api.post(`/api/events/${event.id}/register`, {});
+            await api(session).post(`/api/events/${event.id}/register`, {});
             onUpdate(); // Trigger a re-fetch of the event list
         } catch (error: any) {
             alert(`Error: ${error.message}`);
@@ -30,7 +31,7 @@ export default function EventCard({ event, onUpdate }: EventCardProps) {
         if (confirm("Are you sure you want to withdraw from this event?")) {
             setIsPending(true);
             try {
-                await api.delete(`/api/events/${event.id}/cancel-registration`);
+                await api(session).delete(`/api/events/${event.id}/cancel-registration`);
                 onUpdate(); // Trigger a re-fetch
             } catch (error: any) {
                 alert(`Error: ${error.message}`);

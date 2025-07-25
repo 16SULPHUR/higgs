@@ -10,7 +10,7 @@ import styles from '@/components/rooms/RoomsTable.module.css';
 
 const findPlanNameById = (plans: any[], id: string) => plans.find(plan => plan.id === id)?.name || 'N/A';
 
-export default function OrgsTable({ organizations, plans, users, onUpdate }: { organizations: any[], plans: any[], users: any[], onUpdate: () => void }) {
+export default function OrgsTable({ organizations, plans, users, onUpdate, session }: { organizations: any[], plans: any[], users: any[], onUpdate: () => void, session: any }) {
     const [isSetAdminModalOpen, setIsSetAdminModalOpen] = useState(false);
     const [isCreditsModalOpen, setIsCreditsModalOpen] = useState(false);
     const [selectedOrg, setSelectedOrg] = useState<any | null>(null);
@@ -20,7 +20,7 @@ export default function OrgsTable({ organizations, plans, users, onUpdate }: { o
         if (confirm(`Are you sure you want to delete "${orgName}"? This action cannot be undone.`)) {
             setIsDeleting(orgId);
             try {
-                await api.delete(`/api/admin/orgs/${orgId}`);
+                await api(session).delete(`/api/admin/orgs/${orgId}`);
                 alert('Organization deleted successfully.');
                 onUpdate();
             } catch (error: any) {
@@ -71,8 +71,8 @@ export default function OrgsTable({ organizations, plans, users, onUpdate }: { o
             </table>
             {selectedOrg && (
                 <>
-                    <SetAdminModal isOpen={isSetAdminModalOpen} onClose={closeModal} orgId={selectedOrg.id} users={users.filter(u => u.organization_id === selectedOrg.id)} onUpdate={onUpdate} />
-                    <AssignCreditsModal isOpen={isCreditsModalOpen} onClose={closeModal} org={selectedOrg} onUpdate={onUpdate} />
+                    <SetAdminModal session={session} isOpen={isSetAdminModalOpen} onClose={closeModal} orgId={selectedOrg.id} users={users.filter(u => u.organization_id === selectedOrg.id)} onUpdate={onUpdate} />
+                    <AssignCreditsModal isOpen={isCreditsModalOpen} onClose={closeModal} org={selectedOrg} onUpdate={onUpdate} session={session} />
                 </>
             )}
         </>

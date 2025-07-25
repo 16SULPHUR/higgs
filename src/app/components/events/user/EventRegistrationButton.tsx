@@ -14,7 +14,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
 
     useEffect(() => {
         if (status === 'authenticated') {
-            api.get(`/api/events/${eventId}/registration-status`)
+            api(session).get(`/api/events/${eventId}/registration-status`)
                 .then(data => setIsRegistered(data.is_registered))
                 .finally(() => setIsLoading(false));
         } else if (status === 'unauthenticated') {
@@ -25,7 +25,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
     const handleRegister = async () => {
         setIsSubmitting(true);
         try {
-            await api.post(`/api/events/${eventId}/register`, {});
+            await api(session).post(`/api/events/${eventId}/register`, {});
             setIsRegistered(true);
         } catch (error) { alert('Registration failed.'); }
         setIsSubmitting(false);
@@ -35,7 +35,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
         if (confirm("Are you sure you want to withdraw?")) {
             setIsSubmitting(true);
             try {
-                await api.delete(`/api/events/${eventId}/cancel-registration`);
+                await api(session).delete(`/api/events/${eventId}/cancel-registration`);
                 setIsRegistered(false);
             } catch (error) { alert('Withdrawal failed.'); }
             setIsSubmitting(false);

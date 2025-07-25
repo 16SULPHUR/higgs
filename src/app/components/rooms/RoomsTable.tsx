@@ -6,14 +6,14 @@ import { api } from '@/lib/api.client';
 import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import styles from './RoomsTable.module.css';
 
-export default function RoomsTable({ rooms, onUpdate }: { rooms: any[], onUpdate: () => void }) {
+export default function RoomsTable({ rooms, onUpdate, session }: { rooms: any[], onUpdate: () => void, session:any }) {
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const handleDelete = async (roomId: string, roomName: string) => {
         if (confirm(`Are you sure you want to delete the room "${roomName}"?`)) {
             setIsDeleting(roomId);
             try {
-                await api.delete(`/api/admin/rooms/${roomId}`);
+                await api(session).delete(`/api/admin/rooms/${roomId}`);
                 alert('Room deleted.');
                 onUpdate();
             } catch (error: any) {

@@ -7,16 +7,18 @@ import { api } from '@/lib/api.client';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import styles from '../../../rooms/RoomsPage.module.css';
 import RoomTypeForm from '@/components/room-types/RoomTypeForm';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function EditRoomTypePage() {
+    const session = useSessionContext();
     const params = useParams();
     const [data, setData] = useState<{ roomType: any, locations: any[] } | null>(null);
     const typeId = params.id as string;
 
     const fetchData = () => {
         Promise.all([
-            api.get(`/api/admin/room-types/${typeId}`),
-            api.get('/api/admin/locations')
+            api(session).get(`/api/admin/room-types/${typeId}`),
+            api(session).get('/api/admin/locations')
         ]).then(([roomType, locations]) => setData({ roomType, locations }));
     };
 
@@ -35,7 +37,7 @@ export default function EditRoomTypePage() {
                     <p className={styles.description}>Update the details for this room blueprint.</p>
                 </div>
             </div>
-            <RoomTypeForm locations={data.locations} initialData={data.roomType} onUpdate={fetchData} />
+            <RoomTypeForm session={session} locations={data.locations} initialData={data.roomType} onUpdate={fetchData} />
         </div>
     );
 }

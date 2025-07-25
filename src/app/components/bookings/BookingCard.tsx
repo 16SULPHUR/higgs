@@ -10,9 +10,10 @@ import InviteGuestModal from './InviteGuestModal';
 interface BookingCardProps {
     booking: any;
     onUpdate: () => void;
+    session: any;
 }
 
-export default function BookingCard({ booking, onUpdate }: BookingCardProps) {
+export default function BookingCard({ booking, onUpdate, session }: BookingCardProps) {
     const [isPending, setIsPending] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +21,7 @@ export default function BookingCard({ booking, onUpdate }: BookingCardProps) {
         if (confirm("Are you sure you want to cancel this booking?")) {
             setIsPending(true);
             try {
-                const result = await api.delete(`/api/bookings/${booking.id}`);
+                const result = await api(session).delete(`/api/bookings/${booking.id}`);
                 alert(result.message || 'Booking cancelled successfully.');
                 onUpdate();
             } catch (error: any) {

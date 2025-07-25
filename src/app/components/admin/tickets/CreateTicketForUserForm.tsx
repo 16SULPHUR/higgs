@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api.client';
 import styles from '../../rooms/RoomForm.module.css';
 
-export default function CreateTicketForUserForm({ users }: { users: any[] }) {
+export default function CreateTicketForUserForm({ users, session }: { users: any[], session: any }) {
     const router = useRouter();
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export default function CreateTicketForUserForm({ users }: { users: any[] }) {
         setError(null);
         setIsPending(true);
         try {
-            const result = await api.post('/api/admin/support-tickets', formData);
+            const result = await api(session).post('/api/admin/support-tickets', formData);
             alert(result.message || 'Ticket created successfully.');
             router.push('/admin/dashboard/tickets');
         } catch (err: any) {

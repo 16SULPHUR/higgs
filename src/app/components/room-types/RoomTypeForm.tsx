@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api.client';
 import styles from '../rooms/RoomForm.module.css';
 
-export default function RoomTypeForm({ locations, initialData, onUpdate }: { locations: any[], initialData?: any, onUpdate?: () => void }) {
+export default function RoomTypeForm({ locations, initialData, onUpdate, session }: { locations: any[], initialData?: any, onUpdate?: () => void, session: any }) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({ name: '', capacity: '', credits_per_booking: '', location_id: '' });
@@ -31,11 +31,11 @@ export default function RoomTypeForm({ locations, initialData, onUpdate }: { loc
         try {
             const payload = { ...formData, capacity: parseInt(formData.capacity), credits_per_booking: parseInt(formData.credits_per_booking) };
             if (initialData) {
-                await api.patch(`/api/admin/room-types/${initialData.id}`, payload);
+                await api(session).patch(`/api/admin/room-types/${initialData.id}`, payload);
                 alert('Room Type updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api.post('/api/admin/room-types', payload);
+                await api(session).post('/api/admin/room-types', payload);
                 alert('Room Type created successfully!');
                 router.push('/admin/dashboard/room-types');
             }

@@ -9,9 +9,10 @@ interface AssignCreditsModalProps {
   onClose: () => void;
   org: any;
   onUpdate: () => void;
+  session: any;
 }
 
-export default function AssignCreditsModal({ isOpen, onClose, org, onUpdate }: AssignCreditsModalProps) {
+export default function AssignCreditsModal({ isOpen, onClose, org, onUpdate, session }: AssignCreditsModalProps) {
   const [credits, setCredits] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +31,7 @@ export default function AssignCreditsModal({ isOpen, onClose, org, onUpdate }: A
     setError('');
 
     try {
-        const result = await api.post(`/api/admin/assign-credits/${org.id}`, { creditsToAssign });
+        const result = await api(session).post(`/api/admin/assign-credits/${org.id}`, { creditsToAssign });
         alert(result.message || 'Credits assigned successfully!');
         onUpdate();
         onClose();

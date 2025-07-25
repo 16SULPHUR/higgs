@@ -5,14 +5,14 @@ import { api } from '@/lib/api.client';
 import { XCircle } from 'lucide-react';
 import styles from './CancelPlanButton.module.css';
 
-export default function CancelPlanButton({ orgId, orgName, onUpdate }: { orgId: string, orgName: string, onUpdate: () => void }) {
+export default function CancelPlanButton({ orgId, orgName, onUpdate, session }: { orgId: string, orgName: string, onUpdate: () => void, session:any }) {
     const [isPending, setIsPending] = useState(false);
 
     const handleCancel = async () => {
         if (confirm(`Cancel subscription for "${orgName}"? This will remove their plan and reset credits to zero.`)) {
             setIsPending(true);
             try {
-                const result = await api.delete(`/api/admin/orgs/${orgId}/plan`);
+                const result = await api(session).delete(`/api/admin/orgs/${orgId}/plan`);
                 alert(result.message || 'Plan cancelled successfully.');
                 onUpdate();
             } catch (error: any) {

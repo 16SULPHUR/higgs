@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react';
 import styles from './UserBookingsList.module.css';
 import BookingCard from './BookingCard';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 interface UserBookingsListProps {
   bookings: any[];
@@ -12,6 +13,7 @@ interface UserBookingsListProps {
 type FilterType = 'UPCOMING' | 'PAST';
 
 export default function UserBookingsList({ bookings, onUpdate }: UserBookingsListProps) {
+    const session = useSessionContext();
     const [activeFilter, setActiveFilter] = useState<FilterType>('UPCOMING');
 
     const filteredBookings = useMemo(() => {
@@ -32,7 +34,7 @@ export default function UserBookingsList({ bookings, onUpdate }: UserBookingsLis
             <div className={styles.listContainer}>
                 {filteredBookings.length > 0 ? (
                     filteredBookings.map(booking => (
-                        <BookingCard key={booking.id} booking={booking} onUpdate={onUpdate} />
+                        <BookingCard session={session} key={booking.id} booking={booking} onUpdate={onUpdate} />
                     ))
                 ) : (
                     <div className={styles.emptyFilterState}><p>No {activeFilter.toLowerCase()} bookings found.</p></div>

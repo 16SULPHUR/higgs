@@ -6,11 +6,13 @@ import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api.client';
 import CreateTicketForUserForm from '@/components/admin/tickets/CreateTicketForUserForm';
 import styles from '../AdminTicketsPage.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function NewTicketForUserPage() {
+    const session = useSessionContext();
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        api.get('/api/admin/users').then(setUsers);
+        api(session).get('/api/admin/users').then(setUsers);
     }, []);
 
     return (
@@ -22,7 +24,7 @@ export default function NewTicketForUserPage() {
                     <p className={styles.description}>Open a new support ticket on behalf of a specific user.</p>
                 </div>
             </div>
-            {users.length > 0 ? <CreateTicketForUserForm users={users} /> : <p>Loading users...</p>}
+            {users.length > 0 ? <CreateTicketForUserForm session={session} users={users} /> : <p>Loading users...</p>}
         </div>
     );
 }

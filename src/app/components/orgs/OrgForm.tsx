@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api.client';
 import styles from '@/components/rooms/RoomForm.module.css';
 
-export default function OrgForm({ plans, initialData, onUpdate }: { plans: any[], initialData?: any, onUpdate?: () => void }) {
+export default function OrgForm({ plans, initialData, onUpdate, session }: { plans: any[], initialData?: any, onUpdate?: () => void, session: any }) {
     const router = useRouter();
     const [formData, setFormData] = useState({ name: '', plan_id: '' });
     const [error, setError] = useState<string | null>(null);
@@ -28,11 +28,11 @@ export default function OrgForm({ plans, initialData, onUpdate }: { plans: any[]
         
         try {
             if (initialData) {
-                await api.patch(`/api/admin/orgs/${initialData.id}`, formData);
+                await api(session).patch(`/api/admin/orgs/${initialData.id}`, formData);
                 alert('Organization updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api.post('/api/admin/orgs', formData);
+                await api(session).post('/api/admin/orgs', formData);
                 alert('Organization created successfully!');
                 router.push('/admin/dashboard/organizations');
             }

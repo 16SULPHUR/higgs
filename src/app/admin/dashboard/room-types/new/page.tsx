@@ -6,11 +6,13 @@ import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api.client'; 
 import styles from '../../rooms/RoomsPage.module.css';
 import RoomTypeForm from '@/components/room-types/RoomTypeForm';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function NewRoomTypePage() {
+    const session = useSessionContext();
     const [locations, setLocations] = useState([]);
     useEffect(() => {
-        api.get('/api/admin/locations').then(setLocations);
+        api(session).get('/api/admin/locations').then(setLocations);
     }, []);
 
     return (
@@ -22,7 +24,7 @@ export default function NewRoomTypePage() {
                     <p className={styles.description}>Define a new blueprint for rooms, including capacity, cost, and location.</p>
                 </div>
             </div>
-            {locations.length > 0 ? <RoomTypeForm locations={locations} /> : <p>Loading locations...</p>}
+            {locations.length > 0 ? <RoomTypeForm session={session} locations={locations} /> : <p>Loading locations...</p>}
         </div>
     );
 }

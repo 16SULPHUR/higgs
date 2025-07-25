@@ -10,9 +10,10 @@ interface SetAdminModalProps {
   orgId: string;
   users: any[];
   onUpdate: () => void;
+  session: any;
 }
 
-export default function SetAdminModal({ isOpen, onClose, orgId, users, onUpdate }: SetAdminModalProps) {
+export default function SetAdminModal({ isOpen, onClose, orgId, users, onUpdate, session }: SetAdminModalProps) {
   const [selectedUserId, setSelectedUserId] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +30,7 @@ export default function SetAdminModal({ isOpen, onClose, orgId, users, onUpdate 
     setError('');
 
     try {
-        const result = await api.post(`/api/admin/orgs/${orgId}/set-admin`, { user_id: selectedUserId });
+        const result = await api(session).post(`/api/admin/orgs/${orgId}/set-admin`, { user_id: selectedUserId });
         alert(result.message || 'Organization admin updated successfully!');
         onUpdate();
         onClose();

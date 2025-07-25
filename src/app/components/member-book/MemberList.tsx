@@ -12,11 +12,13 @@ export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
         if (!searchTerm) {
             return initialUsers;
         }
-        return initialUsers.filter(user =>
-            user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.email.toLowerCase().includes(searchTerm.toLowerCase())
+        return initialUsers.filter(user => { 
+            return (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                (user.organization_name && user.organization_name.toLowerCase().includes(searchTerm.toLowerCase()))
+        }
         );
     }, [searchTerm, initialUsers]);
+
 
     return (
         <div>
@@ -30,7 +32,7 @@ export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
                     className={styles.searchInput}
                 />
             </div>
-            
+
             {filteredUsers.length > 0 ? (
                 <div className={styles.grid}>
                     {filteredUsers.map(user => <MemberCard key={user.id} user={user} />)}

@@ -7,7 +7,7 @@ import styles from '../../rooms/RoomForm.module.css';
 
 const roles = ['INDIVIDUAL_USER', 'ORG_USER', 'ORG_ADMIN'];
 
-export default function CreateUserForm({ organizations, initialData, onUpdate }: { organizations: any[], initialData?: any, onUpdate?: () => void }) {
+export default function CreateUserForm({ organizations, initialData, onUpdate, session }: { organizations: any[], initialData?: any, onUpdate?: () => void, session:any }) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -38,11 +38,11 @@ export default function CreateUserForm({ organizations, initialData, onUpdate }:
         setIsSubmitting(true);
         try {
             if (isEditing) {
-                await api.patch(`/api/admin/users/${initialData.id}`, formData);
+                await api(session).patch(`/api/admin/users/${initialData.id}`, formData);
                 alert('User updated successfully.');
                 if (onUpdate) onUpdate();
             } else {
-                const result = await api.post('/api/admin/users', formData);
+                const result = await api(session).post('/api/admin/users', formData);
                 alert(result.message || 'User created successfully.');
                 router.push('/admin/dashboard/users');
             }

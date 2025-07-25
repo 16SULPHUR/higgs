@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/lib/api.client';
 import styles from './UpdateStatusForm.module.css';
 
-export default function UpdateStatusForm({ ticket, onUpdate }: { ticket: any, onUpdate: () => void }) {
+export default function UpdateStatusForm({ ticket, onUpdate, session }: { ticket: any, onUpdate: () => void, session: any }) {
     const [status, setStatus] = useState(ticket.status);
     const [response, setResponse] = useState(ticket.response || '');
     const [isPending, setIsPending] = useState(false);
@@ -18,7 +18,7 @@ export default function UpdateStatusForm({ ticket, onUpdate }: { ticket: any, on
         setIsPending(true);
         try {
             const payload = { status, response: response.trim() === '' ? undefined : response.trim() };
-            await api.patch(`/api/admin/support-tickets/${ticket.id}/status`, payload);
+            await api(session).patch(`/api/admin/support-tickets/${ticket.id}/status`, payload);
             alert('Ticket updated successfully.');
             onUpdate();
         } catch (err: any) {

@@ -9,16 +9,17 @@ import styles from '@/components/rooms/RoomsTable.module.css';
 interface PlansTableProps {
   plans: any[];
   onUpdate: () => void;
+  session: any;
 }
 
-export default function PlansTable({ plans, onUpdate }: PlansTableProps) {
+export default function PlansTable({ plans, onUpdate, session }: PlansTableProps) {
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const handleDelete = async (planId: string, planName: string) => {
         if (confirm(`Are you sure you want to delete the "${planName}" plan?`)) {
             setIsDeleting(planId);
             try {
-                await api.delete(`/api/admin/plans/${planId}`);
+                await api(session).delete(`/api/admin/plans/${planId}`);
                 alert('Plan deleted successfully.');
                 onUpdate();
             } catch (error: any) {

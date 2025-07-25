@@ -6,14 +6,16 @@ import Link from 'next/link';
 import { api } from '@/lib/api.client';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import PlanForm from '@/components/plans/PlanForm';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function EditPlanPage() {
+    const session = useSessionContext();
     const params = useParams();
     const [plan, setPlan] = useState<any>(null);
     const planId = params.id as string;
 
     const fetchData = () => {
-        api.get(`/api/admin/plans/${planId}`).then(setPlan);
+        api(session).get(`/api/admin/plans/${planId}`).then(setPlan);
     };
 
     useEffect(() => {
@@ -26,7 +28,7 @@ export default function EditPlanPage() {
         <div>
             <a href="/admin/dashboard/plans"><ArrowLeft size={16}/> Back to Plans</a>
             <h1 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '2rem' }}>Edit {plan.name}</h1>
-            <PlanForm initialData={plan} onUpdate={fetchData} />
+            <PlanForm session={session} initialData={plan} onUpdate={fetchData} />
         </div>
     );
 }

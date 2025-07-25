@@ -3,11 +3,13 @@
 import { useState } from 'react';
 import { api } from '@/lib/api.client';
 import styles from './AddMemberForm.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function AddMemberForm({ orgId, availableUsers, onUpdate }: { orgId: string, availableUsers: any[], onUpdate: () => void }) {
     const [selectedUserId, setSelectedUserId] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const session = useSessionContext();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -15,7 +17,7 @@ export default function AddMemberForm({ orgId, availableUsers, onUpdate }: { org
         setIsSubmitting(true);
         setError(null);
         try {
-            await api.patch(`/api/admin/users/${selectedUserId}`, { organization_id: orgId });
+            await api(session).patch(`/api/admin/users/${selectedUserId}`, { organization_id: orgId });
             alert('User added successfully!');
             setSelectedUserId('');
             onUpdate();

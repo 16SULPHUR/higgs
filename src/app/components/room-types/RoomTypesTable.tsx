@@ -6,14 +6,14 @@ import { api } from '@/lib/api.client';
 import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import styles from '../rooms/RoomsTable.module.css';
 
-export default function RoomTypesTable({ roomTypes, locationMap, onUpdate }: { roomTypes: any[], locationMap: Map<string, string>, onUpdate: () => void }) {
+export default function RoomTypesTable({ roomTypes, locationMap, onUpdate, session }: { roomTypes: any[], locationMap: Map<string, string>, onUpdate: () => void, session:any }) {
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const handleDelete = async (typeId: string, typeName: string) => {
         if (confirm(`Delete "${typeName}"? This will fail if any room instances are using this type.`)) {
             setIsDeleting(typeId);
             try {
-                await api.delete(`/api/admin/room-types/${typeId}`);
+                await api(session).delete(`/api/admin/room-types/${typeId}`);
                 alert('Room type deleted.');
                 onUpdate();
             } catch (error: any) {

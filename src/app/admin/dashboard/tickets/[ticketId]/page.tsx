@@ -7,14 +7,16 @@ import { api } from '@/lib/api.client';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import UpdateStatusForm from '@/components/admin/tickets/UpdateStatusForm';
 import styles from './AdminTicketDetailPage.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function AdminTicketDetailPage() {
+    const session = useSessionContext();
     const params = useParams();
     const [ticket, setTicket] = useState<any>(null);
     const ticketId = params.ticketId as string;
 
     const fetchData = () => {
-        api.get(`/api/admin/support-tickets/${ticketId}`).then(setTicket);
+        api(session).get(`/api/admin/support-tickets/${ticketId}`).then(setTicket);
     };
 
     useEffect(() => {
@@ -37,7 +39,7 @@ export default function AdminTicketDetailPage() {
                     {ticket.response && (<div className={styles.section}><h2 className={styles.sectionTitle}>Admin's Response</h2><div className={styles.responseBlock}><p>{ticket.response}</p></div></div>)}
                 </div>
                 <aside className={styles.sidebar}>
-                    <UpdateStatusForm ticket={ticket} onUpdate={fetchData} />
+                    <UpdateStatusForm session={session} ticket={ticket} onUpdate={fetchData} />
                 </aside>
             </div>
         </div>

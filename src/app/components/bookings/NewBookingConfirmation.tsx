@@ -7,7 +7,7 @@ import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin } from 'lucide-reac
 import styles from './BookingConfirmationForm.module.css';
 import { displayDate, displayTime } from '@/lib/displayDateAndTime';
 
-export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date }) {
+export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime, session }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date, session:any }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
@@ -27,6 +27,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
     const handleSubmit = async () => {
         setError(null);
         setIsPending(true);
+ 
 
         const payload = {
             type_of_room_id: roomType.id,
@@ -35,7 +36,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
         };
 
         try {
-            const newBooking = await api.post('/api/bookings', payload);
+            const newBooking = await api(session).post('/api/bookings', payload);
             alert('Booking confirmed successfully!');
             router.push(`/dashboard/booking-success/${newBooking.id}`);
         } catch (err: any) {

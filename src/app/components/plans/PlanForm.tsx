@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api.client';
 import styles from '@/components/rooms/RoomForm.module.css';
 
-export default function PlanForm({ initialData, onUpdate }: { initialData?: any, onUpdate?: () => void }) {
+export default function PlanForm({ initialData, onUpdate, session }: { initialData?: any, onUpdate?: () => void, session: any }) {
     const router = useRouter();
     const [formData, setFormData] = useState({ name: '', plan_credits: '', price: '' });
     const [error, setError] = useState<string | null>(null);
@@ -37,11 +37,11 @@ export default function PlanForm({ initialData, onUpdate }: { initialData?: any,
             };
 
             if (initialData) {
-                await api.patch(`/api/admin/plans/${initialData.id}`, payload);
+                await api(session).patch(`/api/admin/plans/${initialData.id}`, payload);
                 alert('Plan updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api.post('/api/admin/plans', payload);
+                await api(session).post('/api/admin/plans', payload);
                 alert('Plan created successfully!');
                 router.push('/admin/dashboard/plans');
             }

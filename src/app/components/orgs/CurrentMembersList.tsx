@@ -5,14 +5,14 @@ import { api } from '@/lib/api.client';
 import { XCircle, Loader2 } from 'lucide-react';
 import styles from './CurrentMembersList.module.css';
 
-export default function CurrentMembersList({ members, onUpdate }: { members: any[], onUpdate: () => void }) {
+export default function CurrentMembersList({ members, onUpdate, session }: { members: any[], onUpdate: () => void, session: any }) {
     const [isRemoving, setIsRemoving] = useState<string | null>(null);
 
     const handleRemove = async (userId: string, userName: string) => {
         if (confirm(`Remove ${userName} from this organization?`)) {
             setIsRemoving(userId);
             try {
-                await api.patch(`/api/admin/users/${userId}`, { organization_id: null });
+                await api(session).patch(`/api/admin/users/${userId}`, { organization_id: null });
                 onUpdate();
             } catch (err: any) {
                 alert(`Error: ${err.message}`);

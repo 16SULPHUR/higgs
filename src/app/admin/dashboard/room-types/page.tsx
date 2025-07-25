@@ -8,8 +8,10 @@ import { Plus, Loader2 } from 'lucide-react';
 import TableSkeleton from '@/components/common/TableSkeleton';
 import styles from '../rooms/RoomsPage.module.css';
 import RoomTypesTable from '@/components/room-types/RoomTypesTable';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function RoomTypesPage() {
+    const session = useSessionContext();
     const { status } = useSession();
     const [data, setData] = useState<{ roomTypes: any[], locations: any[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -18,8 +20,8 @@ export default function RoomTypesPage() {
         setIsLoading(true);
         try {
             const [roomTypesData, locationsData] = await Promise.all([
-                api.get('/api/admin/room-types'),
-                api.get('/api/admin/locations')
+                api(session).get('/api/admin/room-types'),
+                api(session).get('/api/admin/locations')
             ]);
             setData({ roomTypes: roomTypesData, locations: locationsData });
         } finally {
@@ -39,7 +41,7 @@ export default function RoomTypesPage() {
         }
         if (data) {
             const locationMap = new Map(data.locations.map((loc: any) => [loc.id, loc.name]));
-            return <div className={styles.tableContainer}><RoomTypesTable roomTypes={data.roomTypes} locationMap={locationMap} onUpdate={fetchData} /></div>;
+            return <div className={styles.tableContainer}><RoomTypesTable session={session} roomTypes={data.roomTypes} locationMap={locationMap} onUpdate={fetchData} /></div>;
         }
         return <p>Failed to load data.</p>;
     };

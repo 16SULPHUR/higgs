@@ -6,11 +6,13 @@ import { ArrowLeft } from 'lucide-react';
 import { api } from '@/lib/api.client'; 
 import styles from '../RoomsPage.module.css';
 import RoomForm from '@/components/rooms/RoomForm';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function NewRoomPage() {
+    const session = useSessionContext();
     const [roomTypes, setRoomTypes] = useState([]);
     useEffect(() => {
-        api.get('/api/admin/room-types').then(setRoomTypes);
+        api(session).get('/api/admin/room-types').then(setRoomTypes);
     }, []);
 
     return (
@@ -22,7 +24,7 @@ export default function NewRoomPage() {
                     <p className={styles.description}>Create a physical, bookable room based on a predefined room type.</p>
                 </div>
             </div>
-            {roomTypes.length > 0 ? <RoomForm roomTypes={roomTypes} /> : <p>Loading room types...</p>}
+            {roomTypes.length > 0 ? <RoomForm session={session} roomTypes={roomTypes} /> : <p>Loading room types...</p>}
         </div>
     );
 }

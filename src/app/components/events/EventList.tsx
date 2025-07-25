@@ -10,16 +10,17 @@ import styles from './EventList.module.css';
 interface EventListProps {
   events: any[];
   onUpdate: () => void;
+  session: any;
 }
 
-export default function EventList({ events, onUpdate }: EventListProps) {
+export default function EventList({ events, onUpdate, session }: EventListProps) {
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const handleDelete = async (eventId: string, eventTitle: string) => {
         if (confirm(`Are you sure you want to delete the event "${eventTitle}"?`)) {
             setIsDeleting(eventId);
             try {
-                await api.delete(`/api/admin/events/${eventId}`);
+                await api(session).delete(`/api/admin/events/${eventId}`);
                 alert('Event deleted successfully.');
                 onUpdate();
             } catch (error: any) {

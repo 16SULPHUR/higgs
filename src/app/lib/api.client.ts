@@ -1,8 +1,13 @@
 'use client';
+import { Session } from 'next-auth';
 import { getSession, signOut } from 'next-auth/react';
 
-async function apiClient(endpoint: string, options: RequestInit = {}) {
-    const session = await getSession();
+async function apiClient(
+    endpoint: string,
+    options: RequestInit = {},
+    session: Session | null
+) {
+    // const session = await getSession();
 
     console.log(`[API Client] Requesting: ${options.method || 'GET'} ${endpoint}`);
 
@@ -42,9 +47,9 @@ async function apiClient(endpoint: string, options: RequestInit = {}) {
     return response.json();
 }
 
-export const api = {
-    get: (endpoint: string) => apiClient(endpoint, { method: 'GET' }),
-    post: (endpoint: string, body: any) => apiClient(endpoint, { method: 'POST', body }),
-    patch: (endpoint: string, body: any) => apiClient(endpoint, { method: 'PATCH', body }),
-    delete: (endpoint: string) => apiClient(endpoint, { method: 'DELETE' }),
-};
+export const api = (session: Session | null) => ({
+    get: (e: string) => apiClient(e, { method: 'GET' }, session),
+    post: (e: string, b: any) => apiClient(e, { method: 'POST', body: b }, session),
+    patch: (e: string, b: any) => apiClient(e, { method: 'PATCH', body: b }, session),
+    delete: (e: string) => apiClient(e, { method: 'DELETE' }, session),
+});

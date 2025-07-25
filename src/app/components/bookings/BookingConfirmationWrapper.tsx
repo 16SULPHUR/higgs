@@ -1,15 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams, redirect } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api.client';
 import NewBookingConfirmation from '@/components/bookings/NewBookingConfirmation';
 import styles from '@/(members)/dashboard/book/BookingConfirmationPage.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function BookingConfirmationWrapper() {
-  const { status } = useSession();
+  const session = useSessionContext();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const [data, setData] = useState<{ newRoomType: any, liveUserData: any } | null>(null);
@@ -22,41 +23,52 @@ export default function BookingConfirmationWrapper() {
   const endTime = searchParams.get('endTime');
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      if (!typeOfRoomId || !date || !startTime || !endTime) {
-        setError('Booking information is missing. Please try again.');
+    // Check if user is unauthenticated
+    if (!session) {
+      router.push('/login');
+      return;
+    }
+
+    // Check required search params
+    if (!typeOfRoomId || !date || !startTime || !endTime) {
+      setError('Booking information is missing. Please try again.');
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const [newRoomTypeData, userData] = await Promise.all([
+          api(session).get(`/api/room-types/${typeOfRoomId}`),
+          api(session).get('/api/auth/me'),
+        ]);
+        setData({ newRoomType: newRoomTypeData, liveUserData: userData });
+      } catch (err: any) {
+        setError(err.message || 'Could not load booking details.');
+      } finally {
         setIsLoading(false);
-        return;
       }
+    };
 
-      const fetchData = async () => {
-        try {
-          const [newRoomTypeData, userData] = await Promise.all([
-            api.get(`/api/room-types/${typeOfRoomId}`),
-            api.get('/api/auth/me'),
-          ]);
-          setData({ newRoomType: newRoomTypeData, liveUserData: userData });
-        } catch (err: any) {
-          setError(err.message || 'Could not load booking details.');
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchData();
-    }
-
-    if (status === 'unauthenticated') {
-      redirect('/login');
-    }
-  }, [status, typeOfRoomId, date, startTime, endTime]);
+    fetchData();
+  }, [session, typeOfRoomId, date, startTime, endTime, router]);
 
   const renderContent = () => {
-    if (isLoading || status === 'loading') {
-      return <div className={styles.stateContainer}><Loader2 className={styles.loaderIcon} /></div>;
+    if (isLoading) {
+      return (
+        <div className={styles.stateContainer}>
+          <Loader2 className={styles.loaderIcon} />
+        </div>
+      );
     }
     if (error) {
-      return <div className={styles.stateContainer}><p className={styles.errorText}>{error}</p></div>;
+      return (
+        <div className={styles.stateContainer}>
+          <p className={styles.errorText}>{error}</p>
+        </div>
+      );
     }
     if (data && date && startTime && endTime) {
       function parseKolkataTimeToUTC(dateStr: string, timeStr: string): Date {
@@ -70,6 +82,7 @@ export default function BookingConfirmationWrapper() {
       return (
         <div className={styles.card}>
           <NewBookingConfirmation
+          session={session}
             roomType={data.newRoomType}
             liveUserData={data.liveUserData}
             startDateTime={startDateTime}
@@ -78,7 +91,11 @@ export default function BookingConfirmationWrapper() {
         </div>
       );
     }
-    return <div className={styles.stateContainer}><p>Something went wrong.</p></div>;
+    return (
+      <div className={styles.stateContainer}>
+        <p>Something went wrong.</p>
+      </div>
+    );
   };
 
   return (

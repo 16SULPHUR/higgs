@@ -1,8 +1,6 @@
 'use client';
 
 import { ReactNode, Suspense, useState } from 'react';
-import { SessionProvider } from 'next-auth/react';
-import type { Session } from 'next-auth';
 import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy, Loader2 } from 'lucide-react';
 import styles from './MemberLayout.module.css';
 import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
@@ -17,7 +15,6 @@ export default function MemberLayoutClient({ children, userProfileMenu }: Member
     const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
     return (
-        <SessionProvider>
             <div className={styles.container}>
                 <aside className={styles.desktopSidebar}>
                     <div className={styles.sidebarHeader}>
@@ -48,6 +45,5 @@ export default function MemberLayoutClient({ children, userProfileMenu }: Member
                     </main>
                 </div>
             </div>
-        </SessionProvider>
     );
 }

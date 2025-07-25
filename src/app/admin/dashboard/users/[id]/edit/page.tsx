@@ -7,16 +7,18 @@ import { api } from '@/lib/api.client';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import CreateUserForm from '@/components/admin/users/CreateUserForm';
 import styles from '../../../rooms/RoomsPage.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function EditUserPage() {
+    const session = useSessionContext();
     const params = useParams();
     const [data, setData] = useState<{ user: any, organizations: any[] } | null>(null);
     const userId = params.id as string;
 
     const fetchData = () => {
         Promise.all([
-            api.get(`/api/admin/users/${userId}`),
-            api.get('/api/admin/orgs')
+            api(session).get(`/api/admin/users/${userId}`),
+            api(session).get('/api/admin/orgs')
         ]).then(([user, organizations]) => setData({ user, organizations }));
     };
 
@@ -35,7 +37,7 @@ export default function EditUserPage() {
                     <p className={styles.description}>Update user details and permissions.</p>
                 </div>
             </div>
-            <CreateUserForm organizations={data.organizations} initialData={data.user} onUpdate={fetchData} />
+            <CreateUserForm session={session} organizations={data.organizations} initialData={data.user} onUpdate={fetchData} />
         </div>
     );
 }

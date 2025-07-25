@@ -7,7 +7,7 @@ import { api } from '@/lib/api.client';
 import { Pencil, Trash2, User, UserCheck, UserX, Loader2 } from 'lucide-react';
 import styles from '../../rooms/RoomsTable.module.css';
 
-export default function UsersTable({ users, onUpdate }: { users: any[], onUpdate: () => void }) {
+export default function UsersTable({ users, onUpdate, session }: { users: any[], onUpdate: () => void, session:any }) {
     const [isProcessing, setIsProcessing] = useState<string | null>(null);
 
     const handleToggleStatus = async (user: any) => {
@@ -15,7 +15,7 @@ export default function UsersTable({ users, onUpdate }: { users: any[], onUpdate
         if (confirm(`Are you sure you want to ${action} the user "${user.name}"?`)) {
             setIsProcessing(user.id);
             try {
-                await api.patch(`/api/admin/users/${user.id}`, { is_active: !user.is_active });
+                await api(session).patch(`/api/admin/users/${user.id}`, { is_active: !user.is_active });
                 onUpdate();
             } catch (err: any) {
                 alert(`Error: ${err.message}`);
@@ -29,7 +29,7 @@ export default function UsersTable({ users, onUpdate }: { users: any[], onUpdate
         if (confirm(`This will permanently delete "${user.name}". This action cannot be undone. Proceed?`)) {
             setIsProcessing(user.id);
             try {
-                await api.delete(`/api/admin/users/${user.id}`);
+                await api(session).delete(`/api/admin/users/${user.id}`);
                 alert('User deleted successfully.');
                 onUpdate();
             } catch (err: any) {
