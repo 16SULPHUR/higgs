@@ -17,8 +17,8 @@ export default function EditUserPage() {
 
     const fetchData = () => {
         Promise.all([
-            api(session).get(`/api/admin/users/${userId}`),
-            api(session).get('/api/admin/orgs')
+            api.get(`/api/admin/users/${userId}`),
+            api.get('/api/admin/orgs')
         ]).then(([user, organizations]) => setData({ user, organizations }));
     };
 

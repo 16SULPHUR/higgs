@@ -20,7 +20,7 @@ export default function OrgsTable({ organizations, plans, users, onUpdate, sessi
         if (confirm(`Are you sure you want to delete "${orgName}"? This action cannot be undone.`)) {
             setIsDeleting(orgId);
             try {
-                await api(session).delete(`/api/admin/orgs/${orgId}`);
+                await api.delete(`/api/admin/orgs/${orgId}`);
                 alert('Organization deleted successfully.');
                 onUpdate();
             } catch (error: any) {

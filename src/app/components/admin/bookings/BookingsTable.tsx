@@ -18,7 +18,7 @@ export default function BookingsTable({ bookings, onUpdate, session }: BookingsT
         if (confirm("Are you sure you want to cancel this booking? This will refund the user's credits.")) {
             setIsCancelling(bookingId);
             try {
-                const result = await api(session).delete(`/api/admin/bookings/${bookingId}`);
+                const result = await api.delete(`/api/admin/bookings/${bookingId}`);
                 alert(result.message || 'Booking cancelled successfully.');
                 onUpdate();
             } catch (error: any) {

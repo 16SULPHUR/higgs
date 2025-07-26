@@ -19,7 +19,7 @@ export default function PlansTable({ plans, onUpdate, session }: PlansTableProps
         if (confirm(`Are you sure you want to delete the "${planName}" plan?`)) {
             setIsDeleting(planId);
             try {
-                await api(session).delete(`/api/admin/plans/${planId}`);
+                await api.delete(`/api/admin/plans/${planId}`);
                 alert('Plan deleted successfully.');
                 onUpdate();
             } catch (error: any) {

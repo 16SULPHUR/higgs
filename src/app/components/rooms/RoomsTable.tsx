@@ -13,7 +13,7 @@ export default function RoomsTable({ rooms, onUpdate, session }: { rooms: any[],
         if (confirm(`Are you sure you want to delete the room "${roomName}"?`)) {
             setIsDeleting(roomId);
             try {
-                await api(session).delete(`/api/admin/rooms/${roomId}`);
+                await api.delete(`/api/admin/rooms/${roomId}`);
                 alert('Room deleted.');
                 onUpdate();
             } catch (error: any) {

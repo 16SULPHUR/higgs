@@ -70,6 +70,8 @@ export const authConfig  = {
 
           const user = data.user || data.admin;
 
+          
+
           return {
             ...user,
             accessToken: data.accessToken,

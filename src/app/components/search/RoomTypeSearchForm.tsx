@@ -86,7 +86,7 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
 
     try {
       const queryParams = new URLSearchParams(criteria).toString();
-      const data = await api(session).get(`/api/meeting-rooms/search?${queryParams}`);
+      const data = await api.get(`/api/meeting-rooms/search?${queryParams}`);
       setResults(data);
       setExecutedSearchCriteria({
         ...criteria,

@@ -36,7 +36,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
         };
 
         try {
-            const newBooking = await api(session).post('/api/bookings', payload);
+            const newBooking = await api.post('/api/bookings', payload);
             alert('Booking confirmed successfully!');
             router.push(`/dashboard/booking-success/${newBooking.id}`);
         } catch (err: any) {

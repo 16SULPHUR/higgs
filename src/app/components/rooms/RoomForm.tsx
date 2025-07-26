@@ -30,11 +30,11 @@ export default function RoomForm({ roomTypes, initialData, onUpdate, session }: 
         setIsSubmitting(true);
         try {
             if (initialData) {
-                await api(session).patch(`/api/admin/rooms/${initialData.id}`, formData);
+                await api.patch(`/api/admin/rooms/${initialData.id}`, formData);
                 alert('Room instance updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api(session).post('/api/admin/rooms', formData);
+                await api.post('/api/admin/rooms', formData);
                 alert('Room instance created successfully!');
                 router.push('/admin/dashboard/rooms');
             }

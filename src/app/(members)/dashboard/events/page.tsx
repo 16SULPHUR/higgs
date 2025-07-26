@@ -17,8 +17,12 @@ export default function UserEventsPage() {
 
   // Fetch events only if session is available (authenticated)
   useEffect(() => {
+    console.log('Document Cookie:', document.cookie);
+
     if (!session) {
-      // No session, stop loading and clear events
+      
+      console.log("session")
+      console.log(session)
       setIsLoading(false);
       setEvents([]);
       return;
@@ -29,7 +33,7 @@ export default function UserEventsPage() {
       setError(null);
 
       try {
-        const data = await api(session).get('/api/events');
+        const data = await api.get('/api/events');
         setEvents(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load events.');
@@ -56,7 +60,7 @@ export default function UserEventsPage() {
       // Refetch events on update
       setIsLoading(true);
       setError(null);
-      api(session).get('/api/events')
+      api.get('/api/events')
         .then(setEvents)
         .catch(err => setError(err.message))
         .finally(() => setIsLoading(false));

@@ -16,7 +16,7 @@ export default function AdminTicketDetailPage() {
     const ticketId = params.ticketId as string;
 
     const fetchData = () => {
-        api(session).get(`/api/admin/support-tickets/${ticketId}`).then(setTicket);
+        api.get(`/api/admin/support-tickets/${ticketId}`).then(setTicket);
     };
 
     useEffect(() => {

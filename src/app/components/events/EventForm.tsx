@@ -9,8 +9,7 @@ import styles from '@/components/rooms/RoomForm.module.css';
 import imageStyles from './EventForm.module.css';
 
 export default function EventForm({ initialData }: { initialData?: any }) {
-    const router = useRouter();
-    const { status } = useSession();
+    const router = useRouter(); 
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [statusText, setStatusText] = useState('');

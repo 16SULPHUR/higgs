@@ -17,7 +17,7 @@ export default function AddMemberForm({ orgId, availableUsers, onUpdate }: { org
         setIsSubmitting(true);
         setError(null);
         try {
-            await api(session).patch(`/api/admin/users/${selectedUserId}`, { organization_id: orgId });
+            await api.patch(`/api/admin/users/${selectedUserId}`, { organization_id: orgId });
             alert('User added successfully!');
             setSelectedUserId('');
             onUpdate();

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogIn } from 'lucide-react'; 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { LogIn } from 'lucide-react';
+import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
@@ -15,8 +15,8 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
-    
+
+
     const result = await signIn('credentials', {
       redirect: false,
       email: email,
@@ -26,10 +26,24 @@ export default function LoginForm() {
     });
 
     if (result?.error) {
-      
+
       setError('Invalid email or password.');
     } else if (result?.ok) {
-      
+
+      console.log(result)
+      const session = await getSession();
+      if (session?.accessToken) {
+        document.cookie = `accessToken=${session.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+      if (session?.refreshToken) {
+        document.cookie = `refreshToken=${session.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+
+
+
+
       router.push('/dashboard');
     }
   };
@@ -67,17 +81,17 @@ export default function LoginForm() {
               className={styles.input}
             />
           </div>
-           {error && <p className={styles.errorText}>{error}</p>}
+          {error && <p className={styles.errorText}>{error}</p>}
           <button type="submit" className={styles.button}>
             <LogIn size={16} />
             <span>Sign In</span>
           </button>
         </form>
 
-         <div className={styles.divider}>OR</div>
+        <div className={styles.divider}>OR</div>
 
         <button onClick={() => signIn('google', { callbackUrl: '/dashboard' })} className={`${styles.button} ${styles.googleButton}`}>
-            <span>Sign in with Google</span>
+          <span>Sign in with Google</span>
         </button>
       </div>
     </div>

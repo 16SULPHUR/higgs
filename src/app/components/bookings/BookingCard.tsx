@@ -21,7 +21,7 @@ export default function BookingCard({ booking, onUpdate, session }: BookingCardP
         if (confirm("Are you sure you want to cancel this booking?")) {
             setIsPending(true);
             try {
-                const result = await api(session).delete(`/api/bookings/${booking.id}`);
+                const result = await api.delete(`/api/bookings/${booking.id}`);
                 alert(result.message || 'Booking cancelled successfully.');
                 onUpdate();
             } catch (error: any) {

@@ -23,6 +23,9 @@ export default function BookingConfirmationWrapper() {
   const endTime = searchParams.get('endTime');
 
   useEffect(() => {
+
+    console.log("session")
+    console.log(session)
     // Check if user is unauthenticated
     if (!session) {
       router.push('/login');
@@ -41,9 +44,10 @@ export default function BookingConfirmationWrapper() {
       setError(null);
       try {
         const [newRoomTypeData, userData] = await Promise.all([
-          api(session).get(`/api/room-types/${typeOfRoomId}`),
-          api(session).get('/api/auth/me'),
+          api.get(`/api/room-types/${typeOfRoomId}`),
+          api.get('/api/auth/me'),
         ]);
+        console.log(newRoomTypeData, userData);
         setData({ newRoomType: newRoomTypeData, liveUserData: userData });
       } catch (err: any) {
         setError(err.message || 'Could not load booking details.');

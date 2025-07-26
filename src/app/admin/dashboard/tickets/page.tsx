@@ -26,7 +26,7 @@ export default function AdminTicketsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api(session).get('/api/admin/support-tickets');
+      const data = await api.get('/api/admin/support-tickets');
       setTickets(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load support tickets.');

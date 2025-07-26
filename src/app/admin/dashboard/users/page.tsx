@@ -26,7 +26,7 @@ export default function AdminUsersPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api(session).get('/api/admin/users');
+      const data = await api.get('/api/admin/users');
       setUsers(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load users.');

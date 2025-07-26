@@ -1,30 +1,48 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { api } from '@/lib/api.client';
-import styles from './ProfileForm.module.css';
 import { User, Mail, Phone, Save } from 'lucide-react';
-import { useSessionContext } from '@/contexts/SessionContext';
+import styles from './ProfileForm.module.css';
+import { api } from '@/lib/api.client';
+import { getCookie } from '@/lib/cookieUtils';
 
-export default function ProfileForm({ initialData }: { initialData: any }) {
-  const session = useSessionContext();
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-
+export default function ProfileForm() {
+  const [profile, setProfile] = useState<any>(null);
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  // Fetch user profile from /api/auth/me using accessToken
   useEffect(() => {
-    if (initialData) {
-      setFormData({ name: initialData.name || '', phone: initialData.phone || '' });
-      if (initialData.profile_picture) {
-        setImagePreview(initialData.profile_picture);
+    const fetchProfile = async () => {
+      const accessToken = getCookie('accessToken');
+      if (!accessToken) {
+        setError('You are not logged in.');
+        return;
       }
-    }
-  }, [initialData]);
+
+      try {
+        const data = await api.get('/api/auth/me',);
+
+        console.log(data);
+        
+        setProfile(data);
+        setFormData({ name: data.name || '', phone: data.phone || '' });
+        if (data.profile_picture) {
+          setImagePreview(data.profile_picture);
+        }
+      } catch (err: any) {
+        setError(err.message || 'Failed to load profile.');
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -47,7 +65,8 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
     setSuccess(null);
     setIsPending(true);
 
-    if (!session) {
+    const accessToken = getCookie('accessToken');
+    if (!accessToken) {
       setError('You must be logged in to update your profile.');
       setIsPending(false);
       return;
@@ -61,14 +80,18 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
     }
 
     try {
-      const updatedUser = await api(session).patch('/api/profile', data);
-      setSuccess('Profile updated successfully!'); 
+      await api.patch('/api/profile', data);
+      setSuccess('Profile updated successfully!');
     } catch (err: any) {
       setError(err.message || 'Failed to update profile.');
     } finally {
       setIsPending(false);
     }
   };
+
+  if (!profile && !error) {
+    return <div className={styles.loading}>Loading...</div>;
+  }
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -99,8 +122,8 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
           />
         </div>
         <div className={styles.headerInfo}>
-          <h2 className={styles.userName}>{session?.user?.name || initialData.name}</h2>
-          <p className={styles.userEmail}>{initialData.email}</p>
+          <h2 className={styles.userName}>{profile?.name}</h2>
+          <p className={styles.userEmail}>{profile?.email}</p>
         </div>
       </div>
 
@@ -128,7 +151,7 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
               id="email"
               name="email"
               type="email"
-              value={initialData.email}
+              value={profile?.email || ''}
               disabled
               className={styles.input}
               title="Email cannot be changed."
@@ -162,11 +185,7 @@ export default function ProfileForm({ initialData }: { initialData: any }) {
             {success}
           </p>
         )}
-        <button
-          type="submit"
-          disabled={isPending || !session}
-          className={styles.saveButton}
-        >
+        <button type="submit" disabled={isPending} className={styles.saveButton}>
           <Save size={16} />
           <span>{isPending ? 'Saving...' : 'Save Changes'}</span>
         </button>

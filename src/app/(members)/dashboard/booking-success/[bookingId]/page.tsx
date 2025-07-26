@@ -30,8 +30,8 @@ export default function BookingSuccessPage() {
 
     try {
       const [bookingData, guestsData] = await Promise.all([
-        api(session).get(`/api/bookings/${bookingId}`),
-        api(session).get(`/api/bookings/${bookingId}/invitations`),
+        api.get(`/api/bookings/${bookingId}`),
+        api.get(`/api/bookings/${bookingId}/invitations`),
       ]);
       setBooking(bookingData);
       setInvitedGuests(guestsData);

@@ -11,8 +11,7 @@ import RoomTypesTable from '@/components/room-types/RoomTypesTable';
 import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function RoomTypesPage() {
-    const session = useSessionContext();
-    const { status } = useSession();
+    const session = useSessionContext(); 
     const [data, setData] = useState<{ roomTypes: any[], locations: any[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -20,8 +19,8 @@ export default function RoomTypesPage() {
         setIsLoading(true);
         try {
             const [roomTypesData, locationsData] = await Promise.all([
-                api(session).get('/api/admin/room-types'),
-                api(session).get('/api/admin/locations')
+                api.get('/api/admin/room-types'),
+                api.get('/api/admin/locations')
             ]);
             setData({ roomTypes: roomTypesData, locations: locationsData });
         } finally {
@@ -30,13 +29,13 @@ export default function RoomTypesPage() {
     };
 
     useEffect(() => {
-        if (status === 'authenticated') {
+        if (session) {
             fetchData();
         }
-    }, [status]);
+    }, [session]);
 
     const renderContent = () => {
-        if (isLoading || status === 'loading') {
+        if (isLoading || session === null) {
             return <div className={styles.tableContainer}><TableSkeleton cols={5} /></div>;
         }
         if (data) {

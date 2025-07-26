@@ -43,9 +43,9 @@ export default function RescheduleConfirmPage() {
       setError(null);
       try {
         const [originalBookingData, newRoomTypeData, liveUserDataResponse] = await Promise.all([
-          api(session).get(`/api/bookings/${originalBookingId}`),
-          api(session).get(`/api/room-types/${newTypeOfRoomId}`),
-          api(session).get('/api/auth/me')
+          api.get(`/api/bookings/${originalBookingId}`),
+          api.get(`/api/room-types/${newTypeOfRoomId}`),
+          api.get('/api/auth/me')
         ]);
 
         setOriginalBooking(originalBookingData);

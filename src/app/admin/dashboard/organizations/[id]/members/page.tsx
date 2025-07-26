@@ -31,8 +31,8 @@ export default function ManageMembersPage() {
     setError(null);
     try {
       const [orgData, usersData] = await Promise.all([
-        api(session).get(`/api/admin/orgs/${orgId}`),
-        api(session).get('/api/admin/users/summary'),
+        api.get(`/api/admin/orgs/${orgId}`),
+        api.get('/api/admin/users/summary'),
       ]);
       setOrg(orgData);
       setAllUsers(usersData);

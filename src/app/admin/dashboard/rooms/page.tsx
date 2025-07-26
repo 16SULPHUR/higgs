@@ -26,7 +26,7 @@ export default function RoomsInstancesPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api(session).get('/api/admin/rooms');
+      const data = await api.get('/api/admin/rooms');
       setRooms(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load rooms.');

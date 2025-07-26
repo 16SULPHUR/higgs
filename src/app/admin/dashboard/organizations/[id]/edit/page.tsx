@@ -30,8 +30,8 @@ export default function EditOrgPage() {
     setError(null);
     try {
       const [org, plans] = await Promise.all([
-        api(session).get(`/api/admin/orgs/${orgId}`),
-        api(session).get('/api/admin/plans')
+        api.get(`/api/admin/orgs/${orgId}`),
+        api.get('/api/admin/plans')
       ]);
       setData({ org, plans });
     } catch (err: any) {

@@ -20,7 +20,7 @@ export default function EventList({ events, onUpdate, session }: EventListProps)
         if (confirm(`Are you sure you want to delete the event "${eventTitle}"?`)) {
             setIsDeleting(eventId);
             try {
-                await api(session).delete(`/api/admin/events/${eventId}`);
+                await api.delete(`/api/admin/events/${eventId}`);
                 alert('Event deleted successfully.');
                 onUpdate();
             } catch (error: any) {

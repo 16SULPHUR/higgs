@@ -36,7 +36,7 @@ export default function InviteGuestForm({ bookingId, onInviteSuccess, session }:
     };
 
     try {
-      const result = await api(session).post(`/api/bookings/${bookingId}/invite`, payload);
+      const result = await api.post(`/api/bookings/${bookingId}/invite`, payload);
       setSuccess(result.message);
       setName('');
       setEmail('');

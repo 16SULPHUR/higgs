@@ -32,7 +32,7 @@ export default function TicketDetailPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api(session).get(`/api/support-tickets/${ticketId}`);
+        const data = await api.get(`/api/support-tickets/${ticketId}`);
         setTicket(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load ticket details.');
@@ -50,7 +50,7 @@ export default function TicketDetailPage() {
     if (confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
       setIsDeleting(true);
       try {
-        await api(session).delete(`/api/support-tickets/${ticket.id}`);
+        await api.delete(`/api/support-tickets/${ticket.id}`);
         alert('Ticket deleted successfully.');
         router.push('/dashboard/support');
       } catch (err: any) {

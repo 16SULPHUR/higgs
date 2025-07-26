@@ -27,9 +27,9 @@ export default function OrgsPage() {
     setError(null);
     try {
       const [orgs, plans, users] = await Promise.all([
-        api(session).get('/api/admin/orgs'),
-        api(session).get('/api/admin/plans'),
-        api(session).get('/api/admin/users/summary')
+        api.get('/api/admin/orgs'),
+        api.get('/api/admin/plans'),
+        api.get('/api/admin/users/summary')
       ]);
       setData({ orgs, plans, users });
     } catch (err: any) {

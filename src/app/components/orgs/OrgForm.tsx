@@ -28,11 +28,11 @@ export default function OrgForm({ plans, initialData, onUpdate, session }: { pla
         
         try {
             if (initialData) {
-                await api(session).patch(`/api/admin/orgs/${initialData.id}`, formData);
+                await api.patch(`/api/admin/orgs/${initialData.id}`, formData);
                 alert('Organization updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api(session).post('/api/admin/orgs', formData);
+                await api.post('/api/admin/orgs', formData);
                 alert('Organization created successfully!');
                 router.push('/admin/dashboard/organizations');
             }

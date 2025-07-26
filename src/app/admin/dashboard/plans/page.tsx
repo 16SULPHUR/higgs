@@ -15,9 +15,9 @@ export default function PlansPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchData = async () => {
+  const fetchData = async () => { 
     if (!session) {
-      // No session - clear plans and stop loading
+      
       setPlans([]);
       setIsLoading(false);
       return;
@@ -26,7 +26,7 @@ export default function PlansPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api(session).get('/api/admin/plans');
+      const data = await api.get('/api/admin/plans');
       setPlans(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load plans.');

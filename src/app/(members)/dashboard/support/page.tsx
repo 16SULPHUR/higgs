@@ -26,7 +26,7 @@ export default function SupportPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api(session).get('/api/support-tickets');
+        const data = await api.get('/api/support-tickets');
         setTickets(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load support tickets.');

@@ -25,7 +25,7 @@ export default function ProfilePage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api(session).get('/api/auth/me');
+        const data = await api.get('/api/auth/me');
         setUserData(data);
       } catch (err: any) {
         setError(err.message || 'Failed to fetch profile data.');
@@ -54,7 +54,7 @@ export default function ProfilePage() {
       return <p>Could not load user profile.</p>;
     }
 
-    return <ProfileForm initialData={userData} />;
+    return <ProfileForm  />;
   };
 
   return (

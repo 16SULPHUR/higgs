@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, SquareStack, Users } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import MobileMenuButton from '@/components/MobileMenuButton';
-import styles from './DashboardLayout.module.css';
-import { SessionProvider } from 'next-auth/react';
+import styles from './DashboardLayout.module.css'; 
+import { SessionProvider } from '@/contexts/SessionContext';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);

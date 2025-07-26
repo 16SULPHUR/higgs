@@ -24,7 +24,7 @@ export default function AdminBookingsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api(session).get('/api/admin/bookings');
+      const data = await api.get('/api/admin/bookings');
       setBookings(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load bookings.');

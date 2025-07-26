@@ -18,7 +18,7 @@ export default function UpdateStatusForm({ ticket, onUpdate, session }: { ticket
         setIsPending(true);
         try {
             const payload = { status, response: response.trim() === '' ? undefined : response.trim() };
-            await api(session).patch(`/api/admin/support-tickets/${ticket.id}/status`, payload);
+            await api.patch(`/api/admin/support-tickets/${ticket.id}/status`, payload);
             alert('Ticket updated successfully.');
             onUpdate();
         } catch (err: any) {

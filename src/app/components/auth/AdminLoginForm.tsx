@@ -3,8 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogIn } from 'lucide-react'; 
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import styles from './LoginForm.module.css';
+import { setCookie } from '@/lib/cookieUtils';  
 
 export default function AdminLoginForm() {
   const [email, setEmail] = useState('');
@@ -15,21 +17,25 @@ export default function AdminLoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
-    
+
     const result = await signIn('credentials', {
       redirect: false,
-      email: email,
-      password: password,
-      userType: "ADMIN",
-      callbackUrl: "/admin/dashboard"
+      email,
+      password,
+      userType: 'ADMIN',
+      callbackUrl: '/admin/dashboard',
     });
 
     if (result?.error) {
-      
       setError('Invalid email or password.');
     } else if (result?.ok) {
-      
+      const session = await getSession();
+      if (session?.accessToken) {
+        setCookie('accessToken', session.accessToken);
+      }
+      if (session?.refreshToken) {
+        setCookie('refreshToken', session.refreshToken);
+      }
       router.push('/admin/dashboard');
     }
   };
@@ -67,14 +73,14 @@ export default function AdminLoginForm() {
               className={styles.input}
             />
           </div>
-           {error && <p className={styles.errorText}>{error}</p>}
+          {error && <p className={styles.errorText}>{error}</p>}
           <button type="submit" className={styles.button}>
             <LogIn size={16} />
             <span>Sign In</span>
           </button>
         </form>
 
-         <div className={styles.divider}>OR</div>
+        <div className={styles.divider}>OR</div>
       </div>
     </div>
   );
