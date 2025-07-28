@@ -8,7 +8,9 @@ import { deleteCookie } from '@/lib/cookieUtils';
 export default function SignOutButton() {
   const handleSignOut = async () => { 
     deleteCookie('accessToken');
-    deleteCookie('refreshToken');
+    deleteCookie('refreshToken'); 
+    deleteCookie('name');
+    deleteCookie('profile_picture');
  
     await signOut({ callbackUrl: '/login' });
   };
