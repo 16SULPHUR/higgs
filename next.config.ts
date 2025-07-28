@@ -14,7 +14,7 @@ const withPWA = require('next-pwa')({
         cacheName: 'images',
         expiration: {
           maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+          maxAgeSeconds: 30 * 24 * 60 * 60, 
         },
       },
     },
@@ -26,9 +26,11 @@ const withPWA = require('next-pwa')({
       }
     },
   ],
-
 });
-
+ 
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const nextConfig: NextConfig = {
   images: {
@@ -42,7 +44,6 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '10mb',
     },
   },
-
 };
-
-module.exports = withPWA(nextConfig);
+ 
+module.exports = withBundleAnalyzer(withPWA(nextConfig));

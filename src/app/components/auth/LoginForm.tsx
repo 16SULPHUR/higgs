@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { LogIn } from 'lucide-react';
 import { getSession, signIn } from 'next-auth/react';
 import styles from './LoginForm.module.css';
@@ -60,7 +60,9 @@ export default function LoginForm() {
 
 
 
-      router.push('/dashboard');
+      setTimeout(() => {
+        redirect('/dashboard');
+      }, 1000);
     }
   };
 

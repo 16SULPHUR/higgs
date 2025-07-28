@@ -39,16 +39,14 @@ export default function BookingSuccessPage() {
     if (session) {
       fetchBookingData();
 
-    } else {
-      // No session; reset state
+    } else { 
       setBooking(null);
       setInvitedGuests([]);
       setIsLoading(false);
       setError(null);
     }
   }, [session, bookingId]);
-
-  // Render loading, error, and missing booking states early
+ 
   if (isLoading) {
     return (
       <div className={styles.container}>

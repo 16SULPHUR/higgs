@@ -13,7 +13,7 @@ import { api } from "@/lib/api.client";
 import { getCookie } from "@/lib/cookieUtils";
 
 export default function UserProfileMenu() { 
-    const session = useSessionContext();
+    const session = getCookie("accessToken");   
     const [userData, setUserData] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
