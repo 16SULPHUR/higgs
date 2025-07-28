@@ -15,7 +15,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
 
     useEffect(() => {
         if (session) {
-            api.get(`/api/events/${eventId}/registration-status`)
+            api.get(session, `/api/events/${eventId}/registration-status`)
                 .then(data => setIsRegistered(data.is_registered))
                 .finally(() => setIsLoading(false));
         } else if (!session) {

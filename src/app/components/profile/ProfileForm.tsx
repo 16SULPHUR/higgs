@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { User, Mail, Phone, Save } from 'lucide-react';
 import styles from './ProfileForm.module.css';
 import { api } from '@/lib/api.client';
-import { getCookie } from '@/lib/cookieUtils';
+import { getCookie } from '@/lib/cookieUtils'; 
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function ProfileForm() {
+  const session = useSessionContext()
   const [profile, setProfile] = useState<any>(null);
   const [formData, setFormData] = useState({ name: '', phone: '' });
   const [imageFile, setImageFile] = useState<File | null>(null);

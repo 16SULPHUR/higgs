@@ -44,8 +44,8 @@ export default function BookingConfirmationWrapper() {
       setError(null);
       try {
         const [newRoomTypeData, userData] = await Promise.all([
-          api.get(`/api/room-types/${typeOfRoomId}`),
-          api.get('/api/auth/me'),
+          api.get(session, `/api/room-types/${typeOfRoomId}`),
+          api.get(session, '/api/auth/me'),
         ]);
         console.log(newRoomTypeData, userData);
         setData({ newRoomType: newRoomTypeData, liveUserData: userData });

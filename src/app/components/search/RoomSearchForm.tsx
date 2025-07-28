@@ -2,14 +2,16 @@
 
 import { useState, useTransition, useMemo } from 'react';
 import { Search, Loader2 } from 'lucide-react';
-import { searchRoomsAction } from '@/actions/searchActions';
 import { generate30MinSlots, getSlotIndex } from '@/lib/timeSlots';
 import RoomResultCard from './RoomResultCard';
 import styles from './RoomSearchForm.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
+import { api } from '@/lib/api.client'; // Use your client-side API utility
 
 const timeSlots = generate30MinSlots();
 
 export default function RoomSearchForm() {
+    const session = useSessionContext();
     const [criteria, setCriteria] = useState({
         date: new Date().toISOString().split('T')[0],
         capacity: '2',
@@ -57,31 +59,61 @@ export default function RoomSearchForm() {
         }
 
         startTransition(async () => {
-             
-            const finalEndTimeValue = endTime || startTime;
-            const [h, m] = finalEndTimeValue.split(':').map(Number);
-            const endTimeMinutes = h * 60 + m + 30;
-            const endH = Math.floor(endTimeMinutes / 60);
-            const endM = endTimeMinutes % 60;
-            const finalEndTimeForQuery = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
-            
-            const searchPayload = {
-                date: criteria.date,
-                startTime: startTime,
-                endTime: finalEndTimeForQuery,
-                capacity: criteria.capacity
-            };
-            
-            const result = await searchRoomsAction(searchPayload);
+            try {
+                const finalEndTimeValue = endTime || startTime;
+                const [h, m] = finalEndTimeValue.split(':').map(Number);
+                const endTimeMinutes = h * 60 + m + 30;
+                const endH = Math.floor(endTimeMinutes / 60);
+                const endM = endTimeMinutes % 60;
+                const finalEndTimeForQuery = `${endH.toString().padStart(2, '0')}:${endM.toString().padStart(2, '0')}`;
+                
+                const searchPayload = {
+                    date: criteria.date,
+                    startTime: startTime,
+                    endTime: finalEndTimeForQuery,
+                    capacity: criteria.capacity
+                };
+                
+                // Create query parameters
+                const queryParams = new URLSearchParams(
+                    Object.fromEntries(
+                        Object.entries(searchPayload).map(([key, value]) => [key, String(value)])
+                    )
+                ).toString();
 
-            if (result.success) {
-                setResults(result.data);
+                console.log('Searching rooms with criteria:', searchPayload);
+                
+                // Client-side API call
+                const data = await api.get(session, `/api/meeting-rooms/search?${queryParams}`);
+                
+                // Handle success
+                setResults(data);
                 setExecutedSearchCriteria(searchPayload);
-                if (result.data.length === 0) {
+                
+                if (data.length === 0) {
                     setError(null);  
                 }
-            } else {
-                setError(result.error ?? "An unknown error occurred.");
+                
+            } catch (error: any) {
+                console.error('Room search failed:', error);
+                
+                // Handle API error responses
+                try {
+                    let errorMessage = 'An error occurred while searching for rooms.';
+                    
+                    if (error.message) {
+                        try {
+                            const errorBody = JSON.parse(error.message);
+                            errorMessage = errorBody.message || errorMessage;
+                        } catch (parseError) {
+                            errorMessage = error.message;
+                        }
+                    }
+                    
+                    setError(errorMessage);
+                } catch (parseError) {
+                    setError('An error occurred while searching for rooms.');
+                }
             }
         });
     };
@@ -117,7 +149,7 @@ export default function RoomSearchForm() {
                                     key={slot.value}
                                     onClick={() => handleSlotClick(slot.value)}
                                     className={btnClass}
-                                    disabled={isDisabled}
+                                    disabled={isDisabled || isPending}
                                 >
                                     {isStart && 'Start: '}
                                     {isEnd && 'End: '}
@@ -130,12 +162,29 @@ export default function RoomSearchForm() {
 
                 <div className={styles.inputGroup}>
                     <label htmlFor="date">Date</label>
-                    <input type="date" id="date" name="date" value={criteria.date} onChange={handleChange} className={styles.input} />
+                    <input 
+                        type="date" 
+                        id="date" 
+                        name="date" 
+                        value={criteria.date} 
+                        onChange={handleChange} 
+                        className={styles.input}
+                        disabled={isPending}
+                    />
                 </div>
                 
                 <div className={styles.inputGroup}>
                     <label htmlFor="capacity">People</label>
-                    <input type="number" id="capacity" name="capacity" min="1" value={criteria.capacity} onChange={handleChange} className={styles.input} />
+                    <input 
+                        type="number" 
+                        id="capacity" 
+                        name="capacity" 
+                        min="1" 
+                        value={criteria.capacity} 
+                        onChange={handleChange} 
+                        className={styles.input}
+                        disabled={isPending}
+                    />
                 </div>
                 
                 <button type="submit" className={styles.searchButton} disabled={isPending}>

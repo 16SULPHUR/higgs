@@ -1,30 +1,70 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { rescheduleBookingAction } from '@/actions/bookingActions';
 import { Clock, Calendar, Users, Wallet, MapPin, Repeat } from 'lucide-react';
 import styles from './BookingConfirmationForm.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
+import { api } from '@/lib/api.client'; // Use your client-side API utility
+import { useRouter } from 'next/navigation';
 
-export default function RescheduleConfirmation({ newRoomType, liveUserData, startDateTime, endDateTime, originalBooking }: { newRoomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date, originalBooking: any }) {
+export default function RescheduleConfirmation({ 
+    newRoomType, 
+    liveUserData, 
+    startDateTime, 
+    endDateTime, 
+    originalBooking 
+}: { 
+    newRoomType: any, 
+    liveUserData: any, 
+    startDateTime: Date, 
+    endDateTime: Date, 
+    originalBooking: any 
+}) {
+    const session = useSessionContext();
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = () => {
         setError(null);
         startTransition(async () => {
-            const payload = {
-                new_type_of_room_id: newRoomType.id,
-                new_start_time: startDateTime.toISOString(),
-                new_end_time: endDateTime.toISOString()
-            };
-            const result = await rescheduleBookingAction(originalBooking.id, payload);
-            
-            if (result?.success === false) {
-                setError(result.message);
+            try {
+                const payload = {
+                    new_type_of_room_id: newRoomType.id,
+                    new_start_time: startDateTime.toISOString(),
+                    new_end_time: endDateTime.toISOString()
+                };
+                
+                // Client-side reschedule API call
+                await api.post(session, `/api/bookings/${originalBooking.id}/reschedule`, payload);
+                
+                // Navigate to bookings page on success
+                router.push('/dashboard/my-bookings');
+                
+            } catch (error: any) {
+                console.error('Reschedule operation failed:', error);
+                
+                // Handle API error responses
+                try {
+                    let errorMessage = 'An unknown error occurred.';
+                    
+                    if (error.message) {
+                        try {
+                            const errorBody = JSON.parse(error.message);
+                            errorMessage = errorBody.message || errorMessage;
+                        } catch (parseError) {
+                            errorMessage = error.message;
+                        }
+                    }
+                    
+                    setError(errorMessage);
+                } catch (parseError) {
+                    setError('Could not connect to the booking service. Please try again later.');
+                }
             }
         });
     };
- 
+
     const newDurationInMinutes = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60);
     const newCost = (newDurationInMinutes / 30) * newRoomType.credits_per_booking;
     
@@ -49,10 +89,24 @@ export default function RescheduleConfirmation({ newRoomType, liveUserData, star
             <p className={styles.rescheduleSubtext}>Rescheduling from: {originalBooking.room_type_name}</p>
             
             <div className={styles.detailGrid}>
-                <div className={styles.detailItem}><Calendar size={16} /><span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span></div>
-                <div className={styles.detailItem}><Clock size={16} /><span>{startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({newDurationInMinutes} mins)</span></div>
-                <div className={styles.detailItem}><Users size={16} /><span>For up to {newRoomType.capacity} people</span></div>
-                <div className={styles.detailItem}><MapPin size={16} /><span>{newRoomType.location_name}</span></div>
+                <div className={styles.detailItem}>
+                    <Calendar size={16} />
+                    <span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <Clock size={16} />
+                    <span>
+                        {startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({newDurationInMinutes} mins)
+                    </span>
+                </div>
+                <div className={styles.detailItem}>
+                    <Users size={16} />
+                    <span>For up to {newRoomType.capacity} people</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <MapPin size={16} />
+                    <span>{newRoomType.location_name}</span>
+                </div>
             </div>
 
             <div className={styles.costSection}>
@@ -71,11 +125,15 @@ export default function RescheduleConfirmation({ newRoomType, liveUserData, star
             
             {error && <p className={styles.error}>{error}</p>}
             
-            {!hasEnoughCredits && !error &&
+            {!hasEnoughCredits && !error && (
                 <p className={styles.error}>You do not have enough credits for this change.</p>
-            }
+            )}
 
-            <button onClick={handleSubmit} disabled={isPending || !hasEnoughCredits} className={styles.confirmButton}>
+            <button 
+                onClick={handleSubmit} 
+                disabled={isPending || !hasEnoughCredits} 
+                className={styles.confirmButton}
+            >
                 {isPending ? 'Confirming...' : <><Repeat size={18} /> Confirm Reschedule</>}
             </button>
         </div>

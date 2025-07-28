@@ -7,8 +7,10 @@ import Image from 'next/image';
 import { api } from '@/lib/api.client'; 
 import styles from '@/components/rooms/RoomForm.module.css';
 import imageStyles from './EventForm.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function EventForm({ initialData }: { initialData?: any }) {
+    const session = useSessionContext()
     const router = useRouter(); 
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -67,7 +69,7 @@ export default function EventForm({ initialData }: { initialData?: any }) {
         const method = initialData ? 'patch' : 'post';
 
         try {
-            await api[method](endpoint, data);
+            await api[method](session, endpoint, data);
             alert(`Event ${initialData ? 'updated' : 'created'} successfully!`);
             router.push('/admin/dashboard/events');
             router.refresh();

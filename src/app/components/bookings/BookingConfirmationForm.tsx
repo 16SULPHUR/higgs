@@ -1,11 +1,27 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { createBookingAction, rescheduleBookingAction } from '@/actions/bookingActions';
 import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin, Repeat } from 'lucide-react';
 import styles from './BookingConfirmationForm.module.css';
+import { useSessionContext } from '@/contexts/SessionContext';
+import { api } from '@/lib/api.client'; // Use your client-side API utility
+import { useRouter } from 'next/navigation';
 
-export default function BookingConfirmationForm({ newRoomType, liveUserData, startDateTime, endDateTime, originalBooking }: { newRoomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date, originalBooking?: any }) {
+export default function BookingConfirmationForm({ 
+    newRoomType, 
+    liveUserData, 
+    startDateTime, 
+    endDateTime, 
+    originalBooking 
+}: { 
+    newRoomType: any, 
+    liveUserData: any, 
+    startDateTime: Date, 
+    endDateTime: Date, 
+    originalBooking?: any 
+}) {
+    const session = useSessionContext();
+    const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
 
@@ -14,29 +30,64 @@ export default function BookingConfirmationForm({ newRoomType, liveUserData, sta
     const handleSubmit = () => {
         setError(null);
         startTransition(async () => {
-            let result;
-            if (isReschedule) {
-                const payload = {
-                    new_type_of_room_id: newRoomType.id,
-                    new_start_time: startDateTime.toISOString(),
-                    new_end_time: endDateTime.toISOString()
-                };
-                result = await rescheduleBookingAction(originalBooking.id, payload);
-            } else {
-                const payload = {
-                    type_of_room_id: newRoomType.id,
-                    start_time: startDateTime.toISOString(),
-                    end_time: endDateTime.toISOString()
-                };
-                result = await createBookingAction(payload);
-            }
-            
-            if (result?.success === false) {
-                setError(result.message);
+            try {
+                let result;
+                
+                if (isReschedule) {
+                    const payload = {
+                        new_type_of_room_id: newRoomType.id,
+                        new_start_time: startDateTime.toISOString(),
+                        new_end_time: endDateTime.toISOString()
+                    };
+                    
+                    // Client-side reschedule API call
+                    result = await api.post(session, `/api/bookings/${originalBooking.id}/reschedule`, payload);
+                    
+                    // Navigate to bookings page on success
+                    router.push('/dashboard/my-bookings');
+                    
+                } else {
+                    const payload = {
+                        type_of_room_id: newRoomType.id,
+                        start_time: startDateTime.toISOString(),
+                        end_time: endDateTime.toISOString()
+                    };
+                    
+                    // Client-side create booking API call
+                    result = await api.post(session, '/api/bookings', payload);
+                    
+                    // Navigate to success page on successful booking
+                    if (result?.id) {
+                        router.push(`/dashboard/booking-success/${result.id}`);
+                    } else {
+                        setError('Booking confirmation failed: Invalid response from server.');
+                    }
+                }
+                
+            } catch (error: any) {
+                console.error('Booking operation failed:', error);
+                
+                // Handle API error responses
+                try {
+                    let errorMessage = 'An unknown error occurred.';
+                    
+                    if (error.message) {
+                        try {
+                            const errorBody = JSON.parse(error.message);
+                            errorMessage = errorBody.message || errorMessage;
+                        } catch (parseError) {
+                            errorMessage = error.message;
+                        }
+                    }
+                    
+                    setError(errorMessage);
+                } catch (parseError) {
+                    setError('Could not connect to the booking service. Please try again later.');
+                }
             }
         });
     };
- 
+
     const newDurationInMinutes = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60);
     const newCost = (newDurationInMinutes / 30) * newRoomType.credits_per_booking;
     
@@ -49,7 +100,7 @@ export default function BookingConfirmationForm({ newRoomType, liveUserData, sta
         : 0;
 
     const creditDifference = oldCost - newCost;
-    console.log(originalBooking , newCost)
+    console.log(originalBooking, newCost);
 
     const userCredits = liveUserData.role === 'INDIVIDUAL_USER' 
         ? liveUserData.individual_credits 
@@ -66,10 +117,24 @@ export default function BookingConfirmationForm({ newRoomType, liveUserData, sta
             <h2 className={styles.roomName}>{newRoomType.name}</h2>
             
             <div className={styles.detailGrid}>
-                <div className={styles.detailItem}><Calendar size={16} /><span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span></div>
-                <div className={styles.detailItem}><Clock size={16} /><span>{startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({newDurationInMinutes} mins)</span></div>
-                <div className={styles.detailItem}><Users size={16} /><span>For up to {newRoomType.capacity} people</span></div>
-                <div className={styles.detailItem}><MapPin size={16} /><span>{newRoomType.location_name}</span></div>
+                <div className={styles.detailItem}>
+                    <Calendar size={16} />
+                    <span>{startDateTime.toLocaleDateString(undefined, dateOptions)}</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <Clock size={16} />
+                    <span>
+                        {startDateTime.toLocaleTimeString(undefined, timeOptions)} - {endDateTime.toLocaleTimeString(undefined, timeOptions)} ({newDurationInMinutes} mins)
+                    </span>
+                </div>
+                <div className={styles.detailItem}>
+                    <Users size={16} />
+                    <span>For up to {newRoomType.capacity} people</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <MapPin size={16} />
+                    <span>{newRoomType.location_name}</span>
+                </div>
             </div>
 
             <div className={styles.costSection}>
@@ -95,11 +160,15 @@ export default function BookingConfirmationForm({ newRoomType, liveUserData, sta
             
             {error && <p className={styles.error}>{error}</p>}
             
-            {!hasEnoughCredits && !error &&
+            {!hasEnoughCredits && !error && (
                 <p className={styles.error}>You do not have enough credits for this change.</p>
-            }
+            )}
 
-            <button onClick={handleSubmit} disabled={isPending || !hasEnoughCredits} className={styles.confirmButton}>
+            <button 
+                onClick={handleSubmit} 
+                disabled={isPending || !hasEnoughCredits} 
+                className={styles.confirmButton}
+            >
                 {isPending ? 'Confirming...' : (
                     isReschedule ? 
                     <><Repeat size={18} /> Confirm Reschedule</> : 
