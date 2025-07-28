@@ -25,7 +25,7 @@ export default function EventsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.get('/api/admin/events');
+      const data = await api.get(session, '/api/admin/events');
       setEvents(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load events.');

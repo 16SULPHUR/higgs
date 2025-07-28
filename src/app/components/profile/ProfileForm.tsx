@@ -27,7 +27,7 @@ export default function ProfileForm() {
       }
 
       try {
-        const data = await api.get('/api/auth/me',);
+        const data = await api.get(session, '/api/auth/me',);
 
         console.log(data);
         
@@ -80,7 +80,7 @@ export default function ProfileForm() {
     }
 
     try {
-      await api.patch('/api/profile', data);
+      await api.patch(session, '/api/profile', data);
       setSuccess('Profile updated successfully!');
     } catch (err: any) {
       setError(err.message || 'Failed to update profile.');

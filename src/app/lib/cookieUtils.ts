@@ -1,8 +1,3 @@
-// @/lib/cookieUtils.ts
-
-/**
- * Gets a cookie value by name
- */
 export function getCookie(name: string): string | undefined {
   if (typeof document === 'undefined') return;
 
@@ -12,10 +7,7 @@ export function getCookie(name: string): string | undefined {
 
   return cookie?.split('=')[1];
 }
-
-/**
- * Sets a cookie (default expiry = 7 days)
- */
+ 
 export function setCookie(name: string, value: string, days = 7): void {
   if (typeof document === 'undefined') return;
 
@@ -23,10 +15,7 @@ export function setCookie(name: string, value: string, days = 7): void {
 
   document.cookie = `${name}=${value}; path=/; expires=${expires}; SameSite=Lax`;
 }
-
-/**
- * Deletes a cookie by name
- */
+ 
 export function deleteCookie(name: string): void {
   if (typeof document === 'undefined') return;
 

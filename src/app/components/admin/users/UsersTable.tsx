@@ -15,7 +15,7 @@ export default function UsersTable({ users, onUpdate, session }: { users: any[],
         if (confirm(`Are you sure you want to ${action} the user "${user.name}"?`)) {
             setIsProcessing(user.id);
             try {
-                await api.patch(`/api/admin/users/${user.id}`, { is_active: !user.is_active });
+                await api.patch(session, `/api/admin/users/${user.id}`, { is_active: !user.is_active });
                 onUpdate();
             } catch (err: any) {
                 alert(`Error: ${err.message}`);
@@ -29,7 +29,7 @@ export default function UsersTable({ users, onUpdate, session }: { users: any[],
         if (confirm(`This will permanently delete "${user.name}". This action cannot be undone. Proceed?`)) {
             setIsProcessing(user.id);
             try {
-                await api.delete(`/api/admin/users/${user.id}`);
+                await api.delete(session, `/api/admin/users/${user.id}`);
                 alert('User deleted successfully.');
                 onUpdate();
             } catch (err: any) {

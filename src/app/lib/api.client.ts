@@ -1,26 +1,27 @@
 'use client';
 
+import { useSessionContext } from '@/contexts/SessionContext';
 import { signOut } from 'next-auth/react';
+import { getCookie } from './cookieUtils';
 
-// Helper to read cookie by name
-function getCookie(name: string): string | null {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()!.split(';').shift()!;
-  return null;
+interface AppSession {
+    accessToken?: string;
+    refreshToken?: string;
 }
+ 
 
 async function apiClient(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  session: AppSession | null = null
 ) {
-  console.log(`[API Client] Requesting: ${options.method || 'GET'} ${endpoint}`);
+  console.log(`[API Client] Requesting: ${options.method || 'GET'} ${endpoint}`); 
+  console.log(session)
 
-  const accessToken = getCookie('accessToken');
+  const accessToken = session?.accessToken || getCookie('accessToken');
+  const refreshToken = session?.refreshToken || getCookie('refreshToken');
   const refreshTokenError = getCookie('refreshTokenError'); 
-
-  console.log("accessToken")
-  console.log(accessToken)
+ 
 
   if (refreshTokenError === 'true') {
     await signOut({ callbackUrl: '/login?error=SessionExpired' });
@@ -57,8 +58,8 @@ async function apiClient(
 }
  
 export const api = {
-  get: (e: string) => apiClient(e, { method: 'GET' }),
-  post: (e: string, b: any) => apiClient(e, { method: 'POST', body: b }),
-  patch: (e: string, b: any) => apiClient(e, { method: 'PATCH', body: b }),
-  delete: (e: string) => apiClient(e, { method: 'DELETE' }),
+  get: (session: AppSession | null, e: string) => apiClient(e, { method: 'GET' }, session),
+  post: (session: AppSession | null, e: string, b: any) => apiClient(e, { method: 'POST', body: b }, session),
+  patch: (session: AppSession | null, e: string, b: any) => apiClient(e, { method: 'PATCH', body: b }, session),
+  delete: (session: AppSession | null, e: string) => apiClient(e, { method: 'DELETE' }, session),
 };

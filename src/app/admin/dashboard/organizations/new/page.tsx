@@ -25,7 +25,7 @@ export default function NewOrgPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const plansData = await api.get('/api/admin/plans');
+        const plansData = await api.get(session, '/api/admin/plans');
         setPlans(plansData);
       } catch (err: any) {
         setError(err.message || 'Failed to load plans.');

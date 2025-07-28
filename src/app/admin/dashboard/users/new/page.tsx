@@ -12,7 +12,7 @@ export default function NewUserPage() {
   const session = useSessionContext();
   const [organizations, setOrganizations] = useState([]);
   useEffect(() => {
-      api.get('/api/admin/orgs').then(setOrganizations);
+      api.get(session, '/api/admin/orgs').then(setOrganizations);
   }, []);
 
   return (

@@ -24,7 +24,7 @@ export async function searchRoomsAction(criteria: SearchCriteria) {
         ).toString();
 
         
-        const data = await api.get(`/api/meeting-rooms/search?${queryParams}`);
+        const data = await api.get(session, `/api/meeting-rooms/search?${queryParams}`);
         
         return { success: true, data: data };
 

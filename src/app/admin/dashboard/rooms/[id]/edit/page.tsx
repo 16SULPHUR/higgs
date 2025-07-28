@@ -17,8 +17,8 @@ export default function EditRoomPage() {
 
     const fetchData = () => {
         Promise.all([
-            api.get(`/api/admin/rooms/${roomId}`),
-            api.get('/api/admin/room-types')
+            api.get(session, `/api/admin/rooms/${roomId}`),
+            api.get(session, '/api/admin/room-types')
         ]).then(([room, roomTypes]) => setData({ room, roomTypes }));
     };
 

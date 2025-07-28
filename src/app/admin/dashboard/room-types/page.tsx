@@ -19,8 +19,8 @@ export default function RoomTypesPage() {
         setIsLoading(true);
         try {
             const [roomTypesData, locationsData] = await Promise.all([
-                api.get('/api/admin/room-types'),
-                api.get('/api/admin/locations')
+                api.get(session, '/api/admin/room-types'),
+                api.get(session, '/api/admin/locations')
             ]);
             setData({ roomTypes: roomTypesData, locations: locationsData });
         } finally {

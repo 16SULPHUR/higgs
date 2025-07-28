@@ -26,7 +26,7 @@ export default function CreateTicketForm() {
     }
 
     try {
-      await api.post('/api/support-tickets', { subject, description });
+      await api.post(session, '/api/support-tickets', { subject, description });
       alert('Ticket submitted successfully!');
       router.push('/dashboard/support');
     } catch (err: any) {

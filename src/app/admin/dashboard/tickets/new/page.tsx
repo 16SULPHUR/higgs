@@ -12,7 +12,7 @@ export default function NewTicketForUserPage() {
     const session = useSessionContext();
     const [users, setUsers] = useState([]);
     useEffect(() => {
-        api.get('/api/admin/users').then(setUsers);
+        api.get(session, '/api/admin/users').then(setUsers);
     }, []);
 
     return (

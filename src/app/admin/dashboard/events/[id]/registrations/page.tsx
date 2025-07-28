@@ -36,8 +36,8 @@ export default function EventRegistrationsPage() {
       setError(null);
       try {
         const [eventData, regsData] = await Promise.all([
-          api.get(`/api/admin/events/${eventId}`),
-          api.get(`/api/admin/events/${eventId}/registrations`)
+          api.get(session, `/api/admin/events/${eventId}`),
+          api.get(session, `/api/admin/events/${eventId}/registrations`)
         ]);
         setEvent(eventData);
         setRegistrations(regsData);

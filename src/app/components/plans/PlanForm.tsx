@@ -37,11 +37,11 @@ export default function PlanForm({ initialData, onUpdate, session }: { initialDa
             };
 
             if (initialData) {
-                await api.patch(`/api/admin/plans/${initialData.id}`, payload);
+                await api.patch(session, `/api/admin/plans/${initialData.id}`, payload);
                 alert('Plan updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api.post('/api/admin/plans', payload);
+                await api.post(session, '/api/admin/plans', payload);
                 alert('Plan created successfully!');
                 router.push('/admin/dashboard/plans');
             }

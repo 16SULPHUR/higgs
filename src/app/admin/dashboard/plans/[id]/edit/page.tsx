@@ -15,7 +15,7 @@ export default function EditPlanPage() {
     const planId = params.id as string;
 
     const fetchData = () => {
-        api.get(`/api/admin/plans/${planId}`).then(setPlan);
+        api.get(session, `/api/admin/plans/${planId}`).then(setPlan);
     };
 
     useEffect(() => {

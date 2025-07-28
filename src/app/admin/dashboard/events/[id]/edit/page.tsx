@@ -31,7 +31,7 @@ export default function EditEventPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api.get(`/api/admin/events/${eventId}`);
+        const data = await api.get(session, `/api/admin/events/${eventId}`);
         setEvent(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load event details.');

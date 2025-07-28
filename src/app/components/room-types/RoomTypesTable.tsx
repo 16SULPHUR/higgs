@@ -13,7 +13,7 @@ export default function RoomTypesTable({ roomTypes, locationMap, onUpdate, sessi
         if (confirm(`Delete "${typeName}"? This will fail if any room instances are using this type.`)) {
             setIsDeleting(typeId);
             try {
-                await api.delete(`/api/admin/room-types/${typeId}`);
+                await api.delete(session, `/api/admin/room-types/${typeId}`);
                 alert('Room type deleted.');
                 onUpdate();
             } catch (error: any) {

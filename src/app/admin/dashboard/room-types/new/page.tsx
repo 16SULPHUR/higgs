@@ -12,7 +12,7 @@ export default function NewRoomTypePage() {
     const session = useSessionContext();
     const [locations, setLocations] = useState([]);
     useEffect(() => {
-        api.get('/api/admin/locations').then(setLocations);
+        api.get(session, '/api/admin/locations').then(setLocations);
     }, []);
 
     return (

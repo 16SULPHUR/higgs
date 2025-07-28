@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import styles from './HomePage.module.css';
 import MembersDashboardPage from './(members)/dashboard/page';
@@ -7,19 +9,27 @@ import InstallPwaButton from './components/common/InstallPwaButton';
 import { InstallPrompt } from './components/common/InstallPrompt';
 import { getSession } from './lib/session';
 import { redirect } from 'next/navigation';
+import { useSessionContext } from './contexts/SessionContext';
+import { useEffect } from 'react';
 
-export default async function HomePage() {
+export default function HomePage() {
 
-  const session = await getSession();
+  const session = useSessionContext();
+  console.log("session")
   console.log(session)
-  if (!session) {
-    redirect('/login');
-  }
-  if (session?.user?.role === "SUPER_ADMIN") {
-    redirect('/admin/dashboard');
-  } else {
-    redirect('/dashboard')
-  }
+
+  useEffect(() => {
+    if (!session) {
+      redirect('/login');
+    }
+  }, [session])
+
+  // if (session) {
+  //   redirect('/dashboard');
+  // } 
+  // else {
+  //   redirect('/dashboard')
+  // }
 
   return (
     <div className={styles.pageContainer}>

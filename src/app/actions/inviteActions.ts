@@ -10,7 +10,7 @@ export async function sendGuestInviteAction(bookingId: string, guestName: string
 
     try {
         const payload = { guestName, guestEmail };
-        const result = await api.post(`/api/bookings/${bookingId}/invite`, payload);
+        const result = await api.post(session, `/api/bookings/${bookingId}/invite`, payload);
         revalidateTag('invitations');
         return { success: true, message: result.message };
     } catch (error: any) {

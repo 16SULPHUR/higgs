@@ -12,7 +12,7 @@ export default function CurrentMembersList({ members, onUpdate, session }: { mem
         if (confirm(`Remove ${userName} from this organization?`)) {
             setIsRemoving(userId);
             try {
-                await api.patch(`/api/admin/users/${userId}`, { organization_id: null });
+                await api.patch(session, `/api/admin/users/${userId}`, { organization_id: null });
                 onUpdate();
             } catch (err: any) {
                 alert(`Error: ${err.message}`);

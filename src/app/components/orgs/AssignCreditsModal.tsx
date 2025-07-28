@@ -31,7 +31,7 @@ export default function AssignCreditsModal({ isOpen, onClose, org, onUpdate, ses
     setError('');
 
     try {
-        const result = await api.post(`/api/admin/assign-credits/${org.id}`, { creditsToAssign });
+        const result = await api.post(session, `/api/admin/assign-credits/${org.id}`, { creditsToAssign });
         alert(result.message || 'Credits assigned successfully!');
         onUpdate();
         onClose();

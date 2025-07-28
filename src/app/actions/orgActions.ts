@@ -11,9 +11,9 @@ interface OrgFormData {
 export async function saveOrganization(formData: OrgFormData, orgId?: string) {
     try {
         if (orgId) {
-            await api.patch(`/api/admin/orgs/${orgId}`, formData);
+            await api.patch(session, `/api/admin/orgs/${orgId}`, formData);
         } else {
-            await api.post('/api/admin/orgs', formData);
+            await api.post(session, '/api/admin/orgs', formData);
         }
 
         revalidateTag('orgs');
@@ -33,7 +33,7 @@ export async function addUserToOrg(userId: string, orgId: string) {
     }
     try {
         
-        await api.patch(`/api/admin/users/add-to-org/${userId}`, { organization_id: orgId });
+        await api.patch(session, `/api/admin/users/add-to-org/${userId}`, { organization_id: orgId });
 
         revalidateTag('users');
         revalidateTag('orgs');
@@ -52,7 +52,7 @@ export async function setOrgAdmin(orgId: string, userId: string) {
     }
 
     try {
-        await api.post(`/api/admin/orgs/${orgId}/set-admin`, { user_id: userId });
+        await api.post(session, `/api/admin/orgs/${orgId}/set-admin`, { user_id: userId });
 
         revalidateTag('orgs');
 
@@ -71,7 +71,7 @@ export async function assignCreditsToOrg(orgId: string, creditsToAssign: number)
     }
 
     try {
-        const result = await api.post(`/api/admin/assign-credits/${orgId}`, { creditsToAssign });
+        const result = await api.post(session, `/api/admin/assign-credits/${orgId}`, { creditsToAssign });
 
         revalidateTag('orgs');
 
@@ -91,7 +91,7 @@ export async function removeUserFromOrg(userId: string) {
     
     try {
         
-        await api.delete(`/api/admin/users/remove-from-org/${userId}`);
+        await api.delete(session, `/api/admin/users/remove-from-org/${userId}`);
 
         
         revalidateTag('users');
@@ -109,7 +109,7 @@ export async function updateOrgProfileAction(formData: FormData) {
     try {
         console.log("formData")
         console.log(formData)
-        const result = await api.patch('/api/orgs/profile', formData);
+        const result = await api.patch(session, '/api/orgs/profile', formData);
         revalidateTag('org-profile');
         return { success: true, message: 'Organization profile updated successfully!', data: result };
     } catch (error: any) {
@@ -127,7 +127,7 @@ export async function cancelOrgSubscriptionAction(orgId: string) {
         return { success: false, message: 'Organization ID is required.' };
     }
     try {
-        const result = await api.delete(`/api/admin/orgs/${orgId}/plan`);
+        const result = await api.delete(session, `/api/admin/orgs/${orgId}/plan`);
         revalidateTag('orgs');
         revalidateTag(`org-detail-${orgId}`);
         return { success: true, message: result.message || 'Plan cancelled successfully.' };

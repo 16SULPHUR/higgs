@@ -33,7 +33,7 @@ export default function UserEventsPage() {
       setError(null);
 
       try {
-        const data = await api.get('/api/events');
+        const data = await api.get(session, '/api/events');
         setEvents(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load events.');
@@ -60,7 +60,7 @@ export default function UserEventsPage() {
       // Refetch events on update
       setIsLoading(true);
       setError(null);
-      api.get('/api/events')
+      api.get(session, '/api/events')
         .then(setEvents)
         .catch(err => setError(err.message))
         .finally(() => setIsLoading(false));

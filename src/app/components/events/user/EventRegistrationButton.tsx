@@ -26,7 +26,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
     const handleRegister = async () => {
         setIsSubmitting(true);
         try {
-            await api.post(`/api/events/${eventId}/register`, {});
+            await api.post(session, `/api/events/${eventId}/register`, {});
             setIsRegistered(true);
         } catch (error) { alert('Registration failed.'); }
         setIsSubmitting(false);
@@ -36,7 +36,7 @@ export default function EventRegistrationButton({ eventId }: { eventId: string }
         if (confirm("Are you sure you want to withdraw?")) {
             setIsSubmitting(true);
             try {
-                await api.delete(`/api/events/${eventId}/cancel-registration`);
+                await api.delete(session, `/api/events/${eventId}/cancel-registration`);
                 setIsRegistered(false);
             } catch (error) { alert('Withdrawal failed.'); }
             setIsSubmitting(false);

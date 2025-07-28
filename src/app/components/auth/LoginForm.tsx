@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogIn } from 'lucide-react';
-import { getSession, signIn, signOut, useSession } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 import styles from './LoginForm.module.css';
+import { getServerSession } from 'next-auth';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
@@ -30,14 +31,29 @@ export default function LoginForm() {
       setError('Invalid email or password.');
     } else if (result?.ok) {
 
-      console.log(result)
-      const session = await getSession();
+
+      const session: any = await getSession();
+      console.log("result==================")
+      console.log(session)
+
       if (session?.accessToken) {
         document.cookie = `accessToken=${session.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
       }
 
       if (session?.refreshToken) {
         document.cookie = `refreshToken=${session.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+      if (session?.user?.role) {
+        document.cookie = `role=${session.user.role}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+      if (session?.user?.name) {
+        document.cookie = `name=${session.user.name}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+      if (session?.user?.profile_picture) {
+        document.cookie = `profile_picture=${session.user.profile_picture}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
       }
 
 

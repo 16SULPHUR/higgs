@@ -90,8 +90,7 @@ export const authConfig  = {
   },
 
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Initial login
+    async jwt({ token, user, account }) { 
       if (user) {
         token.user = user;
         token.accessToken = user.accessToken;
@@ -102,19 +101,16 @@ export const authConfig  = {
           token.expiresAt = decoded.exp;
         }
       }
-
-      // If access token still valid
+ 
       if (token.expiresAt && Date.now() < token.expiresAt * 1000) {
         return token;
       }
-
-      // No refresh token to rotate
+ 
       if (!token.refreshToken) {
         token.error = 'RefreshTokenError';
         return token;
       }
-
-      // Try to refresh token
+ 
       try {
         const res = await fetch(`${API_BASE_URL}/api/auth/refresh-token`, {
           method: 'POST',
@@ -126,6 +122,7 @@ export const authConfig  = {
 
         console.log("data=====================")
         console.log(data)
+
         if (!res.ok || !data.accessToken) throw data;
 
         const decoded = jwtDecode<DecodedToken>(data.accessToken);

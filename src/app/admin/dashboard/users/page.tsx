@@ -16,8 +16,7 @@ export default function AdminUsersPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
-    if (!session) {
-      // No session - clear users and stop loading
+    if (!session) { 
       setUsers([]);
       setIsLoading(false);
       return;
@@ -26,7 +25,7 @@ export default function AdminUsersPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.get('/api/admin/users');
+      const data = await api.get(session, '/api/admin/users');
       setUsers(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load users.');

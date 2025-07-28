@@ -31,11 +31,11 @@ export default function RoomTypeForm({ locations, initialData, onUpdate, session
         try {
             const payload = { ...formData, capacity: parseInt(formData.capacity), credits_per_booking: parseInt(formData.credits_per_booking) };
             if (initialData) {
-                await api.patch(`/api/admin/room-types/${initialData.id}`, payload);
+                await api.patch(session, `/api/admin/room-types/${initialData.id}`, payload);
                 alert('Room Type updated successfully!');
                 if (onUpdate) onUpdate();
             } else {
-                await api.post('/api/admin/room-types', payload);
+                await api.post(session, '/api/admin/room-types', payload);
                 alert('Room Type created successfully!');
                 router.push('/admin/dashboard/room-types');
             }

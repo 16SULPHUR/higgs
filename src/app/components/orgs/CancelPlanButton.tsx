@@ -12,7 +12,7 @@ export default function CancelPlanButton({ orgId, orgName, onUpdate, session }: 
         if (confirm(`Cancel subscription for "${orgName}"? This will remove their plan and reset credits to zero.`)) {
             setIsPending(true);
             try {
-                const result = await api.delete(`/api/admin/orgs/${orgId}/plan`);
+                const result = await api.delete(session, `/api/admin/orgs/${orgId}/plan`);
                 alert(result.message || 'Plan cancelled successfully.');
                 onUpdate();
             } catch (error: any) {

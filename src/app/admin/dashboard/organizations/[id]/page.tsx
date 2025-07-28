@@ -30,7 +30,7 @@ export default function OrganizationDetailPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.get(`/api/admin/orgs/${orgId}`);
+      const data = await api.get(session, `/api/admin/orgs/${orgId}`);
       setOrg(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load organization details.');

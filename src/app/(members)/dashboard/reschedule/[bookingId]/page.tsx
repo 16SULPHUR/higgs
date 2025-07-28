@@ -32,7 +32,7 @@ export default function ReschedulePage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await api.get(`/api/bookings/${bookingId}`);
+        const data = await api.get(session, `/api/bookings/${bookingId}`);
         setOriginalBooking(data);
       } catch (err: any) {
         setError(err.message || 'Failed to load booking details.');

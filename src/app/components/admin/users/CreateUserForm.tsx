@@ -38,11 +38,11 @@ export default function CreateUserForm({ organizations, initialData, onUpdate, s
         setIsSubmitting(true);
         try {
             if (isEditing) {
-                await api.patch(`/api/admin/users/${initialData.id}`, formData);
+                await api.patch(session, `/api/admin/users/${initialData.id}`, formData);
                 alert('User updated successfully.');
                 if (onUpdate) onUpdate();
             } else {
-                const result = await api.post('/api/admin/users', formData);
+                const result = await api.post(session, '/api/admin/users', formData);
                 alert(result.message || 'User created successfully.');
                 router.push('/admin/dashboard/users');
             }

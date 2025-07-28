@@ -15,6 +15,9 @@ export default function MyBookingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchBookings = async () => {
+
+    console.log("session")
+    console.log(session)
     if (!session) { 
       setBookings([]);
       setIsLoading(false);
@@ -24,7 +27,7 @@ export default function MyBookingsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await api.get('/api/bookings');
+      const data = await api.get(session, '/api/bookings');
       setBookings(data);
     } catch (err: any) {
       setError(err.message);
@@ -36,8 +39,7 @@ export default function MyBookingsPage() {
   useEffect(() => {
     if (session) {
       fetchBookings();
-    } else {
-      // If session disappears, reset state accordingly
+    } else { 
       setBookings([]);
       setIsLoading(false);
       setError(null);

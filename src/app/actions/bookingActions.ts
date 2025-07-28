@@ -17,7 +17,7 @@ export async function searchAvailableRoomTypesAction(criteria: SearchCriteria) {
         const queryParams = new URLSearchParams(
             Object.entries(criteria)
         ).toString();
-        const data = await api.get(`/api/meeting-rooms/search?${queryParams}`);
+        const data = await api.get(session, `/api/meeting-rooms/search?${queryParams}`);
         return { success: true, data: data };
     } catch (error) {
         console.error("Server Action: Room Type search failed:", error);
@@ -34,7 +34,7 @@ interface BookingPayload {
 export async function createBookingAction(payload: BookingPayload) {
     let newBooking;
     try { 
-        newBooking = await api.post('/api/bookings', payload);
+        newBooking = await api.post(session, '/api/bookings', payload);
  
     } catch (error: any) { 
         try {
@@ -69,7 +69,7 @@ export async function cancelBookingAction(bookingId: string) {
         return { success: false, message: 'Booking ID is required.' };
     }
     try {
-        const result = await api.delete(`/api/bookings/${bookingId}`);
+        const result = await api.delete(session, `/api/bookings/${bookingId}`);
         revalidateTag('bookings');
         return { success: true, message: result.message || 'Booking cancelled successfully.' };
     } catch (error: any) {
@@ -93,7 +93,7 @@ interface ReschedulePayload {
 
 export async function rescheduleBookingAction(originalBookingId: string, payload: ReschedulePayload) {
     try {
-        await api.post(`/api/bookings/${originalBookingId}/reschedule`, payload);
+        await api.post(session, `/api/bookings/${originalBookingId}/reschedule`, payload);
         revalidateTag('bookings');
     } catch (error: any) {
         try {

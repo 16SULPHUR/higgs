@@ -18,7 +18,7 @@
 //         if (status === 'authenticated') {
 //             const fetchMembers = async () => {
 //                 try {
-//                     const data = await api.get('/api/users/member-book');
+//                     const data = await api.get(session, '/api/users/member-book');
 //                     setUsers(data);
 //                 } catch (err: any) {
 //                     setError(err.message);
@@ -94,7 +94,7 @@ export default function MemberBookPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const usersData = await api.get('/api/users/member-book');
+        const usersData = await api.get(session, '/api/users/member-book');
         setUsers(usersData ?? []);
       } catch (err: any) {
         setError(err.message || 'Failed to load users.');
