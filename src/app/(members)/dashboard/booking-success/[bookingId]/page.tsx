@@ -20,33 +20,41 @@ export default function BookingSuccessPage() {
   const [invitedGuests, setInvitedGuests] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+ 
+  const fetchAllData = async () => {
+    if (!session || !bookingId) return;
 
-   const fetchBookingData = async () => {
-        if (!bookingId) return;
-        setIsLoading(true);
-        try {
-            const data = await api.get(session, `/api/bookings/${bookingId}`);
-            setBooking(data);
-        } catch (err: any) {
-            setError(err.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    setIsLoading(true);
+    setError(null);
 
-    
+    try {
+      const [bookingData, guestsData] = await Promise.all([
+        api.get(session, `/api/bookings/${bookingId}`),
+        api.get(session, `/api/bookings/${bookingId}/invitations`),
+      ]);
+      setBooking(bookingData);
+      setInvitedGuests(guestsData);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load booking data.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch data when session or bookingId changes and session is authenticated
   useEffect(() => {
     if (session) {
-      fetchBookingData();
-
-    } else { 
+      fetchAllData();
+    } else {
+      // No session; reset state
       setBooking(null);
       setInvitedGuests([]);
       setIsLoading(false);
       setError(null);
     }
   }, [session, bookingId]);
- 
+
+  // Render loading, error, and missing booking states early
   if (isLoading) {
     return (
       <div className={styles.container}>
@@ -103,7 +111,7 @@ export default function BookingSuccessPage() {
 
         <div className={styles.card}>
           <h2 className={styles.cardTitle}>Manage Guests</h2>
-          <InviteGuestForm session={session} bookingId={bookingId} onInviteSuccess={fetchBookingData} />
+          <InviteGuestForm session={session} bookingId={bookingId} onInviteSuccess={fetchAllData} />
           <hr className={styles.divider} />
           <div className={styles.guestList}>
             <h3 className={styles.guestListTitle}>Invited Guests ({invitedGuests.length})</h3>

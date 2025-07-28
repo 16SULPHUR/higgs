@@ -76,8 +76,7 @@ export default function BookingConfirmationWrapper() {
 
     fetchData();
   }, [session, typeOfRoomId, date, startTime, endTime, router]);
-
-  // ✅ Handle session loading state in render
+ 
   if (session === undefined) {
     return (
       <div className={styles.container}>
