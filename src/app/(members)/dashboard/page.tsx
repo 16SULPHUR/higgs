@@ -12,36 +12,57 @@ import { useEffect, useState } from 'react';
 import { getCookie } from '@/lib/cookieUtils';
 
 export default function MembersDashboardPage() {
-  const session = getCookie("accessToken");
+  const [session, setSession] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
   console.log('Session state:', session);
-
-  useEffect(() => { 
-    if (session) {
+ 
+  useEffect(() => {
+    setIsClient(true);
+    const accessToken = getCookie("accessToken");
+    setSession(accessToken);
+    
+    if (accessToken) {
       setUserName(getCookie("name") || "");
     }
-  }, [session]);
- 
-  if (session === undefined) {
+  }, []);
+
+ if (!isClient) {
     return (
       <div className={styles.pageContainer}>
-        <div className={styles.loadingContainer}>
-          <p>Loading your dashboard...</p> 
-        </div>
+        <header className={styles.header}>
+          <div className={styles.welcomeMessage}>
+            <h1 className={styles.welcomeTitle}>Welcome!</h1>
+            <p className={styles.welcomeSubtitle}>Loading your workspace...</p>
+          </div>
+          <div className={styles.headerActions}>
+            <InstallPwaButton />
+          </div>
+        </header>
+        <main className={styles.mainContent}>
+          <div className={styles.actionGrid}>
+            {/* Show loading skeleton or basic cards */}
+            <div className={styles.actionCard}>
+              <div className={styles.cardIconWrapper}>
+                <CalendarCheck size={28} className={styles.cardIcon} />
+              </div>
+              <div>
+                <h2 className={styles.cardTitle}>Loading...</h2>
+                <p className={styles.cardDescription}>Please wait...</p>
+              </div>
+            </div>
+            {/* Add more skeleton cards as needed */}
+          </div>
+        </main>
       </div>
     );
   }
- 
-  // if (session === null || !session?.accessToken) {
-  //   redirect('/login');
-  // }
 
-  // if (session.user?.role === "SUPER_ADMIN") { 
-  //   redirect('/admin/dashboard'); 
-  // }
-
-  // const isOrgAdmin = session.user?.role === 'ORG_ADMIN';
+  // ✅ Now safe to conditionally render based on session
+  if (!session) {
+    redirect('/login');
+  }
 
   return (
     <div className={styles.pageContainer}>
