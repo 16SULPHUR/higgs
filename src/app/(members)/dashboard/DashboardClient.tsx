@@ -13,7 +13,7 @@ export default function DashboardClient() {
   const [session, setSession] = useState<string | null>(null);
   const [userName, setUserName] = useState('');
   const [role, setRole] = useState('');
-  const [isClient, setIsClient] = useState(false);
+  const [isClient, setIsClient] = useState(false); 
 
   useEffect(() => {
     const accessToken = getCookie("accessToken");
@@ -21,7 +21,7 @@ export default function DashboardClient() {
     
     if (accessToken) {
       setUserName(getCookie("name") || "");
-      setRole(getCookie("role") || "");
+      setRole(getCookie("role") || ""); 
     }
     setIsClient(true);
   }, []);
@@ -47,7 +47,7 @@ export default function DashboardClient() {
       <main className={styles.mainContent}>
         <div className={styles.actionGrid}>
           {role === 'ORG_ADMIN' && (
-            <Link href="/dashboard/manage-organization" className={styles.actionCard}>
+            <a href="/dashboard/manage-organization" className={styles.actionCard}>
               <div className={styles.cardIconWrapper}>
                 <Building size={28} className={styles.cardIcon} />
               </div>
@@ -56,10 +56,10 @@ export default function DashboardClient() {
                 <p className={styles.cardDescription}>Manage organization members and settings.</p>
               </div>
               <ArrowRight size={20} className={styles.cardArrow} />
-            </Link>
+            </a>
           )}
 
-          <Link href="/dashboard/find-room" className={styles.actionCard}>
+          {role === 'ORG_ADMIN' && (<a href="/dashboard/find-room" className={styles.actionCard}>
             <div className={styles.cardIconWrapper}>
               <CalendarCheck size={28} className={styles.cardIcon} />
             </div>
@@ -68,9 +68,9 @@ export default function DashboardClient() {
               <p className={styles.cardDescription}>Find and reserve an available meeting room or private office.</p>
             </div>
             <ArrowRight size={20} className={styles.cardArrow} />
-          </Link>
+          </a>)}
 
-          <Link href="/dashboard/my-bookings" className={styles.actionCard}>
+          {role === 'ORG_ADMIN' && (<a href="/dashboard/my-bookings" className={styles.actionCard}>
             <div className={styles.cardIconWrapper}>
               <BookUser size={28} className={styles.cardIcon} />
             </div>
@@ -79,9 +79,9 @@ export default function DashboardClient() {
               <p className={styles.cardDescription}>View your upcoming reservations and booking history.</p>
             </div>
             <ArrowRight size={20} className={styles.cardArrow} />
-          </Link>
+          </a>)}
 
-          <Link href="/dashboard/member-book" className={styles.actionCard}>
+          <a href="/dashboard/member-book" className={styles.actionCard}>
             <div className={styles.cardIconWrapper}>
               <Contact size={28} className={styles.cardIcon} />
             </div>
@@ -90,9 +90,9 @@ export default function DashboardClient() {
               <p className={styles.cardDescription}>Connect with other members in your workspace.</p>
             </div>
             <ArrowRight size={20} className={styles.cardArrow} />
-          </Link>
+          </a>
 
-          <Link href="/dashboard/events" className={styles.actionCard}>
+          <a href="/dashboard/events" className={styles.actionCard}>
             <div className={styles.cardIconWrapper}>
               <CalendarDays size={28} className={styles.cardIcon} />
             </div>
@@ -101,7 +101,7 @@ export default function DashboardClient() {
               <p className={styles.cardDescription}>View upcoming events and manage your registrations.</p>
             </div>
             <ArrowRight size={20} className={styles.cardArrow} />
-          </Link>
+          </a>
         </div>
       </main>
     </div>

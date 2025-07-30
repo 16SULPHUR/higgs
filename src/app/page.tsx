@@ -1,50 +1,61 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
 import styles from './HomePage.module.css';
-import MembersDashboardPage from './(members)/dashboard/page';
+import { clearAllCookies, getCookie } from './lib/cookieUtils';
 import SignOutButton from './components/SignOutButton';
-// import { useEffect, useState } from 'react';
 import InstallPwaButton from './components/common/InstallPwaButton';
 import { InstallPrompt } from './components/common/InstallPrompt';
-import { getSession } from './lib/session';
-import { redirect } from 'next/navigation';
-import { useSessionContext } from './contexts/SessionContext';
-import { useEffect } from 'react';
-import { clearAllCookies, getCookie } from './lib/cookieUtils';
 
 export default function HomePage() {
-
-  const session = getCookie("accessToken");
-  const role = getCookie("role") || "";
-  console.log("session")
-  console.log(session)
-
   useEffect(() => {
+    const session = getCookie("accessToken");
+    const role = getCookie("role") || "";
+
     if (!session) {
       redirect('/login');
+      return;
     }
-    if (role.split("_")[0] == "ORG") {
-      redirect('/dashboard');
-    }
-    else if (role.split("_")[0] == "SUPER") {
-      redirect("/admin/dashboard")
-    }
-    else {
-      clearAllCookies();
-      redirect("/login")
-    }
-  }, [session])
 
+    const rolePrefix = role.split("_")[0];
+    if (rolePrefix === "ORG") {
+      redirect('/dashboard');
+    } else if (rolePrefix === "SUPER") {
+      redirect("/admin/dashboard");
+    } else {
+      clearAllCookies();
+      redirect("/login");
+    }
+  }, []);
 
   return (
     <div className={styles.pageContainer}>
-      <SignOutButton />
-      <InstallPrompt />
-      <div className={styles.headerActions}>
+      <div className={styles.topRightActions}>
         <InstallPwaButton />
+        <SignOutButton />
       </div>
-      <MembersDashboardPage />
+      <InstallPrompt />
+
+      <div className={styles.contentWrapper}>
+        <Image
+          src="/logo.png"
+          alt="logo"
+          width={1500}
+          height={500}
+          className="logoImage"
+        />
+        <div className={styles.navLinks}>
+          <Link href="/login" className={styles.navButton}>
+            Go to Login
+          </Link>
+          <Link href="/dashboard" className={styles.navButton}>
+            Go to Dashboard
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
