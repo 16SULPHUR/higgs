@@ -67,13 +67,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { cache } from 'react';
 import { useSessionContext } from '@/contexts/SessionContext';
-import { api } from '@/lib/api.client'; // make sure import matches your actual file name
+import { api } from '@/lib/api.client';
 import MemberList from '@/components/member-book/MemberList';
 import { ArrowLeft } from 'lucide-react';
-import Link from 'next/link';
 import styles from './MemberBookPage.module.css';
 import TableSkeleton from '@/components/common/TableSkeleton';
+
+const fetchUsersCached = cache(async (session: any) => {
+  if (!session) return [];
+  return await api.get(session, '/api/users/member-book');
+});
 
 export default function MemberBookPage() {
   const session = useSessionContext();
@@ -84,26 +89,18 @@ export default function MemberBookPage() {
 
   useEffect(() => {
     if (!session) {
-      // No session, clear users and set loading false
       setUsers([]);
       setIsLoading(false);
       return;
     }
 
-    const fetchUsers = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const usersData = await api.get(session, '/api/users/member-book');
-        setUsers(usersData ?? []);
-      } catch (err: any) {
-        setError(err.message || 'Failed to load users.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    setIsLoading(true);
+    setError(null);
 
-    fetchUsers();
+    fetchUsersCached(session)
+      .then((usersData) => setUsers(usersData || []))
+      .catch((err: any) => setError(err.message || 'Failed to load users.'))
+      .finally(() => setIsLoading(false));
   }, [session]);
 
   if (isLoading) {

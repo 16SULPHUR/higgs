@@ -3,15 +3,12 @@
 import { signOut } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
 import styles from './SignOutButton.module.css';
-import { deleteCookie } from '@/lib/cookieUtils'; 
+import { clearAllCookies, deleteCookie } from '@/lib/cookieUtils';
 
 export default function SignOutButton() {
-  const handleSignOut = async () => { 
-    deleteCookie('accessToken');
-    deleteCookie('refreshToken'); 
-    deleteCookie('name');
-    deleteCookie('profile_picture');
- 
+  const handleSignOut = async () => {
+    clearAllCookies()
+
     await signOut({ callbackUrl: '/login' });
   };
 

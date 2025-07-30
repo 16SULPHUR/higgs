@@ -11,10 +11,12 @@ import { getSession } from './lib/session';
 import { redirect } from 'next/navigation';
 import { useSessionContext } from './contexts/SessionContext';
 import { useEffect } from 'react';
+import { clearAllCookies, getCookie } from './lib/cookieUtils';
 
 export default function HomePage() {
 
-  const session = useSessionContext();
+  const session = getCookie("accessToken");
+  const role = getCookie("role") || "";
   console.log("session")
   console.log(session)
 
@@ -22,14 +24,18 @@ export default function HomePage() {
     if (!session) {
       redirect('/login');
     }
+    if (role.split("_")[0] == "ORG") {
+      redirect('/dashboard');
+    }
+    else if (role.split("_")[0] == "SUPER") {
+      redirect("/admin/dashboard")
+    }
+    else {
+      clearAllCookies();
+      redirect("/login")
+    }
   }, [session])
 
-  // if (session) {
-  //   redirect('/dashboard');
-  // } 
-  // else {
-  //   redirect('/dashboard')
-  // }
 
   return (
     <div className={styles.pageContainer}>
