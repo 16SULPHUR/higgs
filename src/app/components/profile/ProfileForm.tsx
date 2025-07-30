@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { User, Mail, Phone, Save } from 'lucide-react';
 import styles from './ProfileForm.module.css';
 import { api } from '@/lib/api.client';
-import { getCookie } from '@/lib/cookieUtils'; 
+import { getCookie, setCookie } from '@/lib/cookieUtils'; // Import setCookie
 import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function ProfileForm() {
@@ -18,8 +18,7 @@ export default function ProfileForm() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-
-  // Fetch user profile from /api/auth/me using accessToken
+  
   useEffect(() => {
     const fetchProfile = async () => {
       const accessToken = getCookie('accessToken');
@@ -29,7 +28,7 @@ export default function ProfileForm() {
       }
 
       try {
-        const data = await api.get(session, '/api/auth/me',);
+        const data = await api.get(session, '/api/auth/me');
 
         console.log(data);
         
@@ -44,7 +43,7 @@ export default function ProfileForm() {
     };
 
     fetchProfile();
-  }, []);
+  }, [session]); // Add session to dependency array if useSessionContext can change.
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -82,8 +81,24 @@ export default function ProfileForm() {
     }
 
     try {
-      await api.patch(session, '/api/profile', data);
+      // Assuming the patch request returns the updated user data
+      const updatedProfile = await api.patch(session, '/api/profile', data);
       setSuccess('Profile updated successfully!');
+      
+      // Update local profile state
+      setProfile(updatedProfile);
+
+      // Update cookies with new profile data
+      if (updatedProfile.name) {
+        setCookie('name', updatedProfile.name);
+      }
+      if (updatedProfile.profile_picture) {
+        setCookie('profile_picture', updatedProfile.profile_picture);
+      } else if (imageFile === null && profile?.profile_picture) {
+        // If image was removed (no new file, but old one existed), clear the cookie
+        setCookie('profile_picture', ''); // Or deleteCookie('profile_picture');
+      }
+
     } catch (err: any) {
       setError(err.message || 'Failed to update profile.');
     } finally {
@@ -92,7 +107,12 @@ export default function ProfileForm() {
   };
 
   if (!profile && !error) {
-    return <div className={styles.loading}>Loading...</div>;
+    // Corrected loading div style based on original component's loading state
+    return (
+        <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          Loading...
+        </div>
+    );
   }
 
   return (

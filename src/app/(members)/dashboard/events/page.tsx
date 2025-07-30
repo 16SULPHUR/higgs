@@ -14,10 +14,8 @@ export default function UserEventsPage() {
   const [events, setEvents] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  // Fetch events only if session is available (authenticated)
-  useEffect(() => {
-    console.log('Document Cookie:', document.cookie);
+ 
+  useEffect(() => { 
 
     if (!session) {
       
@@ -56,8 +54,7 @@ export default function UserEventsPage() {
     if (error) {
       return <div className={styles.errorState}>Error: {error}</div>;
     }
-    return <EventList events={events} onUpdate={() => {
-      // Refetch events on update
+    return <EventList events={events} onUpdate={() => { 
       setIsLoading(true);
       setError(null);
       api.get(session, '/api/events')
@@ -69,10 +66,10 @@ export default function UserEventsPage() {
 
   return (
     <div className={styles.container}>
-      <Link href="/dashboard" className={styles.backButton} aria-label="Back to Dashboard">
+      <a href="/dashboard" className={styles.backButton} aria-label="Back to Dashboard">
         <ArrowLeft size={16} />
         <span>Back to Dashboard</span>
-      </Link>
+      </a>
 
       <header className={styles.header}>
         <h1 className={styles.title}>Community Events</h1>

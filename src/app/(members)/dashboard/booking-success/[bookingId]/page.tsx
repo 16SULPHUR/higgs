@@ -104,9 +104,9 @@ export default function BookingSuccessPage() {
             </p>
           </div>
 
-          <Link href="/dashboard/my-bookings" className={styles.ctaButton}>
+          <a href="/dashboard/my-bookings" className={styles.ctaButton}>
             View All My Bookings
-          </Link>
+          </a>
         </div>
 
         <div className={styles.card}>

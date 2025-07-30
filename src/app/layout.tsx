@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"; 
 import { SessionProvider } from "./contexts/SessionContext";
+import { displayTime } from "./lib/displayDateAndTime";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,19 +25,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const session = await getServerSession(authConfig);   
+  // const session = await getServerSession(authConfig);  
+
 
   return (
     <html lang="en">
-      <head>
+      <head> 
         <meta name="theme-color" content="#1976D2" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {/* <ClientSessionProvider> */}
+      <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider>
           {children}
-        </SessionProvider>
-        {/* </ClientSessionProvider> */}
+        </SessionProvider> 
       </body>
     </html>
   );

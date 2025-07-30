@@ -20,13 +20,30 @@ const withPWA = require('next-pwa')({
     },
     {
       urlPattern: "/^https?:\/\/.*/api\/.*/",
-      handler: 'NetworkOnly',
+      handler: 'StaleWhileRevalidate',
       options: {
         cacheName: 'api-calls',
+        expiration: {
+          maxEntries: 50, 
+          maxAgeSeconds: 5 * 60,
+        },
+        // Optionally, add a background sync plugin for POST/PATCH if needed
+        // plugins: [
+        //   {
+        //     cacheWillUpdate: async ({ request, response }) => {
+        //       // Only cache 200 OK responses
+        //       if (response.ok) {
+        //         return response;
+        //       }
+        //       return null;
+        //     },
+        //   },
+        // ],
       }
     },
   ],
 });
+
  
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',

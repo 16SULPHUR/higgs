@@ -22,13 +22,11 @@ type SessionContextType = {
   session: CustomSession | null | undefined;
   refreshSession: () => Promise<void>;
 };
-
-// ✅ Include refresh method in context
+ 
 const SessionContext = createContext<SessionContextType | null>(null);
 
 export const useSessionContext = () => {
-  const context = useContext(SessionContext);
-  // Return just the session for backward compatibility
+  const context = useContext(SessionContext); 
   return context?.session;
 };
 

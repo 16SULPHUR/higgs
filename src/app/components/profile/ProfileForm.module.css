@@ -4,14 +4,20 @@
 }
 .profileHeader {
   display: flex;
-  align-items: center;
+  /* Change to flex-direction: column for stacked layout, or keep row for side-by-side */
+  flex-direction: column; /* Changed for stacking */
+  align-items: center; /* Center horizontally if column */
   gap: 1.5rem;
   padding: 2rem;
   background-color: hsl(var(--secondary) / 0.5);
   border-bottom: 1px solid hsl(var(--border));
 }
 .avatarContainer {
-  position: relative;
+  position: relative; /* Keep relative for avatar styles */
+  display: flex; /* Allow content to stack/center within */
+  flex-direction: column; /* Stack image and button */
+  align-items: center; /* Center image and button */
+  gap: 0.5rem; /* Space between image and new button position */
 }
 .avatar {
   width: 100px;
@@ -31,24 +37,35 @@
   color: hsl(var(--muted-foreground));
 }
 .avatarEditButton {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  background-color: hsl(var(--card));
-  border: 1px solid hsl(var(--border));
-  border-radius: 50%;
-  padding: 0.5rem;
+  /* Removed absolute positioning */
+  position: static; /* Override absolute positioning */
+  bottom: auto; /* Reset bottom */
+  right: auto; /* Reset right */
+  
+  /* New button styling for a more prominent, centered look below the image */
+  background-color: hsl(var(--primary)); /* Primary color background */
+  color: hsl(var(--primary-foreground)); /* Contrasting text color */
+  border: none; /* Remove border if primary styled */
+  padding: 0.4rem 0.8rem; /* Adjust padding for button feel */
+  border-radius: var(--radius); /* Rounded corners for button */
+  font-size: 0.875rem; /* Readable font size */
+  font-weight: 500; /* Medium font weight */
   cursor: pointer;
-  line-height: 1;
-  transition: all 0.2s;
+  transition: background-color 0.2s, color 0.2s; /* Smooth transitions */
+  
+  text-align: center; /* Ensure text is centered */
+  display: inline-flex; /* Use inline-flex to allow gap for icon if added later */
+  align-items: center;
+  justify-content: center;
 }
 .avatarEditButton:hover {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background-color: hsl(var(--primary) / 0.9); /* Slightly darker on hover */
+  color: hsl(var(--primary-foreground)); /* Maintain text color */
 }
 .userName {
   font-size: 1.5rem;
   font-weight: 600;
+  margin-top: 1rem; /* Add some space above name if stacked */
 }
 .userEmail {
   color: hsl(var(--muted-foreground));
