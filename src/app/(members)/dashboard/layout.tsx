@@ -26,12 +26,11 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
         </div>
         <nav className={styles.nav}>
           <a href="/dashboard" className={styles.navLink}><Home size={18} /><span>Dashboard</span></a>
-           {!isOrgUser && (
+            
             <>
               <a href="/dashboard/find-room" className={styles.navLink}><CalendarCheck size={18} /><span>Book a Space</span></a>
               <a href="/dashboard/my-bookings" className={styles.navLink}><BookUser size={18} /><span>My Bookings</span></a>
-            </>
-          )}
+            </> 
 
           <a href="/dashboard/events" className={styles.navLink}><CalendarDays size={18} /><span>Events</span></a>
           <a href="/dashboard/member-book" className={styles.navLink}><Contact size={18} /><span>Member Directory</span></a>
@@ -39,7 +38,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
         </nav>
       </aside>
 
-      <MobileSidebar isOrgUser={isOrgUser} isOpen={isMobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
+      <MobileSidebar  isOpen={isMobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
 
       <div className={styles.mainContentWrapper}>
         <header className={styles.header}>

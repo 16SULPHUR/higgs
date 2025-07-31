@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { ArrowLeft, Calendar, Users } from 'lucide-react';
-import styles from './EventDetailPage.module.css'; 
-import EventRegistrationButton from '@/components/events/user/EventRegistrationButton';
+import styles from './EventDetailPage.module.css';  
+import EventRegistrationManager from '@/components/events/user/EventRegistrationManager';
 
 async function getEvent(eventId: string) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}/details`, { next: { revalidate: 3600 } });
@@ -44,7 +44,7 @@ export default async function EventDetailPage({ params }: { params?: { eventId?:
                     </div>
                     <p className={styles.description}>{event.description}</p>
                     <div className={styles.actions}>
-                        <EventRegistrationButton eventId={event.id} />
+                        <EventRegistrationManager eventId={event.id} />
                     </div>
                 </div>
             </div>

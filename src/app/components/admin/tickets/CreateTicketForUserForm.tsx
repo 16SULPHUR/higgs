@@ -20,8 +20,7 @@ export default function CreateTicketForUserForm({ users, session }: { users: any
         setError(null);
         setIsPending(true);
         try {
-            const result = await api.post(session, '/api/admin/support-tickets', formData);
-            alert(result.message || 'Ticket created successfully.');
+            const result = await api.post(session, '/api/admin/support-tickets', formData); 
             router.push('/admin/dashboard/tickets');
         } catch (err: any) {
             setError(err.message);

@@ -50,8 +50,7 @@ export default function TicketDetailPage() {
     if (confirm("Are you sure you want to delete this ticket? This action cannot be undone.")) {
       setIsDeleting(true);
       try {
-        await api.delete(session, `/api/support-tickets/${ticket.id}`);
-        alert('Ticket deleted successfully.');
+        await api.delete(session, `/api/support-tickets/${ticket.id}`); 
         router.push('/dashboard/support');
       } catch (err: any) {
         setError(err.message || 'Failed to delete ticket.');

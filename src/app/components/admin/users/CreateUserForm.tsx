@@ -42,8 +42,7 @@ export default function CreateUserForm({ organizations, initialData, onUpdate, s
                 alert('User updated successfully.');
                 if (onUpdate) onUpdate();
             } else {
-                const result = await api.post(session, '/api/admin/users', formData);
-                alert(result.message || 'User created successfully.');
+                const result = await api.post(session, '/api/admin/users', formData); 
                 router.push('/admin/dashboard/users');
             }
         } catch (err: any) {

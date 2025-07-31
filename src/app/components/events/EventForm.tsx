@@ -70,7 +70,7 @@ export default function EventForm({ initialData }: { initialData?: any }) {
 
         try {
             await api[method](session, endpoint, data);
-            alert(`Event ${initialData ? 'updated' : 'created'} successfully!`);
+            // alert(`Event ${initialData ? 'updated' : 'created'} successfully!`);
             router.push('/admin/dashboard/events');
             router.refresh();
         } catch (err: any) {

@@ -4,10 +4,9 @@ import styles from './MobileSidebar.module.css';
 interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  isOrgUser: boolean;
 }
 
-export default function MobileSidebar({ isOpen, onClose, isOrgUser }: MobileSidebarProps) {
+export default function MobileSidebar({ isOpen, onClose }: MobileSidebarProps) {
   if (!isOpen) return null;
 
   return (
@@ -22,14 +21,12 @@ export default function MobileSidebar({ isOpen, onClose, isOrgUser }: MobileSide
         </div>
         <nav className={styles.nav}>
           <a href="/dashboard" className={styles.navLink} onClick={onClose}><Home size={20} /><span>Dashboard</span></a>
-           
-          {!isOrgUser && (
-            <>
-              <a href="/dashboard/find-room" className={styles.navLink} onClick={onClose}><CalendarCheck size={20} /><span>Book a Space</span></a>
-              <a href="/dashboard/my-bookings" className={styles.navLink} onClick={onClose}><BookUser size={20} /><span>My Bookings</span></a>
-            </>
-          )}
-          
+
+          <>
+            <a href="/dashboard/find-room" className={styles.navLink} onClick={onClose}><CalendarCheck size={20} /><span>Book a Space</span></a>
+            <a href="/dashboard/my-bookings" className={styles.navLink} onClick={onClose}><BookUser size={20} /><span>My Bookings</span></a>
+          </>
+
           <a href="/dashboard/events" className={styles.navLink} onClick={onClose}><CalendarDays size={20} /><span>Events</span></a>
           <a href="/dashboard/member-book" className={styles.navLink} onClick={onClose}><Contact size={20} /><span>Member Directory</span></a>
           <a href="/dashboard/support" className={styles.navLink} onClick={onClose}><LifeBuoy size={20} /><span>Support</span></a>
