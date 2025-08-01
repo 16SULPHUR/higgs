@@ -57,24 +57,14 @@ export async function refreshAccessToken(refreshToken: string, expiredAccessToke
   }
 
   console.log("data")
+  console.log(data.accessToken)
   const decodedData: any = jwtDecode(data.accessToken);
   console.log(decodedData)
 
-  if (decodedData?.accessToken) {
-    setCookie('accessToken', decodedData.accessToken);
-  }
-
-  if (decodedData?.user?.role) {
+  if (decodedData?.role) {
     setCookie('role', decodedData.role, 7);
   }
-
-  if (decodedData?.user?.name) {
-    setCookie('name', decodedData.name);
-  }
-
-  if (decodedData?.user?.profile_picture) {
-    setCookie('profile_picture', decodedData.profile_picture);
-  }
+ 
 
   return data;
 }
@@ -98,10 +88,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         const data = await refreshAccessToken(refreshToken, accessToken);
 
         accessToken = data.accessToken;
-
-        if (data.refreshToken) {
-          setCookie('refreshToken', data.refreshToken);
-        }
+ 
         setCookie('accessToken', data.accessToken);
       } catch (error) {
         console.error('Client token refresh failed', error);

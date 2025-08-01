@@ -1,14 +1,40 @@
+"use client";
 
-import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './Dashboard.module.css';
 import { UserPlus, PlusCircle } from 'lucide-react';
-import { getSession } from '@/lib/session';
+import { useSessionContext } from '@/contexts/SessionContext';
+import { getDecodedToken } from '@/lib/tokenUtils';
 
-export default async function AdminDashboardPage() {
-  const session = await getSession();
-  if (!session) {
-    redirect('/admin/login');
+export default function AdminDashboardPage() {
+  const router = useRouter();
+  const session = useSessionContext();
+
+  useEffect(() => {
+    if (session === null) {
+      router.replace('/login');
+    }
+
+    const decodedData = getDecodedToken(session?.accessToken);
+    console.log("decodedData")
+    console.log(decodedData?.type)
+
+    if(decodedData?.type != "admin"){
+      router.replace('/login');
+    }
+
+  }, [session, router]);
+
+  console.log(session)
+
+  // if (session === undefined) {
+  //   return <div>Loading...</div>;
+  // }
+
+  if (session === null) {
+    return null;
   }
 
   return (
@@ -19,7 +45,6 @@ export default async function AdminDashboardPage() {
           <p className={styles.welcomeText}>Welcome back, {session?.user?.name}! Here is the platform overview.</p>
         </div>
       </header>
-
 
       <div className={styles.actionsSection}>
         <h2 className={styles.sectionTitle}>Quick Actions</h2>

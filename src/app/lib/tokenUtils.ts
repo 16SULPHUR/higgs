@@ -10,3 +10,12 @@ export function getDecodedTokenExpiry(token: string): number | null {
     return null;
   }
 }
+
+export function getDecodedToken(token: string): any {
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    return decoded; 
+  } catch (err) {
+    return null;
+  }
+}

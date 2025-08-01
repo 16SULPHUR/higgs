@@ -8,14 +8,12 @@ export function getCookie(name: string): string | undefined {
   return cookie?.split('=')[1];
 }
 
-export function setCookie(name: string, value: string, days = 7, domain?: string): void {
+export function setCookie(name: string, value: string, days = 7): void {
   if (typeof document === 'undefined') return;
 
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  let cookieString = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires}; SameSite=Lax`;
-  if (domain) {
-    cookieString += `; domain=${domain}`;
-  }
+
+  document.cookie = `${name}=${value}; path=/; expires=${expires}; SameSite=Lax`;
 }
 
 export function deleteCookie(name: string): void {
