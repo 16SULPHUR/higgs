@@ -26,11 +26,12 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
           {/* <h1 className={styles.logo}>Higgs</h1> */}
           <Image
             src="/logo.png"
-            alt="logo"
-            width={150}
-            height={50}
             className={styles.logo}
+            alt="logo"
+            fill
+            sizes="(max-width: 100px) 1rem, 150px"
           />
+          {/* 1:2.7 */}
         </div>
         <nav className={styles.nav}>
           <a href="/dashboard" className={styles.navLink}><Home size={18} /><span>Dashboard</span></a>
