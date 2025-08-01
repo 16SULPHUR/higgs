@@ -1,52 +1,86 @@
 'use client';
 
-import { Users, MapPin, DollarSign } from 'lucide-react';
+import { Users, DollarSign, MapPin } from 'lucide-react';
 import styles from './RoomResultCard.module.css';
-import Link from 'next/link';
+import Image from 'next/image';
 
 interface RoomTypeResultCardProps {
-  roomType: any;
-  searchCriteria: {
-    date: string;
-    startTime: string;
-    endTime: string;
-    rescheduleBookingId?: string;
-  };
+    roomType: {
+        id: string;
+        name: string;
+        location_name: string;
+        capacity: number;
+        credits_per_booking: number;
+        room_icon: string;
+    };
+    searchCriteria: {
+        date: string;
+        startTime: string;
+        endTime: string;
+        rescheduleBookingId?: string;
+    };
 }
 
 export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTypeResultCardProps) {
-  const isReschedule = !!searchCriteria.rescheduleBookingId;
+    const isReschedule = !!searchCriteria.rescheduleBookingId;
 
-  const params = new URLSearchParams({
-    date: searchCriteria.date,
-    startTime: searchCriteria.startTime,
-    endTime: searchCriteria.endTime,
-  });
+    const params = new URLSearchParams({
+        date: searchCriteria.date,
+        startTime: searchCriteria.startTime,
+        endTime: searchCriteria.endTime,
+    });
 
-  let confirmationUrl: string;
+    let confirmationUrl: string;
 
-  if (isReschedule) {
-    params.set('originalBookingId', searchCriteria.rescheduleBookingId!);
-    params.set('newTypeOfRoomId', roomType.id);
-    confirmationUrl = `/dashboard/reschedule/confirm`;
-  } else {
-    params.set('typeOfRoomId', roomType.id);
-    confirmationUrl = `/dashboard/book`;
-  }
+    if (isReschedule) {
+        params.set('originalBookingId', searchCriteria.rescheduleBookingId!);
+        params.set('newTypeOfRoomId', roomType.id);
+        confirmationUrl = `/dashboard/reschedule/confirm`;
+    } else {
+        params.set('typeOfRoomId', roomType.id);
+        confirmationUrl = `/dashboard/book`;
+    }
 
-  const finalUrl = `${confirmationUrl}?${params.toString()}`;
+    const finalUrl = `${confirmationUrl}?${params.toString()}`;
 
-  return (
-    <div className={styles.card}>
-      <h3 className={styles.roomName}>{roomType.name}</h3>
-      <p className={styles.roomType}>{roomType.location_name}</p>
-      <div className={styles.details}>
-        <span className={styles.detailItem}><Users size={14} /> Up to {roomType.capacity} people</span>
-        <span className={styles.detailItem}><DollarSign size={14} /> {roomType.credits_per_booking} credits per 30 min</span>
-      </div>
-      <a href={finalUrl} className={styles.bookButton}>
-        {isReschedule ? 'Select New Slot' : 'Book This Space'}
-      </a>
-    </div>
-  );
+    return (
+        <div className={styles.card}>
+            <div className={styles.imageWrapper}>
+                <Image
+                    src={roomType.room_icon}
+                    alt={roomType.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 150px"
+                    className={styles.image}
+                />
+            </div>
+
+            <div className={styles.contentWrapper}>
+                <div className={styles.info}>
+                    <h3 className={styles.title}>{roomType.name}</h3>
+                    <p className={styles.location}>
+                        <MapPin size={14} /> {roomType.location_name}
+                    </p>
+                    <div className={styles.capacityHighlight}>
+                        <Users size={16} />
+                        <span>Up to {roomType.capacity} People</span>
+                    </div>
+                </div>
+
+                <div className={styles.pricing}>
+                    <span className={styles.priceValue}>{roomType.credits_per_booking}</span>
+                    <span className={styles.priceLabel}>credits/slot</span>
+                </div>
+
+                <div className={styles.actions}>
+                    <a href={finalUrl} className={styles.bookButton}>
+                        {isReschedule ? 'Select' : 'See Availability'}
+                    </a>
+                </div>
+            </div>
+        </div>
+    );
 }
+
+
+

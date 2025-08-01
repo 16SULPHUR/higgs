@@ -70,13 +70,29 @@
   color: hsl(var(--foreground));
 }
 .resultsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   gap: 1.5rem;
 }
 
 
-/* ... keep all existing styles ... */
+.avatar {
+  width: 100px; 
+  border-radius: 50%;
+  object-fit:contain;
+  border: 4px solid hsl(var(--card));
+}
+.avatarFallback {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: hsl(var(--muted));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--muted-foreground));
+}
 
 .fullWidth {
   grid-column: 1 / -1; /* For layouts where the form is a grid */
@@ -181,3 +197,5 @@
     text-align: center;
     font-weight: 500;
 }
+
+

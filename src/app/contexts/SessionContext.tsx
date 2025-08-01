@@ -1,8 +1,9 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { getCookie, setCookie } from '@/lib/cookieUtils';
+import { clearAllCookies, getCookie, setCookie } from '@/lib/cookieUtils';
 import { getDecodedTokenExpiry } from '@/lib/tokenUtils';
+import { jwtDecode } from 'jwt-decode';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -22,11 +23,11 @@ type SessionContextType = {
   session: CustomSession | null | undefined;
   refreshSession: () => Promise<void>;
 };
- 
+
 const SessionContext = createContext<SessionContextType | null>(null);
 
 export const useSessionContext = () => {
-  const context = useContext(SessionContext); 
+  const context = useContext(SessionContext);
   return context?.session;
 };
 
@@ -36,6 +37,47 @@ export const useSessionActions = () => {
     refreshSession: context?.refreshSession || (() => Promise.resolve()),
   };
 };
+
+export async function refreshAccessToken(refreshToken: string, expiredAccessToken: string) {
+  const res = await fetch(`${API_BASE_URL}/api/auth/refresh-token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      refreshToken
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.accessToken) {
+    if (typeof window !== 'undefined') {
+      clearAllCookies();
+      window.location.href = '/login';
+    }
+    throw new Error('Failed to refresh access token');
+  }
+
+  console.log("data")
+  const decodedData: any = jwtDecode(data.accessToken);
+  console.log(decodedData)
+
+  if (decodedData?.accessToken) {
+    setCookie('accessToken', decodedData.accessToken);
+  }
+
+  if (decodedData?.user?.role) {
+    setCookie('role', decodedData.role, 7);
+  }
+
+  if (decodedData?.user?.name) {
+    setCookie('name', decodedData.name);
+  }
+
+  if (decodedData?.user?.profile_picture) {
+    setCookie('profile_picture', decodedData.profile_picture);
+  }
+
+  return data;
+}
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<CustomSession | null | undefined>(undefined);
@@ -53,18 +95,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     if (!expiry || Date.now() >= expiry) {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/auth/refresh-token`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            refreshToken,
-            expiredAccessToken: accessToken,
-          }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok || !data.accessToken) throw new Error('Failed to refresh');
+        const data = await refreshAccessToken(refreshToken, accessToken);
 
         accessToken = data.accessToken;
 

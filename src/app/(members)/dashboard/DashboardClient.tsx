@@ -46,16 +46,18 @@ export default function DashboardClient() {
 
       <main className={styles.mainContent}>
         <div className={styles.actionGrid}>
-          <a href="/dashboard/manage-organization" className={styles.actionCard}>
-            <div className={styles.cardIconWrapper}>
-              <Building size={28} className={styles.cardIcon} />
-            </div>
-            <div>
-              <h2 className={styles.cardTitle}>Manage Org</h2>
-              <p className={styles.cardDescription}>Manage organization members and settings.</p>
-            </div>
-            <ArrowRight size={20} className={styles.cardArrow} />
-          </a>
+          {role === 'ORG_ADMIN' && (
+            <a href="/dashboard/manage-organization" className={styles.actionCard}>
+              <div className={styles.cardIconWrapper}>
+                <Building size={28} className={styles.cardIcon} />
+              </div>
+              <div>
+                <h2 className={styles.cardTitle}>Manage Org</h2>
+                <p className={styles.cardDescription}>Manage organization members and settings.</p>
+              </div>
+              <ArrowRight size={20} className={styles.cardArrow} />
+            </a>
+          )}
           <a href="/dashboard/find-room" className={styles.actionCard}>
             <div className={styles.cardIconWrapper}>
               <CalendarCheck size={28} className={styles.cardIcon} />
