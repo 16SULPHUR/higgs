@@ -7,6 +7,7 @@ import styles from './LoginPage.module.css';
 import Link from 'next/link';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { useEffect } from 'react';
+import { getDecodedToken } from '@/lib/tokenUtils';
 
 export default function LoginPage() {
   const session = useSessionContext();
@@ -14,6 +15,14 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (session) {
+      const decodedData = getDecodedToken(session?.accessToken);
+      console.log("decodedData")
+      console.log(decodedData?.type)
+
+      if (decodedData?.type == "admin") {
+        redirect('/admin/dashboard');
+      }
+
       redirect('/dashboard');
     }
   }

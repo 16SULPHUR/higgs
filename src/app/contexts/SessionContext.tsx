@@ -39,34 +39,43 @@ export const useSessionActions = () => {
 };
 
 export async function refreshAccessToken(refreshToken: string, expiredAccessToken: string) {
-  const res = await fetch(`${API_BASE_URL}/api/auth/refresh-token`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      refreshToken
-    }),
-  });
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/refresh-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        refreshToken
+      }),
+    });
 
-  const data = await res.json();
-  if (!res.ok || !data.accessToken) {
+    const data = await res.json();
+    console.log("refresh token data");
+    console.log(data);
+    if (!res.ok || !data.accessToken) {
+      if (typeof window !== 'undefined') {
+        clearAllCookies();
+        window.location.href = '/login';
+      }
+      throw new Error('Failed to refresh access token');
+    }
+
+    console.log("data");
+    console.log(data.accessToken);
+    const decodedData: any = jwtDecode(data.accessToken);
+    console.log(decodedData);
+
+    if (decodedData?.role) {
+      setCookie('role', decodedData.role, 7);
+    }
+
+    return data;
+  } catch (error) {
     if (typeof window !== 'undefined') {
       clearAllCookies();
-      window.location.href = '/login';
+      window.location.href = '/login?error=sessionExpired';
     }
-    throw new Error('Failed to refresh access token');
+    throw error;
   }
-
-  console.log("data")
-  console.log(data.accessToken)
-  const decodedData: any = jwtDecode(data.accessToken);
-  console.log(decodedData)
-
-  if (decodedData?.role) {
-    setCookie('role', decodedData.role, 7);
-  }
- 
-
-  return data;
 }
 
 export const SessionProvider = ({ children }: { children: React.ReactNode }) => {

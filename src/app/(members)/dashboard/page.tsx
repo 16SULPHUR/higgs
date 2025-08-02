@@ -8,7 +8,8 @@ import InstallPwaButton from '@/components/common/InstallPwaButton';
 import { ArrowRight, BookUser, Building, CalendarCheck, CalendarDays, Contact } from 'lucide-react';
 import { clearAllCookies, getCookie } from '@/lib/cookieUtils';
 import styles from './Dashboard.module.css';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
+import { getDecodedToken } from '@/lib/tokenUtils';
 
 export default function MembersDashboardPage() {
   const [session, setSession] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export default function MembersDashboardPage() {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    const accessToken = getCookie("accessToken"); 
+    const accessToken = getCookie("accessToken");
     setSession(accessToken);
 
     const handleLoginRedirect = () => {
@@ -36,8 +37,16 @@ export default function MembersDashboardPage() {
       } catch {
         isExpired = true;
       }
+      
+      const decodedData = getDecodedToken(accessToken);
+      console.log("decodedData")
+      console.log(decodedData?.type)
 
-       
+      if (decodedData?.type == "admin") {
+        redirect('/admin/dashboard');
+      }
+
+
     } else {
       handleLoginRedirect();
     }

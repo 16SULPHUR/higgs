@@ -17,13 +17,16 @@ export default function AdminDashboardPage() {
       router.replace('/login');
     }
 
-    const decodedData = getDecodedToken(session?.accessToken);
-    console.log("decodedData")
-    console.log(decodedData?.type)
-
-    if(decodedData?.type != "admin"){
-      router.replace('/login');
+    if(session != undefined){
+      const decodedData = getDecodedToken(session?.accessToken);
+      console.log("decodedData")
+      console.log(decodedData?.type)
+  
+      if (decodedData?.type != "admin") {
+        router.replace('/login');
+      }
     }
+
 
   }, [session, router]);
 
