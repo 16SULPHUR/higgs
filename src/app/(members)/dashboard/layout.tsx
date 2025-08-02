@@ -24,13 +24,15 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
       <aside className={styles.desktopSidebar}>
         <div className={styles.sidebarHeader}>
           {/* <h1 className={styles.logo}>Higgs</h1> */}
-          <Image
-            src="/logo.png"
-            className={styles.logo}
-            alt="logo"
-            fill
-            sizes="(max-width: 100px) 1rem, 150px"
-          />
+          <a href="/dashboard">
+            <Image
+              src="/logo.png"
+              className={styles.logo}
+              alt="logo"
+              fill
+              sizes="(max-width: 100px) 1rem, 150px"
+            />
+          </a>
           {/* 1:2.7 */}
         </div>
         <nav className={styles.nav}>
