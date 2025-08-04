@@ -3,13 +3,16 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api.client';
-import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin } from 'lucide-react';
+import { Clock, Calendar, Users, Wallet, CheckCircle, MapPin, Rotate3D } from 'lucide-react';
 import styles from './BookingConfirmationForm.module.css';
 import { displayDate, displayTime } from '@/lib/displayDateAndTime';
+import Image from 'next/image';
+import SceneComponent from './scene';
 
-export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime, session }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date, session:any }) {
+export default function NewBookingConfirmation({ roomType, liveUserData, startDateTime, endDateTime, session }: { roomType: any, liveUserData: any, startDateTime: Date, endDateTime: Date, session: any }) {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [overlayVisible, setOverlayVisible] = useState(true);
     const router = useRouter();
 
     function formatDateInKolkata(date: Date): string {
@@ -27,7 +30,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
     const handleSubmit = async () => {
         setError(null);
         setIsPending(true);
- 
+
 
         const payload = {
             type_of_room_id: roomType.id,
@@ -37,7 +40,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
 
         try {
             const newBooking = await api.post(session, '/api/bookings', payload);
-            
+
             router.push(`/dashboard/booking-success/${newBooking.id}`);
         } catch (err: any) {
             setError(err.message);
@@ -47,7 +50,7 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
     };
 
     const durationInMinutes = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60);
-    const totalCost = (durationInMinutes / 30) * roomType.credits_per_booking;
+    const totalCost = (durationInMinutes / 15) * roomType.credits_per_booking;
     const userCredits = liveUserData.role === 'INDIVIDUAL_USER'
         ? liveUserData.individual_credits
         : liveUserData.organization_credits_pool;
@@ -55,16 +58,31 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
 
     return (
         <div className={styles.wrapper}>
-            <h2 className={styles.roomName}>{roomType.name}</h2>
-            <div className={styles.detailGrid}>
-                <div className={styles.detailItem}><Calendar size={16} /><span>{displayDate(startDateTime.toString())}</span></div>
-                <div className={styles.detailItem}>
-                    <Clock size={16} />
-                    <span>{displayTime(startDateTime.toString())} - {displayTime(endDateTime.toString())} ({durationInMinutes} mins)</span>
+            <div className={styles.flexContainer}>
+                <div>
+                <h2 className={styles.roomName}>{roomType.name}</h2>
+                <div className={styles.detailsSection}>
+                    <div className={styles.detailGrid}>
+                        <div className={styles.detailItem}><Calendar size={16} /><span>{displayDate(startDateTime.toString())}</span></div>
+                        <div className={styles.detailItem}>
+                            <Clock size={16} />
+                            <span>{displayTime(startDateTime.toString())} - {displayTime(endDateTime.toString())} ({durationInMinutes} mins)</span>
+                        </div>
+                        <div className={styles.detailItem}><Users size={16} /><span>For up to {roomType.capacity} people</span></div>
+                        <div className={styles.detailItem}><MapPin size={16} /><span>{roomType.location_name}</span></div>
+                    </div>
                 </div>
-                <div className={styles.detailItem}><Users size={16} /><span>For up to {roomType.capacity} people</span></div>
-                <div className={styles.detailItem}><MapPin size={16} /><span>{roomType.location_name}</span></div>
+                </div>
+
+                <div
+                    className={styles.imageWrapper}
+                    onMouseEnter={() => setOverlayVisible(false)}
+                >
+                    <SceneComponent roomUrl={`/3d_models/${roomType.id}.glb`} />
+                     
+                </div>
             </div>
+
             <div className={styles.costSection}>
                 <div><p className={styles.costLabel}>Total Cost</p><p className={styles.costValue}>{totalCost} Credits</p></div>
                 <div className={styles.balance}><p className={styles.costLabel}>Your Current Balance</p><p className={styles.costValue}>{userCredits ?? 'N/A'}</p></div>

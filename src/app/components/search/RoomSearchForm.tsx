@@ -2,13 +2,13 @@
 
 import { useState, useTransition, useMemo } from 'react';
 import { Search, Loader2 } from 'lucide-react';
-import { generate30MinSlots, getSlotIndex } from '@/lib/timeSlots';
+import { generate15MinSlots, getSlotIndex } from '@/lib/timeSlots';
 import RoomResultCard from './RoomResultCard';
 import styles from './RoomSearchForm.module.css';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { api } from '@/lib/api.client'; // Use your client-side API utility
 
-const timeSlots = generate30MinSlots();
+const timeSlots = generate15MinSlots();
 
 export default function RoomSearchForm() {
     const session = useSessionContext();

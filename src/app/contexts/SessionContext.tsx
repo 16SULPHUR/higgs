@@ -72,7 +72,7 @@ export async function refreshAccessToken(refreshToken: string, expiredAccessToke
   } catch (error) {
     if (typeof window !== 'undefined') {
       clearAllCookies();
-      window.location.href = '/login?error=sessionExpired';
+      window.location.href = '/login';
     }
     throw error;
   }

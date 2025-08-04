@@ -24,7 +24,7 @@ async function apiClient(
  
 
   if (refreshTokenError === 'true') {
-    await signOut({ callbackUrl: '/login?error=SessionExpired' });
+    await signOut({ callbackUrl: '/login' });
     throw new Error('Session expired, please log in again.');
   }
 

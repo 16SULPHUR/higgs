@@ -3,12 +3,12 @@
 import { useState, useMemo } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api.client';
-import { generate30MinSlots } from '@/lib/timeSlots';
+import { generate15MinSlots } from '@/lib/timeSlots';
 import RoomTypeResultCard from './RoomTypeResultCard';
 import styles from './RoomSearchForm.module.css';
 import { useSessionContext } from '@/contexts/SessionContext';
 
-const timeSlots = generate30MinSlots();
+const timeSlots = generate15MinSlots();
 
 const getNextAvailableSlot = () => {
   const now = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));

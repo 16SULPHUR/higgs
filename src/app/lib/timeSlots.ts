@@ -3,11 +3,11 @@ interface TimeSlot {
     label: string;
 }
 
-export function generate30MinSlots(): TimeSlot[] {
+export function generate15MinSlots(): TimeSlot[] {
     const slots: TimeSlot[] = [];
     const startTime = 9 * 60; 
-    const endTime = 21 * 60;
-    const interval = 30;
+    const endTime = 21.25 * 60;
+    const interval = 15;
 
     for (let timeInMinutes = startTime; timeInMinutes < endTime; timeInMinutes += interval) {
         const h = Math.floor(timeInMinutes / 60);
