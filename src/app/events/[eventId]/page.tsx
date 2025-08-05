@@ -4,7 +4,7 @@ import styles from './EventDetailPage.module.css';
 import EventRegistrationManager from '@/events/EventRegistrationManager';
 
 async function getEvent(eventId: string) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}/details`, { next: { revalidate: 3600 } });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}/details`, { next: { revalidate: 120 } });
     if (!res.ok) return null;
     return res.json();
 }

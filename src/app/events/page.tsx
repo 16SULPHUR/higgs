@@ -2,7 +2,7 @@ import EventList from '@/events/EventList';
 import styles from './EventsPage.module.css';  
 
 async function getEvents() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/public/events`, { next: { revalidate: 300 } });
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/public/events`, { next: { revalidate: 120 } });
   if (!res.ok) return null;
   return res.json();
 }
