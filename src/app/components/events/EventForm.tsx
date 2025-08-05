@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation'; 
 import Image from 'next/image';
 import { api } from '@/lib/api.client'; 
 import styles from '@/components/rooms/RoomForm.module.css';
