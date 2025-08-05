@@ -40,7 +40,7 @@ export default function InviteGuestForm({ bookingId, onInviteSuccess, session }:
       setSuccess(result.message);
       setName('');
       setEmail('');
-      onInviteSuccess(); // Tell the parent page to re-fetch the guest list
+      onInviteSuccess();  
     } catch (err: any) {
       setError(err.message || 'Failed to send invite.');
     } finally {

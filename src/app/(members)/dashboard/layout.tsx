@@ -7,7 +7,7 @@ import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
 import MobileMenuButton from '@/components/members/sidebar/MobileMenuButton';
 import UserProfileMenu from '@/components/common/UserProfileMenu';
 import { getCookie } from '@/lib/cookieUtils';
-import Image from 'next/image';
+import Image from 'next/image';  
 
 export default function MemberPortalLayout({ children }: { children: ReactNode }) {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
   }, []);
 
   return (
-    <div className={styles.container}>
+    <div className={styles.container}> 
       <aside className={styles.desktopSidebar}>
         <div className={styles.sidebarHeader}>
           {/* <h1 className={styles.logo}>Higgs</h1> */}
@@ -59,7 +59,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
         </header>
         <main className={styles.main}>
           {children}
-        </main>
+        </main> 
       </div>
     </div>
   );

@@ -1,45 +1,13 @@
-'use client';
-
-import { useState } from 'react';
 import Image from 'next/image';
-import { Calendar, Check, Users, X, Loader2 } from 'lucide-react';
-import { api } from '@/lib/api.client';
+import { Calendar, Check, Users, X, Loader2 } from 'lucide-react'; 
 import styles from './EventCard.module.css';
 
 interface EventCardProps {
-  event: any;
-  onUpdate: () => void;
-  session: any;
+  event: any;  
 }
 
-export default function EventCard({ event, onUpdate, session }: EventCardProps) {
-    const [isPending, setIsPending] = useState(false);
-
-    const handleRegister = async () => {
-        setIsPending(true);
-        try {
-            await api.post(session, `/api/events/${event.id}/register`, {});
-            onUpdate(); 
-        } catch (error: any) {
-            alert(`Error: ${error.message}`);
-        } finally {
-            setIsPending(false);
-        }
-    };
-
-    const handleWithdraw = async () => {
-        if (confirm("Are you sure you want to withdraw from this event?")) {
-            setIsPending(true);
-            try {
-                await api.delete(session, `/api/events/${event.id}/cancel-registration`);
-                onUpdate();  
-            } catch (error: any) {
-                alert(`Error: ${error.message}`);
-            } finally {
-                setIsPending(false);
-            }
-        }
-    };
+export default function EventCard({ event }: EventCardProps) { 
+ 
 
     const formatDate = (d: string) => new Date(d).toLocaleDateString('en-US', { dateStyle: 'full', timeZone: 'Asia/Kolkata' });
 
@@ -58,8 +26,8 @@ export default function EventCard({ event, onUpdate, session }: EventCardProps) 
                 <p className={styles.description}>{event.description}</p>
                 <div className={styles.footer}>
                     <span className={styles.registrations}><Users size={14} />{event.registration_count} Registered</span>
-                    <a href={`/dashboard/events/${event.id}`}>Details</a>
-                    {event.is_registered ? (
+                    <a href={`/events/${event.id}`}>Details</a>
+                    {/* {event.is_registered ? (
                         <button onClick={handleWithdraw} disabled={isPending} className={`${styles.actionButton} ${styles.withdrawButton}`}>
                             {isPending ? <Loader2 size={16} className={styles.spinner} /> : <X size={16}/>}
                             <span>{isPending ? 'Withdrawing...' : 'Withdraw'}</span>
@@ -69,7 +37,7 @@ export default function EventCard({ event, onUpdate, session }: EventCardProps) 
                             {isPending ? <Loader2 size={16} className={styles.spinner} /> : <Check size={16}/>}
                             <span>{isPending ? 'Registering...' : 'Register'}</span>
                         </button>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

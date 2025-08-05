@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import styles from './GuestRegistrationForm.module.css';
 import { Loader2 } from 'lucide-react';
@@ -28,7 +26,8 @@ export default function GuestRegistrationForm({ eventId, onBack }: { eventId: st
             });
 
             const data = await result.json();
-            if (!result.ok) { 
+            if (!result.ok) {
+                // If the response is not ok, throw an error with the message from the JSON body
                 throw new Error(data.message || 'An unknown error occurred.');
             }
             setSuccess(data.message || 'You have been successfully registered!');

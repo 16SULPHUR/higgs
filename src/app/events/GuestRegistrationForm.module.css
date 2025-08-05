@@ -1,0 +1,84 @@
+.form {
+  width: 100%;
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 1.5rem;
+}
+.title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.inputGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.inputGroup input {
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.registerButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 1rem;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+.registerButton:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+.withdrawButton {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+.withdrawButton:hover {
+  background-color: hsl(var(--accent));
+}
+.error {
+  color: hsl(var(--destructive));
+  font-size: 0.875rem;
+}
+.successMessage {
+  text-align: center;
+  padding: 2rem;
+  background-color: hsl(var(--secondary));
+  border-radius: var(--radius);
+}

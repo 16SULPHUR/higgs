@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"; 
-import { SessionProvider } from "./contexts/SessionContext";
-import { displayTime } from "./lib/displayDateAndTime";
+import { SessionProvider } from "./contexts/SessionContext"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +33,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#1976D2" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
-        <SessionProvider>
+        <SessionProvider> 
           {children}
         </SessionProvider> 
       </body>

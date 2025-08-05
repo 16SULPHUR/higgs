@@ -10,6 +10,7 @@ import { clearAllCookies, getCookie } from '@/lib/cookieUtils';
 import styles from './Dashboard.module.css';
 import { jwtDecode } from 'jwt-decode';
 import { getDecodedToken } from '@/lib/tokenUtils';
+import PwaInstallPopup from '@/components/common/PwaInstallPopup';
 
 export default function MembersDashboardPage() {
   const [session, setSession] = useState<string | null>(null);
@@ -59,6 +60,7 @@ export default function MembersDashboardPage() {
 
   return (
     <div className={styles.pageContainer}>
+      <PwaInstallPopup />
       <header className={styles.header}>
         <div className={styles.welcomeMessage}>
           <h1 className={styles.welcomeTitle}>

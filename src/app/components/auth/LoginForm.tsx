@@ -125,6 +125,13 @@ export default function LoginForm() {
           <span>Sign in with Google</span>
         </button>
       </div>
-    </div>
+
+      <div className={styles.cardFooter}>
+        <a href="/forgot-password" className={styles.forgotPasswordLink}>
+          Forgot Password?
+        </a>
+      </div>
+    </div>      
+      
   );
 }

@@ -21,7 +21,7 @@ export default function UserBookingsList({ bookings, onUpdate }: UserBookingsLis
         if (activeFilter === 'UPCOMING') {
             return bookings.filter(b => b.status === 'CONFIRMED' && new Date(b.start_time) > now);
         } else {
-            return bookings.filter(b => b.status === 'CANCELLED' || (b.status === 'CONFIRMED' && new Date(b.start_time) <= now));
+            return bookings.filter(b => b.status === 'CANCELLED' || (b.status === 'CONFIRMED' && new Date(b.end_time) <= now));
         }
     }, [bookings, activeFilter]);
 

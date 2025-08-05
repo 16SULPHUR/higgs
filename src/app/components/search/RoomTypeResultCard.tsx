@@ -74,13 +74,13 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
 
                 <div className={styles.actions}>
                     <a href={finalUrl} className={styles.bookButton}>
-                        {isReschedule ? 'Select' : 'See Availability'}
+                        {isReschedule ? 'Select' : 'Book Now'}
                     </a>
                 </div>
             </div>
         </div>
     );
 }
-
+    
 
 

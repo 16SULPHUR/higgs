@@ -8,7 +8,7 @@ import styles from './HomePage.module.css';
 import { clearAllCookies, getCookie } from './lib/cookieUtils';
 import SignOutButton from './components/SignOutButton';
 import InstallPwaButton from './components/common/InstallPwaButton';
-import { InstallPrompt } from './components/common/InstallPrompt';
+import { InstallPrompt } from './components/common/InstallPrompt'; 
 
 export default function HomePage() {
   useEffect(() => {
@@ -38,6 +38,7 @@ export default function HomePage() {
         <SignOutButton />
       </div>
       <InstallPrompt />
+      
 
       <div className={styles.contentWrapper}>
         <Image

@@ -1,0 +1,158 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.tabs {
+  display: flex;
+  border-bottom: 1px solid hsl(var(--border));
+  margin-bottom: 1.5rem;
+}
+.tabs button {
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.tabs button.activeTab {
+  color: hsl(var(--primary));
+  border-bottom-color: hsl(var(--primary));
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.guestInputRow {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.guestInputRow input {
+  flex-grow: 1;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+}
+.removeButton {
+  background: none;
+  border: none;
+  color: hsl(var(--destructive));
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.addButton {
+  background: none;
+  border: 1px dashed hsl(var(--border));
+  color: hsl(var(--primary));
+  font-weight: 500;
+  padding: 0.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.memberSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.memberItem.selected {
+  border-color: hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.05);
+}
+.checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid hsl(var(--border));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.memberItem.selected .checkbox {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+.memberName {
+  font-weight: 500;
+}
+.memberEmail {
+  font-size: 0.8rem;
+  color: hsl(var(--muted-foreground));
+}
+.footerActions {
+  margin-top: 1.5rem;
+}
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 2.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+.button:disabled {
+  opacity: 0.6;
+}
+.messageText {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+.divider {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1.5rem 0;
+}
+.guestListTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.guestList ul {
+  list-style: none;
+  padding: 0;
+}
+.guestList li {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+  padding: 0.25rem 0;
+}
+.noGuestsText {
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+.spinner {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
