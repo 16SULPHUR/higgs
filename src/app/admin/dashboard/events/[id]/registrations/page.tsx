@@ -3,101 +3,107 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2, User, UserSquare } from 'lucide-react';
 import { api } from '@/lib/api.client';
-import styles from './EventRegistrationsPage.module.css';
 import { useSessionContext } from '@/contexts/SessionContext';
+import styles from './EventRegistrationsPage.module.css';
 
 export default function EventRegistrationsPage() {
-  const params = useParams();
-  const session = useSessionContext();
+    const params = useParams();
+    const session = useSessionContext();
+    
+    const [data, setData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+  
+    const eventId = params.id as string;
 
-  const eventId = params.id as string | undefined;
+    useEffect(() => {
+        if (session === undefined) {
+            return;
+        }
 
-  const [event, setEvent] = useState<any>(null);
-  const [registrations, setRegistrations] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+        if (session && eventId) {
+            const fetchData = async () => {
+                try {
+                    const responseData = await api.get(session, `/api/admin/events/${eventId}/registrations`);
+                    setData(responseData);
+                } catch (err: any) {
+                    setError(err.message || 'Failed to load registrations.');
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchData();
+        } else {
+            setIsLoading(false);
+        }
+    }, [session, eventId]);
 
-  useEffect(() => {
-    console.log('Fetching registrations for event:', eventId);
+    const renderContent = () => {
+        if (isLoading || session === undefined) {
+            return <div className={styles.loadingState}><Loader2 className={styles.loaderIcon} /></div>;
+        }
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+        if (data) {
+            const { members = [], guests = [] } = data.registrations;
+            const totalRegistrations = members.length + guests.length;
 
-    if (!session || !eventId) {
-      // No session or eventId - reset state and stop loading
-      setEvent(null);
-      setRegistrations([]);
-      setIsLoading(false);
-      setError(null);
-      return;
-    }
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const [eventData, regsData] = await Promise.all([
-          api.get(session, `/api/admin/events/${eventId}`),
-          api.get(session, `/api/admin/events/${eventId}/registrations`)
-        ]);
-        setEvent(eventData);
-        setRegistrations(regsData);
-      } catch (err: any) {
-        setError(err.message || 'Failed to load event registrations.');
-      } finally {
-        setIsLoading(false);
-      }
+            return (
+                <div>
+                    <p className={styles.description}>
+                        A total of {totalRegistrations} people have registered for this event.
+                    </p>
+                    <div className={styles.grid}>
+                        <div className={styles.card}>
+                            <h2 className={styles.cardTitle}><User /> Members ({members.length})</h2>
+                            <ul className={styles.memberList}>
+                                {members.length > 0 ? (
+                                    members.map((reg: any) => (
+                                        <li key={reg.id} className={styles.memberItem}>
+                                            <span>{reg.name}</span>
+                                            <span className={styles.memberEmail}>{reg.email}</span>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <p className={styles.noMembers}>No members have registered yet.</p>
+                                )}
+                            </ul>
+                        </div>
+                        <div className={styles.card}>
+                            <h2 className={styles.cardTitle}><UserSquare /> Guests ({guests.length})</h2>
+                            <ul className={styles.memberList}>
+                                {guests.length > 0 ? (
+                                    guests.map((reg: any) => (
+                                        <li key={reg.id} className={styles.memberItem}>
+                                            <span>{reg.name}</span>
+                                            <span className={styles.memberEmail}>{reg.email}</span>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <p className={styles.noMembers}>No guests have registered yet.</p>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        return <p>Event not found.</p>;
     };
 
-    fetchData();
-  }, [session, eventId]);
-
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <div className={styles.loadingState}>
-          <Loader2 className={styles.loaderIcon} />
+    return (
+        <div>
+            <Link href="/admin/dashboard/events" className={styles.backButton}>
+                <ArrowLeft size={16} />
+                <span>Back to Events</span>
+            </Link>
+            <h1 className={styles.title}>
+                Registrations for "{data?.eventTitle || '...'}"
+            </h1>
+            {renderContent()}
         </div>
-      );
-    }
-    if (error) {
-      return <p>Error: {error}</p>;
-    }
-    if (event) {
-      return (
-        <div className={styles.card}>
-          <ul className={styles.memberList}>
-            {registrations.length > 0 ? (
-              registrations.map((reg: any) => (
-                <li key={reg.id} className={styles.memberItem}>
-                  <span>{reg.name}</span>
-                  <span className={styles.memberEmail}>{reg.email}</span>
-                </li>
-              ))
-            ) : (
-              <p className={styles.noMembers}>
-                There are no registrations for this event yet.
-              </p>
-            )}
-          </ul>
-        </div>
-      );
-    }
-    return <p>Event not found.</p>;
-  };
-
-  return (
-    <div>
-      <a href="/admin/dashboard/events" className={styles.backButton}>
-        <ArrowLeft size={16} />
-        <span>Back to Events</span>
-      </a>
-      <h1 className={styles.title}>
-        Registrations for "{event?.title || '...'}"
-      </h1>
-      <p className={styles.description}>
-        A total of {isLoading ? '...' : registrations.length} users have registered for this event.
-      </p>
-      {renderContent()}
-    </div>
-  );
+    );
 }

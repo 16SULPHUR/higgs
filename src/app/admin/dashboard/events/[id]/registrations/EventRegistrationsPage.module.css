@@ -15,11 +15,25 @@
   color: hsl(var(--muted-foreground));
   margin-bottom: 2rem;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+  align-items: flex-start;
+}
 .card {
   background-color: hsl(var(--card));
   border: 1px solid hsl(var(--border));
   border-radius: var(--radius);
-  max-width: 800px;
+}
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(var(--border));
 }
 .memberList {
   list-style: none;
