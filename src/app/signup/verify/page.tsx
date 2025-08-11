@@ -31,7 +31,6 @@ export default function VerifySignupPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || 'Verification failed');
-      // Redirect to login with a message to wait for approval. Do not attempt auto-login here.
       const params = new URLSearchParams({ notice: 'verified' });
       window.location.href = `/login?${params.toString()}`;
     } catch (err: any) {

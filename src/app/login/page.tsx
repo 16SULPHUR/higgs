@@ -6,14 +6,21 @@ import { redirect } from 'next/navigation';
 import styles from './LoginPage.module.css';
 import Link from 'next/link';
 import { useSessionContext } from '@/contexts/SessionContext';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getDecodedToken } from '@/lib/tokenUtils';
 
-export default function LoginPage() {
-  const session = useSessionContext();
+function LoginNotice() {
   const search = useSearchParams();
   const notice = search.get('notice');
+  if (notice === 'verified') {
+    return <p className={styles.linkRow}>Email verified. You can log in once an admin approves your account.</p>;
+  }
+  return null;
+}
+
+export default function LoginPage() {
+  const session = useSessionContext();
   console.log("session", session);
 
   useEffect(() => {
@@ -38,9 +45,9 @@ export default function LoginPage() {
   return (
     <main className={styles.container}>
       <div className={styles.stack}>
-        {notice === 'verified' && (
-          <p className={styles.linkRow}>Email verified. You can log in once an admin approves your account.</p>
-        )}
+        <Suspense fallback={null}>
+          <LoginNotice />
+        </Suspense>
         <a className={styles.adminLink} href='/admin/login'>Admin Login</a>
         <p className={styles.linkRow}>
           New here? <Link href="/signup">Create an account</Link>
