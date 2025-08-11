@@ -49,12 +49,12 @@ export default function HomePage() {
           className="logoImage"
         />
         <div className={styles.navLinks}>
-          <Link href="/login" className={styles.navButton}>
+          <a href="/login" className={styles.navButton}>
             Go to Login
-          </Link>
-          <Link href="/dashboard" className={styles.navButton}>
+          </a >
+          <a href="/dashboard" className={styles.navButton}>
             Go to Dashboard
-          </Link>
+          </a >
         </div>
       </div>
     </div>

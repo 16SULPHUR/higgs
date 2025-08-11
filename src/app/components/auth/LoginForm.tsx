@@ -19,6 +19,20 @@ export default function LoginForm() {
     setIsLoading(true); 
 
     try {
+      // Preflight check to surface backend error messages (e.g., pending approval, unverified)
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+      if (!baseUrl) throw new Error('API not configured');
+      const pre = await fetch(`${baseUrl}/api/auth/email-auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!pre.ok) {
+        const data = await pre.json().catch(() => ({ message: 'Login failed' }));
+        setError(data?.message || 'Login failed');
+        return;
+      }
+
       const result = await signIn('credentials', {
         redirect: false,
         email: email,
@@ -54,8 +68,9 @@ export default function LoginForm() {
          
         router.push('/dashboard');
       }
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
+    } catch (err: any) {
+      const message = err?.message || 'An unexpected error occurred. Please try again.';
+      setError(message);
     } finally {
       setIsLoading(false);  
     }

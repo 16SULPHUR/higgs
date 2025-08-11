@@ -1,75 +1,87 @@
+/* MobileSidebar.module.css */
 .overlay {
   position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 40;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 30;
+  animation: fadeIn 0.3s ease;
 }
 
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  bottom: 0;
   width: 280px;
-  background-color: hsl(var(--card));
-  z-index: 50;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem;
-  animation: slideIn 0.3s ease-in-out;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
+  height: 100%;
+  background: white;
+  z-index: 40;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+  animation: slideIn 0.3s ease;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .logo {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  letter-spacing: -0.05em;
+  color: #1e293b;
 }
 
 .closeButton {
-  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1f5f9;
   border: none;
-  padding: 0.5rem;
-  color: hsl(var(--muted-foreground));
+  color: #64748b;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: #e2e8f0;
+  color: #475569;
 }
 
 .nav {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  padding: 1rem 0;
 }
 
 .navLink {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius);
-  font-size: 1rem;
-  font-weight: 500;
-  color: hsl(var(--muted-foreground));
+  padding: 0.75rem 1.5rem;
+  color: #64748b;
   text-decoration: none;
-  transition: background-color 0.15s, color 0.15s;
+  transition: all 0.2s ease;
 }
 
 .navLink:hover {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
+  background: #f8fafc;
+  color: #4f46e5;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
 }

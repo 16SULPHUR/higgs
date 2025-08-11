@@ -1,71 +1,140 @@
 .container {
   display: flex;
   height: 100vh;
-  overflow: hidden; /* Prevent body scrolling */
+  overflow: hidden;
+  background: #f8fafc;
 }
 
 .desktopSidebar {
-  position: fixed; /* Fix the sidebar to the viewport */
+  position: fixed;
   top: 0;
   left: 0;
   height: 100%;
-  width: 240px;
-  background-color: hsl(var(--card));
-  border-right: 1px solid hsl(var(--border));
+  width: 260px;
+  background: white;
+  backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(226, 232, 240, 0.5);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 1.5rem;
   z-index: 20;
+  overflow: hidden;
 }
- 
+
 .sidebarHeader {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 1rem 0.5rem;
-  margin-bottom: 1rem;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
   width: 100%;
   height: 50px;
-  position: relative; 
-} 
+  position: relative;
+}
 
-.logo { 
-  width: fit-content; 
+.logoContainer {
+  position: relative;
+  width: 120px;
+  height: 40px;
+  overflow: hidden;
+}
+
+.logo {
   object-fit: contain;
-  filter: invert();  
+  filter: invert(1);
+}
 
+.searchContainer {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
 
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.5);
+  background: #f8fafc;
+  color: #1e293b;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: rgba(79, 70, 229, 0.5);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .nav {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .navLink {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: calc(var(--radius) - 4px);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 500;
-  color: hsl(var(--muted-foreground));
+  color: #64748b;
   text-decoration: none;
-  transition: background-color 0.15s, color 0.15s;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #4f46e5;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
 }
 
 .navLink:hover {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
+  background: rgba(226, 232, 240, 0.5);
+  color: #475569;
+}
+
+.activeNavLink {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+.activeNavLink::before {
+  transform: translateX(0);
+}
+
+.navIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mainContentWrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 240px; /* Create space for the fixed sidebar */
+  margin-left: 260px;
 }
 
 .header {
@@ -73,41 +142,135 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  border-bottom: 1px solid hsl(var(--border));
-  flex-shrink: 0; /* Prevent header from shrinking */
-  background-color: hsla(var(--card), 0.8);
-  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
   z-index: 10;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerSearch {
+  position: relative;
+  flex: 1;
+  max-width: 500px;
+}
+
+.notificationButton {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(241, 245, 249, 0.5);
+  border: none;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notificationButton:hover {
+  background: rgba(79, 70, 229, 0.2);
+  color: #4f46e5;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .main {
   flex: 1;
   padding: 2rem;
-  background-color: hsl(var(--secondary) / 0.5);
-  overflow-y: auto; /* Make this the scrollable area */
+  background: rgba(241, 245, 249, 0.5);
+  overflow-y: auto;
 }
 
-.loader {
-  animation: spin 1s linear infinite;
+.mobileBottomNav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+  z-index: 20;
+  justify-content: space-around;
+  padding: 0.5rem 0;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.mobileNavItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.mobileNavLabel {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.activeMobileNavItem {
+  color: #4f46e5;
 }
 
 @media (max-width: 1024px) {
   .desktopSidebar {
     display: none;
   }
+  
   .mainContentWrapper {
-    margin-left: 0; /* Remove margin on mobile where sidebar is hidden */
+    margin-left: 0;
   }
+  
   .header {
     justify-content: space-between;
+  }
+  
+  .headerSearch {
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .headerSearch {
+    display: none;
+  }
+  
+  .main {
+    padding: 1rem;
+    padding-bottom: 5rem;
+  }
+  
+  .mobileBottomNav {
+    display: flex;
   }
 }

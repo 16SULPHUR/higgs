@@ -1,15 +1,9 @@
 'use client';
-
 import Image from "next/image";
-import Link from "next/link";
 import styles from './UserProfileMenu.module.css';
 import { User, LogOut } from 'lucide-react';
-import { signOut } from "next-auth/react";
-import { getSession } from "@/lib/session";
 import SignOutButton from "../SignOutButton";
-import { useSessionContext } from "@/contexts/SessionContext";
-import { useEffect, useState } from "react";
-import { api } from "@/lib/api.client";
+import { useEffect, useState, useRef } from "react";
 import { getCookie } from "@/lib/cookieUtils";
 
 export default function UserProfileMenu() { 
@@ -18,16 +12,16 @@ export default function UserProfileMenu() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
-
-    // ✅ Ensure we're on the client before accessing cookies
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+    
     useEffect(() => {
         setIsClient(true);
         const accessToken = getCookie("accessToken");
         setSession(accessToken);
     }, []);
-
+    
     const fetchUserData = async () => {
-        console.log('Fetching user data for session:', session);
         setIsLoading(true);
         try {
             const data = {
@@ -42,7 +36,7 @@ export default function UserProfileMenu() {
             setIsLoading(false);
         }
     };
-
+    
     useEffect(() => {
         if (session && isClient) {
             fetchUserData();
@@ -52,8 +46,24 @@ export default function UserProfileMenu() {
             setError(null);
         }
     }, [session, isClient]);
-
-    // ✅ Return consistent loading state during hydration
+    
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+    
+    const handleClickOutside = (event: MouseEvent) => {
+        if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            setIsMenuOpen(false);
+        }
+    };
+    
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+    
     if (!isClient) {
         return (
             <div className={styles.menuContainer}>
@@ -63,17 +73,16 @@ export default function UserProfileMenu() {
             </div>
         );
     }
-
-    // ✅ Now safe to conditionally render based on session
+    
     if (!session) return null;
-
+    
     const getInitials = (name: string) => {
         if (!name) return 'U';
         const names = name.split(' ');
         const initials = names.map(n => n[0]).join('');
         return initials.slice(0, 2).toUpperCase();
     };
-
+    
     if (isLoading) {
         return (
             <div className={styles.menuContainer}>
@@ -83,7 +92,7 @@ export default function UserProfileMenu() {
             </div>
         );
     }
-
+    
     if (error) {
         return (
             <div className={styles.menuContainer}>
@@ -93,12 +102,17 @@ export default function UserProfileMenu() {
             </div>
         );
     }
-
+    
     if (!userData) return null;
-
+    
     return (
-        <div className={styles.menuContainer}>
-            <button className={styles.avatarButton}>
+        <div className={styles.menuContainer} ref={menuRef}>
+            <button 
+                className={styles.avatarButton} 
+                onClick={toggleMenu}
+                aria-label="User menu"
+                aria-expanded={isMenuOpen}
+            >
                 {userData.profile_picture ? (
                     <Image 
                         src={userData.profile_picture} 
@@ -113,7 +127,8 @@ export default function UserProfileMenu() {
                     </div>
                 )}
             </button>
-            <div className={styles.dropdown}>
+            
+            <div className={`${styles.dropdown} ${isMenuOpen ? styles.dropdownOpen : ''}`}>
                 <div className={styles.dropdownHeader}>
                     <p className={styles.dropdownName}>{userData.name}</p>
                     <p className={styles.dropdownEmail}>{userData.email}</p>

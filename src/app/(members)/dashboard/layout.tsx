@@ -1,30 +1,41 @@
 'use client';
-
 import { ReactNode, useState, useEffect } from 'react';
-import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy } from 'lucide-react';
+import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy, Settings, Bell, Search } from 'lucide-react';
 import styles from './MemberLayout.module.css';
 import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
 import MobileMenuButton from '@/components/members/sidebar/MobileMenuButton';
 import UserProfileMenu from '@/components/common/UserProfileMenu';
 import { getCookie } from '@/lib/cookieUtils';
-import Image from 'next/image';  
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 
 export default function MemberPortalLayout({ children }: { children: ReactNode }) {
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
   const [isOrgUser, setIsOrgUser] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [notifications, setNotifications] = useState(3);
+  const pathname = usePathname();
 
   useEffect(() => {
     const role = getCookie("role");
     setIsOrgUser(role === "ORG_USER");
   }, []);
 
+  const navItems = [
+    { href: "/dashboard", icon: <Home size={18} />, label: "Dashboard" },
+    { href: "/dashboard/find-room", icon: <CalendarCheck size={18} />, label: "Book a Space" },
+    { href: "/dashboard/my-bookings", icon: <BookUser size={18} />, label: "My Bookings" },
+    { href: "/dashboard/events", icon: <CalendarDays size={18} />, label: "Events" },
+    { href: "/dashboard/member-book", icon: <Contact size={18} />, label: "Member Directory" },
+    { href: "/dashboard/support", icon: <LifeBuoy size={18} />, label: "Support" },
+    { href: "/dashboard/settings", icon: <Settings size={18} />, label: "Settings" },
+  ];
+
   return (
-    <div className={styles.container}> 
+    <div className={styles.container}>
       <aside className={styles.desktopSidebar}>
         <div className={styles.sidebarHeader}>
-          {/* <h1 className={styles.logo}>Higgs</h1> */}
-          <a href="/dashboard">
+          <a href="/dashboard" className={styles.logoContainer}>
             <Image
               src="/logo.png"
               className={styles.logo}
@@ -33,33 +44,56 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
               sizes="(max-width: 100px) 1rem, 150px"
             />
           </a>
-          {/* 1:2.7 */}
         </div>
+         
+        
         <nav className={styles.nav}>
-          <a href="/dashboard" className={styles.navLink}><Home size={18} /><span>Dashboard</span></a>
-
-          <>
-            <a href="/dashboard/find-room" className={styles.navLink}><CalendarCheck size={18} /><span>Book a Space</span></a>
-            <a href="/dashboard/my-bookings" className={styles.navLink}><BookUser size={18} /><span>My Bookings</span></a>
-          </>
-
-          <a href="/dashboard/events" className={styles.navLink}><CalendarDays size={18} /><span>Events</span></a>
-          <a href="/dashboard/member-book" className={styles.navLink}><Contact size={18} /><span>Member Directory</span></a>
-          <a href="/dashboard/support" className={styles.navLink}><LifeBuoy size={18} /><span>Support</span></a>
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={`${styles.navLink} ${pathname === item.href ? styles.activeNavLink : ''}`}
+            >
+              <span className={styles.navIcon}>{item.icon}</span>
+              <span>{item.label}</span>
+            </a>
+          ))}
         </nav>
       </aside>
-
+      
       <MobileSidebar isOpen={isMobileSidebarOpen} onClose={() => setMobileSidebarOpen(false)} />
-
+      
       <div className={styles.mainContentWrapper}>
         <header className={styles.header}>
-          <MobileMenuButton onClick={() => setMobileSidebarOpen(true)} />
-          <div />
-          <UserProfileMenu />
+          <div className={styles.headerLeft}>
+            <MobileMenuButton onClick={() => setMobileSidebarOpen(true)} />
+            
+             
+          </div>
+          
+          <div className={styles.headerActions}>
+             
+            
+            <UserProfileMenu />
+          </div>
         </header>
+        
         <main className={styles.main}>
           {children}
         </main> 
+        
+        <nav className={styles.mobileBottomNav}>
+          {navItems.slice(0, 5).map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className={`${styles.mobileNavItem} ${pathname === item.href ? styles.activeMobileNavItem : ''}`}
+            >
+              {item.icon}
+              <span className={styles.mobileNavLabel}>{item.label}</span>
+            </a>
+          ))}
+        </nav>
       </div>
     </div>
   );

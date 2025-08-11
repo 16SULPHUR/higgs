@@ -71,3 +71,27 @@
     transform: rotate(360deg);
   }
 }
+
+.headerActions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.exportButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #10B981;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.exportButton:hover {
+    background-color: #059669;
+}

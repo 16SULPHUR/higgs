@@ -71,7 +71,7 @@ export default function BookingSuccessPage() {
                         <p><strong>Date:</strong> {displayDate(booking.start_time)}</p>
                         <p><strong>Time:</strong> {displayTime(booking.start_time)} - {displayTime(booking.end_time)}</p>
                     </div>
-                    <Link href="/dashboard/my-bookings" className={styles.ctaButton}>View All My Bookings</Link>
+                    <a href="/dashboard/my-bookings" className={styles.ctaButton}>View All My Bookings</a >
                 </div>
                 <div className={styles.card}>
                     <h2 className={styles.cardTitle}>Manage Guests & Members</h2>

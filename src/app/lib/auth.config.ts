@@ -66,20 +66,23 @@ export const authConfig  = {
           });
 
           const data = await res.json();
-          if (!res.ok || !data.accessToken || !data.refreshToken) return null;
+          if (!res.ok) {
+            throw new Error(data?.message || 'Login failed.');
+          }
+          if (!data.accessToken || !data.refreshToken) {
+            throw new Error('Invalid server response.');
+          }
 
           const user = data.user || data.admin;
-
-          
 
           return {
             ...user,
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
           };
-        } catch (error) {
-          console.error('Authorize error:', error);
-          return null;
+        } catch (error: any) {
+          const message = error?.message || 'Login failed.';
+          throw new Error(message);
         }
       }
     })

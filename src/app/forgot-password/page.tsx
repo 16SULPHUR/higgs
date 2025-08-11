@@ -33,9 +33,9 @@ export default function ForgotPasswordPage() {
                     <div className={styles.successMessage}>
                         <h3>Password Reset Successfully!</h3>
                         <p>You can now log in with your new password.</p>
-                        <Link href="/login" className={styles.loginButton}>
+                        <a href="/login" className={styles.loginButton}>
                             Go to Login
-                        </Link>
+                        </a >
                     </div>
                 );
             default:
@@ -45,10 +45,10 @@ export default function ForgotPasswordPage() {
 
     return (
         <div className={styles.container}>
-             <Link href="/login" className={styles.backButton}>
+             <a href="/login" className={styles.backButton}>
                 <ArrowLeft size={16} />
                 <span>Back to Login</span>
-            </Link>
+            </a >
             <div className={styles.card}>
                 {renderStep()}
             </div>
