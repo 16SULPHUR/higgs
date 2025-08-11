@@ -1,18 +1,23 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // import { signIn } from 'next-auth/react';
 import styles from './VerifySignupPage.module.css';
 
 export default function VerifySignupPage() {
-  const search = useSearchParams();
-  const presetEmail = search.get('email') || '';
-  const [email, setEmail] = useState(presetEmail);
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const preset = params.get('email') || '';
+      setEmail(preset);
+    } catch {}
+  }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
