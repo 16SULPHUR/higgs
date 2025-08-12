@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #1a1a1a;
+  background-color: hsl(var(--background));
   justify-content: center;
   align-items: center;
 }
@@ -32,19 +32,19 @@
 
 .navButton {
   padding: 0.75rem 1.75rem;
-  background: #333;
-  color: #fff;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   text-decoration: none;
   font-weight: 500;
   border-radius: 8px;
-  border: 1px solid #444;
+  border: 1px solid hsl(var(--ring));
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
 }
 
 .navButton:hover {
   transform: translateY(-2px);
-  background: #444;
+  background: hsl(var(--primary) / 0.9);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -54,7 +54,7 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-  background-color: #1a1a1a;
+  background-color: hsl(var(--card));
   border-radius: 12px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;

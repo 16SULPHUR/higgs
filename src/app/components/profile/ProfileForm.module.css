@@ -9,8 +9,8 @@
   align-items: center;
   gap: 1.5rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, hsl(var(--muted)) 0%, hsl(var(--border)) 100%);
+  border-bottom: 1px solid hsl(var(--border));
 }
 
 .avatarContainer {
@@ -34,11 +34,11 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: #e2e8f0;
+  background: hsl(var(--border));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   border: 4px solid white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -50,7 +50,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #ef4444;
+  background: hsl(var(--destructive));
   color: white;
   border: none;
   display: flex;
@@ -62,7 +62,7 @@
 }
 
 .removeImageButton:hover {
-  background: #dc2626;
+  background: hsl(var(--destructive) / 0.9);
 }
 
 .avatarEditButton {
@@ -70,7 +70,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: #4f46e5;
+  background: hsl(var(--primary));
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -81,7 +81,7 @@
 }
 
 .avatarEditButton:hover {
-  background: #4338ca;
+  background: hsl(var(--primary) / 0.9);
 }
 
 .hiddenInput {
@@ -91,12 +91,12 @@
 .userName {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #1e293b;
+  color: hsl(var(--foreground));
   margin: 0;
 }
 
 .userEmail {
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   margin: 0;
 }
 
@@ -116,7 +116,7 @@
 .inputGroup label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #475569;
+  color: hsl(var(--foreground));
 }
 
 .inputWrapper {
@@ -128,14 +128,14 @@
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  color: hsl(var(--muted-foreground));
 }
 
 .input {
   width: 100%;
   height: 2.75rem;
   border-radius: 0.5rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid hsl(var(--border));
   padding-left: 2.5rem;
   padding-right: 0.75rem;
   font-size: 0.875rem;
@@ -144,13 +144,13 @@
 
 .input:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
 }
 
 .input:disabled {
-  background: #f8fafc;
-  color: #94a3b8;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
   cursor: not-allowed;
 }
 
@@ -159,8 +159,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
+  border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--muted));
 }
 
 .messageContainer {
@@ -168,14 +168,14 @@
 }
 
 .errorMessage {
-  color: #ef4444;
+  color: hsl(var(--destructive));
   font-size: 0.875rem;
   font-weight: 500;
   margin: 0;
 }
 
 .successMessage {
-  color: #10b981;
+  color: hsl(var(--success));
   font-size: 0.875rem;
   font-weight: 500;
   margin: 0;
@@ -188,7 +188,7 @@
   gap: 0.5rem;
   height: 2.5rem;
   padding: 0 1.25rem;
-  background: #4f46e5;
+  background: hsl(var(--primary));
   color: white;
   border-radius: 0.5rem;
   font-weight: 500;
@@ -198,7 +198,7 @@
 }
 
 .saveButton:hover {
-  background: #4338ca;
+  background: hsl(var(--primary) / 0.9);
 }
 
 .saveButton:disabled {

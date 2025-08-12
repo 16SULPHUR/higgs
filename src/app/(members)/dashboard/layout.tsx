@@ -79,20 +79,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
         
         <main className={styles.main}>
           {children}
-        </main> 
-        
-        <nav className={styles.mobileBottomNav}>
-          {navItems.slice(0, 5).map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`${styles.mobileNavItem} ${pathname === item.href ? styles.activeMobileNavItem : ''}`}
-            >
-              {item.icon}
-              <span className={styles.mobileNavLabel}>{item.label}</span>
-            </a>
-          ))}
-        </nav>
+        </main>
       </div>
     </div>
   );

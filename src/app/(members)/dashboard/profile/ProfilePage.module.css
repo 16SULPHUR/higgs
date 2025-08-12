@@ -17,17 +17,17 @@
   gap: 0.5rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
   transition: all 0.2s ease;
 }
 
 .backButton:hover {
-  background: #f1f5f9;
-  color: #475569;
+  background: hsl(var(--border));
+  color: hsl(var(--foreground));
 }
 
 .titleSection {
@@ -37,19 +37,19 @@
 .title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: hsl(var(--foreground));
   margin: 0;
 }
 
 .description {
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   margin-top: 0.5rem;
   margin-bottom: 0;
 }
 
 .formContainer {
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
@@ -66,7 +66,7 @@
 
 .loaderIcon {
   animation: spin 1s linear infinite;
-  color: #4f46e5;
+  color: hsl(var(--primary));
 }
 
 .errorState {
@@ -81,7 +81,7 @@
 
 .retryButton {
   padding: 0.5rem 1rem;
-  background: #4f46e5;
+  background: hsl(var(--primary));
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -91,13 +91,13 @@
 }
 
 .retryButton:hover {
-  background: #4338ca;
+  background: hsl(var(--primary) / 0.9);
 }
 
 .emptyState {
   padding: 4rem;
   text-align: center;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
 }
 
 @keyframes spin {

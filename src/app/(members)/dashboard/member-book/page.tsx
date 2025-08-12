@@ -73,7 +73,7 @@ import { api } from '@/lib/api.client';
 import MemberList from '@/components/member-book/MemberList';
 import { ArrowLeft } from 'lucide-react';
 import styles from './MemberBookPage.module.css';
-import TableSkeleton from '@/components/common/TableSkeleton';
+import MemberListSkeleton from '@/components/member-book/MemberListSkeleton';
 
 const fetchUsersCached = cache(async (session: any) => {
   if (!session) return [];
@@ -106,7 +106,7 @@ export default function MemberBookPage() {
   if (isLoading) {
     return (
       <div className={styles.container}>
-        <TableSkeleton rows={10} cols={4}/>
+        <MemberListSkeleton cards={8} />
       </div>
     );
   }

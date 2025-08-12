@@ -1,0 +1,60 @@
+.searchBarSkeleton {
+  width: 100%;
+  height: 3rem;
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  background-color: hsl(var(--card));
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: hsl(var(--secondary));
+  position: relative;
+  overflow: hidden;
+}
+
+.lines { flex: 1; display: grid; gap: 0.5rem; }
+.line { height: 1rem; border-radius: 6px; background-color: hsl(var(--secondary)); position: relative; overflow: hidden; }
+.lineShort { width: 40%; }
+.lineLong { width: 70%; }
+
+/* Shimmer animation reuse */
+.searchBarSkeleton::after,
+.avatar::after,
+.line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, hsl(var(--accent)), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer { 100% { transform: translateX(100%); } }
+
+@media (max-width: 640px) {
+  .searchBarSkeleton { height: 2.75rem; margin-bottom: 1rem; }
+}
+
+

@@ -19,22 +19,22 @@ function Scene({ roomUrl }: RoomProps) {
     //     }
     // });
 
-    return <primitive ref={modelRef} object={scene} scale={2} />;
+    return <primitive ref={modelRef} object={scene} scale={2.2} />;
 }
 
 function RoomViewer({ roomUrl }: RoomProps) {
     return (
-        <Canvas camera={{ fov: 35, position: [5, 1, 5] }}>
+        <Canvas camera={{ fov: 34, position: [7.5, 2, 7.5] }}>
             <Suspense fallback={null}>
-                <ambientLight intensity={2} />
-                <directionalLight position={[10, 10, 5]} intensity={1} />
+                <ambientLight intensity={1.5} />
+                <directionalLight position={[10, 10, 5]} intensity={1.2} />
                 <Scene roomUrl={roomUrl} />
                 <OrbitControls
                     enableZoom={true}
-                    minPolarAngle={Math.PI / 3}
+                    minPolarAngle={Math.PI / 3.5}
                     maxPolarAngle={Math.PI / 2}
-                    minAzimuthAngle={-Math.PI / 18}
-                    maxAzimuthAngle={Math.PI / 2}
+                    minAzimuthAngle={-Math.PI / 12}
+                    maxAzimuthAngle={Math.PI / 1.8}
                 />
             </Suspense>
         </Canvas>

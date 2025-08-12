@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, Loader2 } from 'lucide-react';
 import { api } from '@/lib/api.client';
 import { generate15MinSlots } from '@/lib/timeSlots';
@@ -36,6 +36,8 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
   });
 
   const [results, setResults] = useState<any[]>([]);
+  const [initialRoomTypes, setInitialRoomTypes] = useState<any[] | null>(null);
+  const [isLoadingInitial, setIsLoadingInitial] = useState(false);
   const [executedSearchCriteria, setExecutedSearchCriteria] = useState<any>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,6 +100,26 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
       setIsLoading(false);
     }
   };
+
+  // Initial browse: load room types to show before any search
+  useEffect(() => {
+    if (session === undefined) return; // wait for session resolve
+    if (!session) return; // require auth
+    let cancelled = false;
+    const loadRoomTypes = async () => {
+      try {
+        setIsLoadingInitial(true);
+        const data = await api.get(session, '/api/meeting-rooms');
+        if (!cancelled) setInitialRoomTypes(data);
+      } catch (err) {
+        if (!cancelled) setInitialRoomTypes([]);
+      } finally {
+        if (!cancelled) setIsLoadingInitial(false);
+      }
+    };
+    loadRoomTypes();
+    return () => { cancelled = true; };
+  }, [session]);
 
   return (
     <div>
@@ -173,6 +195,35 @@ export default function RoomTypeSearchForm({ rescheduleBookingId }: { reschedule
       </form>
       {error && <p className={styles.errorText}>{error}</p>}
       <div className={styles.resultsContainer}>
+        {!hasSearched && !error && (
+          <div className={styles.browseSection}>
+            <div className={styles.browseHeader}>
+              <h3>Browse Rooms</h3>
+              <p>Explore available room types. Use the form to refine by time.</p>
+            </div>
+            {isLoadingInitial && (
+              <div className={styles.loadingState}>
+                <Loader2 className={styles.loaderIcon} />
+                <p>Loading rooms...</p>
+              </div>
+            )}
+            {!isLoadingInitial && initialRoomTypes && initialRoomTypes.length > 0 && (
+              <div className={styles.browseGrid}>
+                {initialRoomTypes.map(roomType => (
+                  <RoomTypeResultCard
+                    key={roomType.id}
+                    roomType={roomType}
+                    searchCriteria={{
+                      date: criteria.date,
+                      startTime: criteria.startTime,
+                      endTime: criteria.endTime,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         {isLoading && (
           <div className={styles.loadingState}>
             <Loader2 className={styles.loaderIcon} />

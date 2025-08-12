@@ -140,7 +140,7 @@ export default function MembersDashboardPage() {
 
   const overviewCards = [
     { label: 'Available Credits', value: availableCredits, icon: <Wallet size={20} /> },
-    { label: 'Upcoming Bookings', value: upcomingBookings.length, icon: <CalendarCheck size={20} /> },
+    // { label: 'Upcoming Bookings', value: upcomingBookings.length, icon: <CalendarCheck size={20} /> },
     { label: 'Tickets', value: tickets.length, icon: <LifeBuoy size={20} /> },
     { label: 'Upcoming Events', value: upcomingEvents.length, icon: <CalendarDays size={20} /> },
   ];

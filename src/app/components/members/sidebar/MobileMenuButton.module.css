@@ -6,16 +6,16 @@
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  background: #f1f5f9;
+  background: hsl(var(--muted));
   border: none;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .menuButton:hover {
-  background: #e2e8f0;
-  color: #475569;
+  background: hsl(var(--border));
+  color: hsl(var(--foreground));
 }
 
 /* Hide on desktop screens */

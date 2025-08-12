@@ -25,7 +25,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   letter-spacing: -0.025em;
-  background: linear-gradient(135deg, #4f46e5 0%, #03037d 100%);
+  background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--foreground)) 100%);
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
@@ -33,7 +33,7 @@
 
 .welcomeSubtitle {
   font-size: 1.125rem;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   font-weight: 400;
 }
 
@@ -47,9 +47,9 @@
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
-  background: white;
+  background: hsl(var(--card));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(226, 232, 240, 0.5);
+  border: 1px solid hsl(var(--border));
   border-radius: 1rem;
   padding: 1.5rem;
   text-decoration: none;
@@ -67,13 +67,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, transparent 100%);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, transparent 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .actionCard:hover {
-  border-color: rgba(79, 70, 229, 0.5);
+  border-color: hsl(var(--primary) / 0.5);
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
   transform: translateY(-5px);
 }
@@ -90,37 +90,35 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.2) 0%, rgba(124, 58, 237, 0.1) 100%);
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.18) 0%, hsl(var(--primary) / 0.08) 100%);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.cardIcon {
-  color: #4f46e5;
-}
+.cardIcon { color: hsl(var(--primary)); }
 
 .cardTitle {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
-  color: #1e293b;
+  color: hsl(var(--foreground));
 }
 
 .cardDescription {
   font-size: 0.875rem;
-  color: #64748b;
+  color: hsl(var(--muted-foreground));
   line-height: 1.5;
 }
 
 .cardArrow {
   margin-left: auto;
   align-self: center;
-  color: #94a3b8;
+  color: hsl(var(--muted-foreground));
   transition: transform 0.2s;
 }
 
 .actionCard:hover .cardArrow {
   transform: translateX(4px);
-  color: #4f46e5;
+  color: hsl(var(--primary));
 }
 
 /* Overview */
@@ -132,8 +130,8 @@
 }
 
 .overviewCard {
-  background: white;
-  border: 1px solid rgba(226, 232, 240, 0.5);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 12px;
   padding: 1rem 1.25rem;
   display: grid;
@@ -142,15 +140,15 @@
   gap: 0.75rem;
 }
 
-.overviewIcon { color: #4f46e5; }
-.overviewLabel { color: #64748b; font-size: 0.875rem; }
-.overviewValue { color: #0f172a; font-weight: 700; font-size: 1.25rem; }
+.overviewIcon { color: hsl(var(--primary)); }
+.overviewLabel { color: hsl(var(--muted-foreground)); font-size: 0.875rem; }
+.overviewValue { color: hsl(var(--foreground)); font-weight: 700; font-size: 1.25rem; }
 
 .overviewSkeleton {
   height: 52px;
   border-radius: 8px;
   width: 100%;
-  background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+  background: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--muted)) 50%, hsl(var(--border)) 100%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
 }
@@ -163,8 +161,8 @@
 }
 
 .section {
-  background: white;
-  border: 1px solid rgba(226, 232, 240, 0.5);
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
   border-radius: 12px;
   padding: 1rem 1.25rem;
 }
@@ -176,17 +174,17 @@
   margin-bottom: 0.75rem;
 }
 
-.sectionTitle { font-size: 1rem; font-weight: 600; color: #0f172a; }
-.sectionAction { color: #4f46e5; font-size: 0.875rem; text-decoration: none; }
+.sectionTitle { font-size: 1rem; font-weight: 600; color: hsl(var(--foreground)); }
+.sectionAction { color: hsl(var(--primary)); font-size: 0.875rem; text-decoration: none; }
 .sectionAction:hover { text-decoration: underline; }
 
 .simpleList { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
-.simpleListItem { padding: 0.75rem; border: 1px solid rgba(226,232,240,0.6); border-radius: 10px; }
-.simpleListPrimary { font-weight: 600; color: #0f172a; }
-.simpleListSecondary { color: #64748b; font-size: 0.875rem; }
+.simpleListItem { padding: 0.75rem; border: 1px solid hsl(var(--border)); border-radius: 10px; }
+.simpleListPrimary { font-weight: 600; color: hsl(var(--foreground)); }
+.simpleListSecondary { color: hsl(var(--muted-foreground)); font-size: 0.875rem; }
 
-.emptyStateBox { padding: 1rem; border-radius: 10px; background: #f8fafc; border: 1px dashed #e2e8f0; color: #475569; }
-.ctaLink { color: #4f46e5; text-decoration: none; font-weight: 600; margin-left: 0.25rem; }
+.emptyStateBox { padding: 1rem; border-radius: 10px; background: hsl(var(--muted)); border: 1px dashed hsl(var(--border)); color: hsl(var(--muted-foreground)); }
+.ctaLink { color: hsl(var(--primary)); text-decoration: none; font-weight: 600; margin-left: 0.25rem; }
 .ctaLink:hover { text-decoration: underline; }
 
 .skeletonList {
@@ -204,8 +202,8 @@
   display: flex;
   align-items: flex-start;
   gap: 1.5rem;
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
   border-radius: 1rem;
   padding: 1.5rem;
 }
@@ -214,7 +212,7 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+  background: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--muted)) 50%, hsl(var(--border)) 100%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
 }
@@ -227,7 +225,7 @@
   height: 1.5rem;
   width: 70%;
   border-radius: 4px;
-  background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+  background: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--muted)) 50%, hsl(var(--border)) 100%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
   margin-bottom: 0.75rem;
@@ -237,7 +235,7 @@
   height: 1rem;
   width: 90%;
   border-radius: 4px;
-  background: linear-gradient(90deg, #e2e8f0 0%, #cbd5e1 50%, #e2e8f0 100%);
+  background: linear-gradient(90deg, hsl(var(--border)) 0%, hsl(var(--muted)) 50%, hsl(var(--border)) 100%);
   background-size: 200% 100%;
   animation: skeleton-loading 1.5s infinite;
 }

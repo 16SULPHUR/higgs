@@ -30,7 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head> 
-        <meta name="theme-color" content="#1976D2" />
+        <meta name="theme-color" content="#A67951" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider> 
