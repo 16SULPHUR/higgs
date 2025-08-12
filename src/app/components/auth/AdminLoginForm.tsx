@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { redirect, useRouter } from 'next/navigation';
-import { LogIn } from 'lucide-react';
+import { LogIn, Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { getSession } from 'next-auth/react';
 import styles from './LoginForm.module.css';
@@ -12,10 +12,12 @@ export default function AdminLoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     const result = await signIn('credentials', {
       redirect: false,
@@ -52,6 +54,7 @@ export default function AdminLoginForm() {
 
       redirect('/admin/dashboard');
     }
+    setIsLoading(false);
   };
 
   return (
@@ -74,6 +77,7 @@ export default function AdminLoginForm() {
               required
               className={styles.input}
               placeholder="admin@higgs.co"
+              disabled={isLoading}
             />
           </div>
           <div className={styles.inputGroup}>
@@ -85,12 +89,22 @@ export default function AdminLoginForm() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className={styles.input}
+              disabled={isLoading}
             />
           </div>
           {error && <p className={styles.errorText}>{error}</p>}
-          <button type="submit" className={styles.button}>
-            <LogIn size={16} />
-            <span>Sign In</span>
+          <button type="submit" className={styles.button} disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 size={16} className={styles.spinner} />
+                <span>Signing In...</span>
+              </>
+            ) : (
+              <>
+                <LogIn size={16} />
+                <span>Sign In</span>
+              </>
+            )}
           </button>
         </form>
 

@@ -37,6 +37,11 @@ export default function EditUserPage() {
                     <p className={styles.description}>Update user details and permissions.</p>
                 </div>
             </div>
+            {typeof data.user?.individual_credits === 'number' && (
+              <p style={{ padding: '0.5rem 0 1rem', color: 'hsl(var(--muted-foreground))' }}>
+                Individual credits: <strong>{data.user.individual_credits}</strong>
+              </p>
+            )}
             <CreateUserForm session={session} organizations={data.organizations} initialData={data.user} onUpdate={fetchData} />
         </div>
     );

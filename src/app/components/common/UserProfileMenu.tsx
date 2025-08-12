@@ -4,7 +4,9 @@ import styles from './UserProfileMenu.module.css';
 import { User, LogOut } from 'lucide-react';
 import SignOutButton from "../SignOutButton";
 import { useEffect, useState, useRef } from "react";
-import { getCookie } from "@/lib/cookieUtils";
+import { clearAllCookies, getCookie } from "@/lib/cookieUtils";
+import { jwtDecode } from "jwt-decode"; 
+import { redirect } from "next/navigation";
 
 export default function UserProfileMenu() { 
     const [session, setSession] = useState<string | null>(null);
@@ -18,6 +20,9 @@ export default function UserProfileMenu() {
     useEffect(() => {
         setIsClient(true);
         const accessToken = getCookie("accessToken");
+        if (accessToken) {
+            try { console.log(jwtDecode(accessToken)); } catch (err) { /* ignore client decode errors */ }
+        }
         setSession(accessToken);
     }, []);
     

@@ -1,13 +1,13 @@
 'use client';
 
 import LoginForm from '../components/auth/LoginForm';
-import { getSession } from '../lib/session';
 import { redirect } from 'next/navigation';
 import styles from './LoginPage.module.css';
 import Link from 'next/link';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { getDecodedToken } from '@/lib/tokenUtils';
 
 function LoginNotice() {
@@ -43,17 +43,15 @@ export default function LoginPage() {
   // }
 
   return (
-    <main className={styles.container}>
-      <div className={styles.stack}>
-        <Suspense fallback={null}>
-          <LoginNotice />
-        </Suspense>
-        <a className={styles.adminLink} href='/admin/login'>Admin Login</a>
-        <p className={styles.linkRow}>
-          New here? <Link href="/signup">Create an account</Link>
-        </p>
+    <main className={styles.page}>
+      <section className={styles.cardWrapper}>
+        <Suspense fallback={null}><LoginNotice /></Suspense>
         <LoginForm />
-      </div>
+        <div className={styles.helperRow}>
+          <a className={styles.adminLink} href='/admin/login'>Admin Login</a>
+          <div className={styles.linkRow}>New here? <Link href="/signup">Create an account</Link></div>
+        </div>
+      </section>
     </main>
   );
 }

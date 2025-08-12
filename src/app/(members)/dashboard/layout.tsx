@@ -1,6 +1,6 @@
 'use client';
 import { ReactNode, useState, useEffect } from 'react';
-import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy, Settings, Bell, Search } from 'lucide-react';
+import { BookUser, CalendarCheck, CalendarDays, Contact, Home, LifeBuoy,  Bell, Search } from 'lucide-react';
 import styles from './MemberLayout.module.css';
 import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
 import MobileMenuButton from '@/components/members/sidebar/MobileMenuButton';
@@ -27,8 +27,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
     { href: "/dashboard/my-bookings", icon: <BookUser size={18} />, label: "My Bookings" },
     { href: "/dashboard/events", icon: <CalendarDays size={18} />, label: "Events" },
     { href: "/dashboard/member-book", icon: <Contact size={18} />, label: "Member Directory" },
-    { href: "/dashboard/support", icon: <LifeBuoy size={18} />, label: "Support" },
-    { href: "/dashboard/settings", icon: <Settings size={18} />, label: "Settings" },
+    { href: "/dashboard/support", icon: <LifeBuoy size={18} />, label: "Support" }, 
   ];
 
   return (

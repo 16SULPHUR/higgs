@@ -61,6 +61,7 @@ export default function SignupPage() {
 
   return (
     <main className={styles.container}>
+      <div className={styles.bg} />
       <div className={styles.card}>
         <div className={styles.cardHeader}>
           <h1 className={styles.cardTitle}>Create your account</h1>

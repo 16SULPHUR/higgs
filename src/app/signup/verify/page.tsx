@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-// import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { getSession, signIn } from 'next-auth/react';
 import styles from './VerifySignupPage.module.css';
 
 export default function VerifySignupPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
@@ -36,8 +38,36 @@ export default function VerifySignupPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || 'Verification failed');
-      const params = new URLSearchParams({ notice: 'verified' });
-      window.location.href = `/login?${params.toString()}`;
+
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+        userType: 'USER',
+      });
+
+      if (result?.error) {
+        throw new Error('Auto-login failed. Please sign in manually.');
+      }
+
+      const session: any = await getSession();
+      if (session?.accessToken) {
+        document.cookie = `accessToken=${session.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+      if (session?.refreshToken) {
+        document.cookie = `refreshToken=${session.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+      if (session?.user?.role) {
+        document.cookie = `role=${session.user.role}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+      if (session?.user?.name) {
+        document.cookie = `name=${session.user.name}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+      if (session?.user?.profile_picture) {
+        document.cookie = `profile_picture=${session.user.profile_picture}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+      }
+
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Verification failed');
     } finally {

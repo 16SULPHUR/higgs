@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogIn, Loader2 } from 'lucide-react'; // Import Loader2 for the spinner
 import { getSession, signIn } from 'next-auth/react';
+import { useSessionActions } from '@/contexts/SessionContext';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
@@ -12,6 +13,7 @@ export default function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false); 
   const router = useRouter();
+  const { refreshSession } = useSessionActions();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +67,8 @@ export default function LoginForm() {
           document.cookie = `profile_picture=${session.user.profile_picture}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
         }
 
-         
+        // Ensure the app-level session provider picks up the fresh cookies
+        try { await refreshSession(); } catch {}
         router.push('/dashboard');
       }
     } catch (err: any) {

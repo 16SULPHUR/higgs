@@ -9,13 +9,8 @@ async function getEvent(eventId: string) {
     return res.json();
 }
 
-export async function generateStaticParams() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/ids`);
-    const events = await res.json();
-    return events.map((event: { id: string }) => ({
-        eventId: event.id.toString(),
-    }));
-}
+// Disable static params to avoid build-time network dependency
+export const dynamicParams = true;
 
 export default async function EventDetailPage({ params }: { params?: { eventId?: string } }) {
     const event = await getEvent(params.eventId) ?? null;

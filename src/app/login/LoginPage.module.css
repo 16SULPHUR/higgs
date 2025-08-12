@@ -1,24 +1,9 @@
-.container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 1rem;
-}
+.page { min-height: 100vh; display: grid; place-items: center; padding: 1rem; }
 
-.stack {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
+.cardWrapper { display: grid; align-content: start; gap: 0.75rem; }
+.helperRow { text-align: center; color: hsl(var(--muted-foreground)); font-size: 0.9rem; }
+.helperRow a { color: hsl(var(--foreground)); font-weight: 600; text-decoration: none; }
+.helperRow a:hover { text-decoration: underline; }
 
-.linkRow {
-  font-size: 0.9rem;
-  color: hsl(var(--muted-foreground));
-}
-
-.adminLink {
-  color: hsl(var(--muted-foreground));
-  text-decoration: underline;
-}
+.linkRow { font-size: 0.9rem; color: hsl(var(--muted-foreground)); }
+.adminLink { color: hsl(var(--muted-foreground)); text-decoration: underline; }

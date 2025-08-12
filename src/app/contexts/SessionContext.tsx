@@ -85,27 +85,36 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
     let accessToken = getCookie('accessToken');
     const refreshToken = getCookie('refreshToken');
 
-    if (!accessToken || !refreshToken) {
+    // If no access token at all, user is unauthenticated
+    if (!accessToken) {
       setSession(null);
       return;
     }
 
     const expiry = getDecodedTokenExpiry(accessToken);
 
+    // If token expired but we have a refresh token, try to refresh
     if (!expiry || Date.now() >= expiry) {
-      try {
-        const data = await refreshAccessToken(refreshToken, accessToken);
-
-        accessToken = data.accessToken;
- 
-        setCookie('accessToken', data.accessToken);
-      } catch (error) {
-        console.error('Client token refresh failed', error);
-        setSession({ accessToken: undefined, refreshToken, error: 'RefreshTokenError' });
+      if (refreshToken) {
+        try {
+          const data = await refreshAccessToken(refreshToken, accessToken);
+          accessToken = data.accessToken;
+          setCookie('accessToken', data.accessToken);
+          setSession({ accessToken, refreshToken: data.refreshToken || refreshToken });
+          return;
+        } catch (error) {
+          console.error('Client token refresh failed', error);
+          setSession({ accessToken: undefined, refreshToken, error: 'RefreshTokenError' });
+          return;
+        }
+      } else {
+        // No refresh token; proceed with a degraded session so client can still read cookies
+        setSession({ accessToken, refreshToken: undefined });
         return;
       }
     }
 
+    // Token valid; set session even if refresh token is missing
     setSession({ accessToken, refreshToken });
   }, []);
 

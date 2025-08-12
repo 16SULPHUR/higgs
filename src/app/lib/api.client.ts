@@ -23,8 +23,9 @@ async function apiClient(
   const refreshTokenError = getCookie('refreshTokenError'); 
  
 
+  // Do not hard sign out on this flag; allow pages to handle token refresh via SessionProvider
   if (refreshTokenError === 'true') {
-    await signOut({ callbackUrl: '/login' });
+    // Soft error to allow callers to react
     throw new Error('Session expired, please log in again.');
   }
 
