@@ -31,10 +31,10 @@ function RoomViewer({ roomUrl }: RoomProps) {
                 <Scene roomUrl={roomUrl} />
                 <OrbitControls
                     enableZoom={true}
-                    minPolarAngle={Math.PI / 3.5}
+                    minPolarAngle={Math.PI / 3}
                     maxPolarAngle={Math.PI / 2}
-                    minAzimuthAngle={-Math.PI / 12}
-                    maxAzimuthAngle={Math.PI / 1.8}
+                    minAzimuthAngle={-Math.PI / 18}
+                    maxAzimuthAngle={Math.PI / 2}
                 />
             </Suspense>
         </Canvas>
