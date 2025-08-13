@@ -64,61 +64,22 @@
 
 
 
-'use client';
-
-import { useState, useEffect } from 'react';
-import { cache } from 'react';
-import { useSessionContext } from '@/contexts/SessionContext';
-import { api } from '@/lib/api.client';
-import MemberList from '@/components/member-book/MemberList';
 import { ArrowLeft } from 'lucide-react';
 import styles from './MemberBookPage.module.css';
-import MemberListSkeleton from '@/components/member-book/MemberListSkeleton';
+import MemberBookClient from './MemberBookClient';
 
-const fetchUsersCached = cache(async (session: any) => {
-  if (!session) return [];
-  return await api.get(session, '/api/users/member-book');
-});
+export const revalidate = 300;
 
-export default function MemberBookPage() {
-  const session = useSessionContext();
+async function fetchMemberNames() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL as string;
+  const res = await fetch(`${baseUrl}/api/public/users/member-names`, { next: { revalidate: 300 } });
+  if (!res.ok) return [] as { id: string; name: string }[];
+  const data = await res.json();
+  return (Array.isArray(data) ? data : []).map((u: any) => ({ id: u.id, name: u.name }));
+}
 
-  const [users, setUsers] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!session) {
-      setUsers([]);
-      setIsLoading(false);
-      return;
-    }
-
-    setIsLoading(true);
-    setError(null);
-
-    fetchUsersCached(session)
-      .then((usersData) => setUsers(usersData || []))
-      .catch((err: any) => setError(err.message || 'Failed to load users.'))
-      .finally(() => setIsLoading(false));
-  }, [session]);
-
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <MemberListSkeleton cards={8} />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.container}>
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-
+export default async function MemberBookPage() {
+  const initialUsers = await fetchMemberNames();
   return (
     <div className={styles.container}>
       <a href="/dashboard" className={styles.backButton}>
@@ -133,7 +94,7 @@ export default function MemberBookPage() {
         </p>
       </div>
 
-      <MemberList initialUsers={users} />
+      <MemberBookClient initialUsers={initialUsers} />
     </div>
   );
 }

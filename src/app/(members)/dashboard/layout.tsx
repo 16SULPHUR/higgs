@@ -47,16 +47,23 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
          
         
         <nav className={styles.nav}>
-          {navItems.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className={`${styles.navLink} ${pathname === item.href ? styles.activeNavLink : ''}`}
-            >
-              <span className={styles.navIcon}>{item.icon}</span>
-              <span>{item.label}</span>
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <a
+                key={item.href}
+                href={isActive ? undefined : item.href}
+                aria-disabled={isActive}
+                className={`${styles.navLink} ${isActive ? styles.activeNavLink : ''}`}
+                onClick={(e) => {
+                  if (isActive) e.preventDefault();
+                }}
+              >
+                <span className={styles.navIcon}>{item.icon}</span>
+                <span>{item.label}</span>
+              </a>
+            );
+          })}
         </nav>
       </aside>
       

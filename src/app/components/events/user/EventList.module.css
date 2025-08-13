@@ -1,15 +1,5 @@
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
-}
-.emptyState {
-    text-align: center;
-    padding: 4rem 1rem;
-    color: hsl(var(--muted-foreground));
-    border: 1px dashed hsl(var(--border));
-    border-radius: var(--radius);
-}
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; }
+.emptyState { text-align: center; padding: 4rem 1rem; color: hsl(var(--muted-foreground)); border: 1px dashed hsl(var(--border)); border-radius: 12px; }
 .emptyState h3 {
     font-size: 1.25rem;
     font-weight: 600;
