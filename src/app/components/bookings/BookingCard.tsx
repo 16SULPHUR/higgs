@@ -55,6 +55,7 @@ export default function BookingCard({ booking, onUpdate, session }: BookingCardP
     return (
         <>
             <div className={styles.card}>
+                      <span className={`${styles.statusBadge} ${styles[booking.status?.toLowerCase() || 'unknown']}`}>{booking.status || 'UNKNOWN'}</span>
                 <div className={styles.mediaRow}>
                     <div className={styles.imageWrapLarge}>
                         {booking.room_icon ? (
@@ -63,14 +64,14 @@ export default function BookingCard({ booking, onUpdate, session }: BookingCardP
                     </div>
                     <div className={styles.headerContent}>
                         <h3 className={styles.roomName}>{booking.room_type_name}</h3>
-                        <span className={`${styles.statusBadge} ${styles[booking.status?.toLowerCase() || 'unknown']}`}>{booking.status || 'UNKNOWN'}</span>
-                    </div>
-                </div>
-                <div className={styles.details}>
-                    <div className={styles.detailItem}><DoorOpen size={14} /><span><strong>Instance:</strong> {booking.room_instance_name}</span></div>
-                    <div className={styles.detailItem}><Calendar size={14} /><span>{formatDate(booking.start_time)}</span></div>
+                        <div className={styles.detailItem}><DoorOpen size={14} /><span> {booking.room_instance_name}</span></div>
+                        <div className={styles.detailItem}><Calendar size={14} /><span>{formatDate(booking.start_time)}</span></div>
                     <div className={styles.detailItem}><Clock size={14} /><span>{formatTime(booking.start_time)} to {formatTime(booking.end_time)}</span></div>
-                    <div className={styles.detailItem}><Hash size={14} /><span className={styles.bookingId}>ID: {booking.id}</span></div>
+                    </div>
+                    
+                </div>
+                <div className={styles.details}>  
+                     
                     <div className={styles.detailItem}>
                         <Users size={14} />
                          <span><strong>Guests:</strong> {Array.isArray(guests) && guests.length > 0 ? (

@@ -15,7 +15,7 @@ export default function TicketList({ tickets }: { tickets: any[] }) {
                 tickets.map(ticket => (
                     <a href={`/dashboard/support/${ticket.id}`} key={ticket.id} className={styles.ticketItem}>
                         <div className={styles.subject}>
-                            <span className={styles.ticketId}>#{ticket.id}</span> {ticket.subject}
+                             {ticket.subject}
                         </div>
                         <div
                             className={styles.status}>

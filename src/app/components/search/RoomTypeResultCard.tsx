@@ -1,7 +1,7 @@
 'use client';
 
 import { Users, DollarSign, MapPin } from 'lucide-react';
-import styles from './RoomResultCard.module.css';
+import styles from './RoomTypeResultCard.module.css';
 import Image from 'next/image';
 
 interface RoomTypeResultCardProps {
@@ -50,17 +50,19 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
                     src={roomType.room_icon}
                     alt={roomType.name}
                     fill
-                    sizes="(max-width: 768px) 100vw, 150px"
+                    sizes="(max-width: 768px) 100vw, 160px"
                     className={styles.image}
+                    priority={false}
                 />
             </div>
 
             <div className={styles.contentWrapper}>
                 <div className={styles.info}>
                     <h3 className={styles.title}>{roomType.name}</h3>
-                    <p className={styles.location}>
-                        <MapPin size={14} /> {roomType.location_name}
-                    </p>
+                    <div className={styles.location}>
+                        <MapPin size={16} />
+                        <span>{roomType.location_name}</span>
+                    </div>
                     <div className={styles.capacityHighlight}>
                         <Users size={16} />
                         <span>Up to {roomType.capacity} People</span>
@@ -72,15 +74,15 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
                     <span className={styles.priceLabel}>credits/slot</span>
                 </div>
 
-                <div className={styles.actions}>
-                    <a href={finalUrl} className={styles.bookButton}>
-                        {isReschedule ? 'Select' : 'Book Now'}
-                    </a>
-                </div>
+            </div>
+            <div className={styles.actions}>
+                <a href={finalUrl} className={styles.bookButton}>
+                    {isReschedule ? 'Select Room' : 'Book Now'}
+                </a>
             </div>
         </div>
     );
 }
-    
+
 
 

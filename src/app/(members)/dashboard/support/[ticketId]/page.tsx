@@ -96,7 +96,7 @@ export default function TicketDetailPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.subject}>
-            #{ticket.id}: {ticket.subject}
+             {ticket.subject}
           </h1>
           <p className={styles.meta}>Opened on {formatDate(ticket.created_at)}</p>
         </div>
