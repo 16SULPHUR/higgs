@@ -27,8 +27,7 @@ export default function MembersDashboardPage() {
   const [tickets, setTickets] = useState<any[]>([]);
  
   useEffect(() => {
-    setMounted(true);
-    // Wait until SessionProvider initializes: session is undefined initially, null if unauthenticated
+    setMounted(true); 
     if (session === undefined) return;
     const accessToken = getCookie('accessToken');
     if (session === null || !accessToken) {

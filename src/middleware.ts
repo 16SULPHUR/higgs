@@ -3,12 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const hasCustomAccessCookie = Boolean(req.cookies.get('accessToken')?.value);
-  const hasNextAuthCookie = Boolean(
-    req.cookies.get('next-auth.session-token')?.value ||
-    req.cookies.get('__Secure-next-auth.session-token')?.value
-  );
-  const isAuthenticated = hasCustomAccessCookie || hasNextAuthCookie;
+  const hasCustomAccessCookie = Boolean(req.cookies.get('accessToken')?.value); 
+  const isAuthenticated = hasCustomAccessCookie
 
   if (pathname.startsWith('/admin')) {
     if (!isAuthenticated && !pathname.startsWith('/admin/login')) {
