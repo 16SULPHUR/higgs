@@ -61,6 +61,7 @@ async function apiClient(
 export const api = {
   get: (session: AppSession | null, e: string) => apiClient(e, { method: 'GET' }, session),
   post: (session: AppSession | null, e: string, b: any) => apiClient(e, { method: 'POST', body: b }, session),
+  put: (session: AppSession | null, e: string, b: any) => apiClient(e, { method: 'PUT', body: b }, session),
   patch: (session: AppSession | null, e: string, b: any) => apiClient(e, { method: 'PATCH', body: b }, session),
   delete: (session: AppSession | null, e: string) => apiClient(e, { method: 'DELETE' }, session),
 };

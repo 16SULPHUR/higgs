@@ -1,13 +1,15 @@
 .signOutButton {
   /* Flexbox for aligning icon and text */
-  display: inline-flex;
+  /* display: inline-flex; */
   align-items: center;
   justify-content: center;
+  text-align: left;
   gap: 0.5rem;
 
   /* Sizing and Spacing */
   height: 2.5rem;
   padding: 0 1rem;
+  width: 100%;
   
   /* Appearance */
   background-color: transparent;

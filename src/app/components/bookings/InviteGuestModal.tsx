@@ -4,7 +4,12 @@ import { useState, useTransition } from 'react';
 import styles from './InviteGuestModal.module.css';
 import { Send, X } from 'lucide-react';
 import { useSessionContext } from '@/contexts/SessionContext';
-import { api } from '@/lib/api.client'; // Use your client-side API utility
+import { api } from '@/lib/api.client';  
+
+interface Invitee {
+    name: string;
+    email: string;
+}
 
 export default function InviteGuestModal({ 
     bookingId, 
@@ -37,26 +42,27 @@ export default function InviteGuestModal({
 
         startTransition(async () => {
             try {
-                const payload = { 
-                    guestName: name, 
-                    guestEmail: email 
+                // The backend expects: { invitees: Invitee[] }
+                const payload = {
+                    invitees: [
+                        { name, email }
+                    ]
                 };
-                
+
                 // Client-side API call
                 const result = await api.post(session, `/api/bookings/${bookingId}/invite`, payload);
-                
+
                 // Handle success
                 setSuccess(result.message || 'Invite sent successfully!');
                 setName('');
                 setEmail('');
-                
             } catch (error: any) {
                 console.error('Invite sending failed:', error);
-                
+
                 // Handle API error responses
                 try {
                     let errorMessage = 'Failed to send invite.';
-                    
+
                     if (error.message) {
                         try {
                             const errorBody = JSON.parse(error.message);
@@ -65,7 +71,7 @@ export default function InviteGuestModal({
                             errorMessage = error.message;
                         }
                     }
-                    
+
                     setError(errorMessage);
                 } catch (parseError) {
                     setError('A server error occurred while sending the invite.');
@@ -73,7 +79,7 @@ export default function InviteGuestModal({
             }
         });
     };
-    
+
     const handleClose = () => { 
         setName('');
         setEmail('');

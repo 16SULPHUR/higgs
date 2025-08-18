@@ -1,111 +1,164 @@
 .container {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  background: hsl(var(--background));
 }
 
-.sidebar {
-  width: 240px;
-  background-color: hsl(var(--card));
-  border-right: 1px solid hsl(var(--border));
+.desktopSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 260px;
+  background: hsl(var(--card));
+  backdrop-filter: blur(10px);
+  border-right: 1px solid hsl(var(--border) / 0.5);
   display: flex;
   flex-direction: column;
-  padding: 1rem;
-  flex-shrink: 0; 
-  transition: transform 0.3s ease-in-out; 
+  padding: 1.5rem;
+  z-index: 20;
+  overflow: hidden;
 }
 
 .sidebarHeader {
-  padding: 1rem 0.5rem;
-  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  width: 100%;
+  height: 50px;
+  position: relative;
+}
+
+.logoContainer {
+  position: relative;
+  width: 120px;
+  height: 40px;
+  overflow: hidden;
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
+  object-fit: contain;
+  filter: invert(1);
 }
 
 .nav {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  flex: 1;
 }
 
 .navLink {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: calc(var(--radius) - 4px);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
   font-size: 0.875rem;
   font-weight: 500;
   color: hsl(var(--muted-foreground));
-  transition: background-color 0.15s, color 0.15s;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.navLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: hsl(var(--primary));
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
 }
 
 .navLink:hover {
-  background-color: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
+  background: hsl(var(--border) / 0.5);
+  color: hsl(var(--foreground));
+}
+
+.activeNavLink {
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  font-weight: 600;
+}
+
+.activeNavLink::before {
+  transform: translateX(0);
+}
+
+.navIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .mainContentWrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 240px);
+  margin-left: 260px;
 }
 
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid hsl(var(--border));
-    background-color: hsl(var(--card) / 0.5);
-    backdrop-filter: blur(8px);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid hsl(var(--border));
+  flex-shrink: 0;
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .main {
   flex: 1;
   padding: 2rem;
-  background-color: hsl(var(--background));
+  background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--border)) 100%);
+  overflow-y: auto;
 }
 
-.overlay {
-    display: none; /* Hidden on desktop */
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100; 
-    transform: translateX(-100%);
-  }
-
-  .sidebarOpen {
-    transform: translateX(0); 
+@media (max-width: 1024px) {
+  .desktopSidebar {
+    display: none;
   }
   
   .mainContentWrapper {
-    width: 100%; 
+    margin-left: 0;
   }
-
+  
   .header {
-    padding: 1rem; 
+    justify-content: space-between;
   }
+}
 
-  .overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 99; 
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+  }
+  
+  .main {
+    padding: 1rem;
   }
 }
 

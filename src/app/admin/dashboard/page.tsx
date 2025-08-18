@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import styles from './Dashboard.module.css';
-import { UserPlus, PlusCircle } from 'lucide-react';
+import { UserPlus, PlusCircle, MapPin } from 'lucide-react';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { getDecodedToken } from '@/lib/tokenUtils';
 
@@ -13,29 +13,50 @@ export default function AdminDashboardPage() {
   const session = useSessionContext();
 
   useEffect(() => {
+    // Wait for session to be loaded (not undefined)
+    if (session === undefined) {
+      return; // Still loading, don't do anything yet
+    }
+
+    // If session is null, user is not authenticated
     if (session === null) {
       router.replace('/login');
+      return;
     }
 
-    if(session != undefined){
+    // Check if user is admin
+    try {
       const decodedData = getDecodedToken(session?.accessToken);
-      console.log("decodedData")
-      console.log(decodedData?.type)
-  
-      if (decodedData?.type != "admin") {
+      console.log("decodedData", decodedData);
+      
+      if (decodedData?.type !== "admin") {
         router.replace('/login');
+        return;
       }
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      router.replace('/login');
+      return;
     }
-
-
   }, [session, router]);
 
-  console.log(session)
+  // Show loading while session is being fetched
+  if (session === undefined) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px',
+        color: '#6b7280'
+      }}>
+        Loading admin dashboard...
+      </div>
+    );
+  }
 
-  // if (session === undefined) {
-  //   return <div>Loading...</div>;
-  // }
-
+  // Don't render anything if session is null (will redirect)
   if (session === null) {
     return null;
   }
@@ -61,6 +82,11 @@ export default function AdminDashboardPage() {
             <PlusCircle size={24} className={styles.actionIcon} />
             <h3 className={styles.actionTitle}>Create Organization</h3>
             <p className={styles.actionDescription}>Set up a new organization and assign a plan.</p>
+          </a>
+          <a href="/admin/dashboard/location-admins/new" className={styles.actionCard}>
+            <MapPin size={24} className={styles.actionIcon} />
+            <h3 className={styles.actionTitle}>Add Location Admin</h3>
+            <p className={styles.actionDescription}>Create a new location administrator for a specific location.</p>
           </a>
         </div>
       </div>

@@ -24,9 +24,9 @@ export default function LoginPage() {
   console.log("session", session);
 
   useEffect(() => {
-    if (session) {
+    if (session?.accessToken) {
       const decodedData = getDecodedToken(session?.accessToken);
-      console.log("decodedData")
+      console.log("decodedData")  
       console.log(decodedData?.type)
 
       if (decodedData?.type == "admin") {

@@ -15,14 +15,20 @@ export default function UserProfileMenu() {
     const [error, setError] = useState<string | null>(null);
     const [isClient, setIsClient] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     
     useEffect(() => {
         setIsClient(true);
         const accessToken = getCookie("accessToken");
+        const role = getCookie("role");
+        
         if (accessToken) {
             try { console.log(jwtDecode(accessToken)); } catch (err) { /* ignore client decode errors */ }
         }
+        
+        // Check if user is admin
+        setIsAdmin(role === "SUPER_ADMIN" || role === "ADMIN");
         setSession(accessToken);
     }, []);
     
@@ -138,9 +144,11 @@ export default function UserProfileMenu() {
                     <p className={styles.dropdownName}>{userData.name}</p>
                     <p className={styles.dropdownEmail}>{userData.email}</p>
                 </div>
-                <a href="/dashboard/profile" className={styles.dropdownItem}>
-                    <User size={14} /> My Profile
-                </a>
+                {!isAdmin && (
+                    <a href="/dashboard/profile" className={styles.dropdownItem}>
+                        <User size={14} /> My Profile
+                    </a>
+                )}
                 <SignOutButton />
             </div>
         </div>

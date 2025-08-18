@@ -27,7 +27,7 @@ type SessionContextType = {
 const SessionContext = createContext<SessionContextType | null>(null);
 
 export const useSessionContext = () => {
-  const context = useContext(SessionContext);
+  const context = useContext(SessionContext); 
   return context?.session;
 };
 
