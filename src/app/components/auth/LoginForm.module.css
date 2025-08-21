@@ -70,6 +70,19 @@
   animation: spin 1s linear infinite;
 }
 
+.divider {
+  margin: 16px 0;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.forgotLink {
+  display: inline-block;
+  margin-top: 8px;
+  color: #60a5fa;
+  text-decoration: none;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);

@@ -18,8 +18,7 @@
   color: hsl(var(--foreground));
 }
 
-/* Hide on desktop screens */
-@media (min-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1019.98px) {
   .menuButton {
     display: none;
   }

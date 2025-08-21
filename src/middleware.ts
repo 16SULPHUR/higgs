@@ -7,7 +7,10 @@ export async function middleware(req: NextRequest) {
   const isAuthenticated = hasCustomAccessCookie
 
   if (pathname.startsWith('/admin')) {
-    if (!isAuthenticated && !pathname.startsWith('/admin/login')) {
+    const adminPublicPaths = ['/admin/login', '/admin/forgot-password'];
+    const isAdminPublic = adminPublicPaths.some((p) => pathname.startsWith(p));
+
+    if (!isAuthenticated && !isAdminPublic) {
       return NextResponse.redirect(new URL('/admin/login', req.url));
     }
     if (isAuthenticated && pathname.startsWith('/admin/login')) {

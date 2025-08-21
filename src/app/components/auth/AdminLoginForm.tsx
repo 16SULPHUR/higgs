@@ -109,6 +109,7 @@ export default function AdminLoginForm() {
         </form>
 
         <div className={styles.divider}>OR</div>
+        <a href="/admin/forgot-password" className={styles.forgotLink}>Forgot password?</a>
       </div>
     </div>
   );
