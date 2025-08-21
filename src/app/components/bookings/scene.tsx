@@ -19,7 +19,7 @@ function Scene({ roomUrl }: RoomProps) {
     //     }
     // });
 
-    return <primitive ref={modelRef} object={scene} scale={2.2} />;
+    return <primitive ref={modelRef} object={scene} scale={3} />;
 }
 
 function RoomViewer({ roomUrl }: RoomProps) {
@@ -30,7 +30,7 @@ function RoomViewer({ roomUrl }: RoomProps) {
                 <directionalLight position={[10, 10, 5]} intensity={1.2} />
                 <Scene roomUrl={roomUrl} />
                 <OrbitControls
-                    enableZoom={true}
+                    enableZoom={false}
                     minPolarAngle={Math.PI / 3}
                     maxPolarAngle={Math.PI / 2}
                     minAzimuthAngle={-Math.PI / 18}
