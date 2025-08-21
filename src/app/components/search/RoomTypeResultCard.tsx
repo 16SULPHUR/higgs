@@ -1,6 +1,6 @@
 'use client';
 
-import { Users, DollarSign, MapPin } from 'lucide-react';
+import { Users, DollarSign, MapPin, Bolt } from 'lucide-react';
 import styles from './RoomTypeResultCard.module.css';
 import Image from 'next/image';
 
@@ -12,6 +12,7 @@ interface RoomTypeResultCardProps {
         capacity: number;
         credits_per_booking: number;
         room_icon: string;
+        is_fcfs?: boolean;
     };
     searchCriteria: {
         date: string;
@@ -43,6 +44,8 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
 
     const finalUrl = `${confirmationUrl}?${params.toString()}`;
 
+    const isFcfs = roomType.is_fcfs === true;
+
     return (
         <div className={styles.card}>
             <div className={styles.imageWrapper}>
@@ -69,16 +72,22 @@ export default function RoomTypeResultCard({ roomType, searchCriteria }: RoomTyp
                     </div>
                 </div>
 
-                <div className={styles.pricing}>
-                    <span className={styles.priceValue}>{roomType.credits_per_booking}</span>
-                    <span className={styles.priceLabel}>credits/slot</span>
-                </div>
+                {!isFcfs && (
+                    <div className={styles.pricing}>
+                        <span className={styles.priceValue}>{roomType.credits_per_booking}</span>
+                        <span className={styles.priceLabel}>credits/slot</span>
+                    </div>
+                )}
 
             </div>
             <div className={styles.actions}>
-                <a href={finalUrl} className={styles.bookButton}>
-                    {isReschedule ? 'Select Room' : 'Book Now'}
-                </a>
+                {!isFcfs ? (
+                    <a href={finalUrl} className={styles.bookButton}>
+                        {isReschedule ? 'Select Room' : 'Book Now'}
+                    </a>
+                ) : (
+                    <span className={styles.badge}><Bolt size={14} /> Walk-in (FCFS)</span>
+                )}
             </div>
         </div>
     );

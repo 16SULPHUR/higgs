@@ -12,17 +12,17 @@ import { useSessionContext } from '@/contexts/SessionContext';
 
 export default function RoomTypesPage() {
     const session = useSessionContext(); 
-    const [data, setData] = useState<{ roomTypes: any[], locations: any[] } | null>(null);
+    const [data, setData] = useState<{ roomTypes: any[] } | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchData = async () => {
         setIsLoading(true);
         try {
-            const [roomTypesData, locationsData] = await Promise.all([
+            const [roomTypesData] = await Promise.all([
                 api.get(session, '/api/admin/room-types'),
                 api.get(session, '/api/admin/locations')
             ]);
-            setData({ roomTypes: roomTypesData, locations: locationsData });
+            setData({ roomTypes: roomTypesData });
         } finally {
             setIsLoading(false);
         }
@@ -38,9 +38,8 @@ export default function RoomTypesPage() {
         if (isLoading || session === null) {
             return <div className={styles.tableContainer}><TableSkeleton cols={5} /></div>;
         }
-        if (data) {
-            const locationMap = new Map(data.locations.map((loc: any) => [loc.id, loc.name]));
-            return <div className={styles.tableContainer}><RoomTypesTable session={session} roomTypes={data.roomTypes} locationMap={locationMap} onUpdate={fetchData} /></div>;
+        if (data) { 
+            return <div className={styles.tableContainer}><RoomTypesTable session={session} roomTypes={data.roomTypes} onUpdate={fetchData} /></div>;
         }
         return <p>Failed to load data.</p>;
     };

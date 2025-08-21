@@ -9,7 +9,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (min-width: 1020px) {
   .menuButton {
     display: flex;
     align-items: center;

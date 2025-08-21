@@ -28,8 +28,15 @@ export default function MemberCard({ user }: { user: any }) {
                 )}
             </div>
             <div className={styles.info}>
-                <h3 className={styles.name}>{user.name}</h3>
-                <p className={styles.org}>{user.organization_name || 'Individual Member'}</p>
+                <h3 className={styles.name}>{user.name}</h3> 
+                    {user.organization_name === undefined
+                        ? null
+                        : (
+                            <p className={styles.org}>
+                                {user.organization_name || 'Individual Member'}
+                            </p>
+                        )
+                    }
             </div>
         </div>
     );

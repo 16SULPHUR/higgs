@@ -8,7 +8,7 @@ import styles from '../rooms/RoomForm.module.css';
 export default function RoomTypeForm({ locations, initialData, onUpdate, session }: { locations: any[], initialData?: any, onUpdate?: () => void, session: any }) {
     const router = useRouter();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState({ name: '', capacity: '', credits_per_booking: '', location_id: '' });
+    const [formData, setFormData] = useState({ name: '', capacity: '', credits_per_booking: '', location_id: '', is_fcfs: false });
 
     useEffect(() => {
         if (initialData) {
@@ -17,19 +17,27 @@ export default function RoomTypeForm({ locations, initialData, onUpdate, session
                 capacity: initialData.capacity?.toString() || '',
                 credits_per_booking: initialData.credits_per_booking?.toString() || '',
                 location_id: initialData.location_id || '',
+                is_fcfs: Boolean(initialData.is_fcfs) || false,
             });
         }
     }, [initialData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        const { name, type, value, checked } = e.target as HTMLInputElement;
+        setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
         try {
-            const payload = { ...formData, capacity: parseInt(formData.capacity), credits_per_booking: parseInt(formData.credits_per_booking) };
+            const payload = { 
+                name: formData.name,
+                capacity: parseInt(formData.capacity),
+                credits_per_booking: parseInt(formData.credits_per_booking),
+                location_id: formData.location_id,
+                is_fcfs: formData.is_fcfs,
+            };
             if (initialData) {
                 await api.patch(session, `/api/admin/room-types/${initialData.id}`, payload);
                 alert('Room Type updated successfully!');
@@ -53,6 +61,7 @@ export default function RoomTypeForm({ locations, initialData, onUpdate, session
                 <div className={styles.inputGroup}><label>Location</label><select name="location_id" value={formData.location_id} onChange={handleChange} required className={styles.input} disabled={isSubmitting}><option value="" disabled>Select...</option>{locations.map(loc => <option key={loc.id} value={loc.id}>{loc.name}</option>)}</select></div>
                 <div className={styles.inputGroup}><label>Capacity</label><input name="capacity" type="number" value={formData.capacity} onChange={handleChange} required className={styles.input} disabled={isSubmitting} /></div>
                 <div className={styles.inputGroup}><label>Credits Per Booking</label><input name="credits_per_booking" type="number" value={formData.credits_per_booking} onChange={handleChange} required className={styles.input} disabled={isSubmitting} /></div>
+                <div className={styles.inputGroup}><label><input type="checkbox" name="is_fcfs" checked={formData.is_fcfs} onChange={handleChange} disabled={isSubmitting} /> First-Come-First-Serve (FCFS)</label></div>
             </div>
             <div className={styles.formActions}>
                 <button type="button" onClick={() => router.back()} className={`${styles.button} ${styles.secondary}`} disabled={isSubmitting}>Cancel</button>

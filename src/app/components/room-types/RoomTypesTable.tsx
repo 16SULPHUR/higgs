@@ -6,7 +6,7 @@ import { api } from '@/lib/api.client';
 import { Pencil, Trash2, Loader2 } from 'lucide-react';
 import styles from '../rooms/RoomsTable.module.css';
 
-export default function RoomTypesTable({ roomTypes, locationMap, onUpdate, session }: { roomTypes: any[], locationMap: Map<string, string>, onUpdate: () => void, session:any }) {
+export default function RoomTypesTable({ roomTypes, onUpdate, session }: { roomTypes: any[], onUpdate: () => void, session:any }) {
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
     const handleDelete = async (typeId: string, typeName: string) => {
@@ -31,7 +31,7 @@ export default function RoomTypesTable({ roomTypes, locationMap, onUpdate, sessi
                 {roomTypes.map((type) => (
                     <tr key={type.id}>
                         <td>{type.name}</td>
-                        <td>{locationMap.get(type.location_id) || 'N/A'}</td>
+                        <td>{type.location_name || 'N/A'}</td>
                         <td>{type.capacity}</td>
                         <td>{type.credits_per_booking}</td>
                         <td className={styles.actions}>

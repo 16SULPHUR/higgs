@@ -90,6 +90,18 @@
   background-color: hsl(var(--primary) / 0.9);
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.7rem;
+  border-radius: 9999px;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 @media (min-width: 640px) { .card { grid-template-columns: 160px 1fr auto; } .imageWrapper { width: 160px; height: 160px; } .actions { grid-column: auto; justify-self: end; } }
 
 /* Mobile-first refinements for better layout */
