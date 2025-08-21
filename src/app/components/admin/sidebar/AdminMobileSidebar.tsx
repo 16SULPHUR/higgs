@@ -4,6 +4,7 @@ import { X, Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, La
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './AdminMobileSidebar.module.css';
+import Image from 'next/image';
 
 interface AdminMobileSidebarProps {
     isOpen: boolean;
@@ -12,6 +13,7 @@ interface AdminMobileSidebarProps {
 
 export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSidebarProps) {
     const pathname = usePathname();
+    if (!isOpen) return null;
 
     const navItems = [
         { href: '/admin/dashboard', icon: <LayoutDashboard size={18} />, label: 'Overview' },
@@ -28,17 +30,23 @@ export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSideb
 
     return (
         <>
-            {isOpen && (
-                <div className={styles.overlay} onClick={onClose} />
-            )}
-            <div className={`${styles.sidebar} ${isOpen ? styles.open : ''}`}>
+            <div className={styles.overlay} onClick={onClose} />
+            <aside className={styles.sidebar}>
                 <div className={styles.header}>
-                    <h2>Admin Menu</h2>
-                    <button onClick={onClose} className={styles.closeButton}>
-                        <X size={24} />
+                    <a href="/admin/dashboard" className={styles.logoContainer} onClick={onClose}>
+                        <Image
+                            src="/logo.png"
+                            alt="Higgs"
+                            fill
+                            className={styles.logo}
+                            sizes="(max-width: 100px) 1rem, 150px"
+                        />
+                    </a>
+                    <button onClick={onClose} className={styles.closeButton} aria-label="Close menu">
+                        <X size={20} />
                     </button>
                 </div>
-                
+
                 <nav className={styles.nav}>
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
@@ -46,7 +54,7 @@ export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSideb
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`${styles.navLink} ${isActive ? styles.active : ''}`}
+                                className={`${styles.navLink} ${isActive ? styles.activeNavLink : ''}`}
                                 onClick={onClose}
                             >
                                 <span className={styles.navIcon}>{item.icon}</span>
@@ -55,7 +63,7 @@ export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSideb
                         );
                     })}
                 </nav>
-            </div>
+            </aside>
         </>
     );
 }
