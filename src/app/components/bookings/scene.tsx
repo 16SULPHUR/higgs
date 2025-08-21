@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useGLTF } from '@react-three/drei';
 import { Group } from 'three';
@@ -23,6 +23,10 @@ function Scene({ roomUrl }: RoomProps) {
 }
 
 function RoomViewer({ roomUrl }: RoomProps) {
+    useEffect(() => {
+        if (roomUrl) useGLTF.preload(roomUrl);
+      }, [roomUrl]);
+      
     return (
         <Canvas camera={{ fov: 34, position: [7.5, 2, 7.5] }}>
             <Suspense fallback={null}>
@@ -31,6 +35,7 @@ function RoomViewer({ roomUrl }: RoomProps) {
                 <Scene roomUrl={roomUrl} />
                 <OrbitControls
                     enableZoom={false}
+                    enablePan={false}
                     minPolarAngle={Math.PI / 3}
                     maxPolarAngle={Math.PI / 2}
                     minAzimuthAngle={-Math.PI / 18}

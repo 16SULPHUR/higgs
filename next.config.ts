@@ -61,6 +61,22 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '10mb',
     },
   },
+  async headers() {
+    return [
+      {
+        source: '/3d_models/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        source: '/:all*(glb|gltf|bin|ktx2|basis|png|jpg|jpeg|webp)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+    ];
+  },
 };
  
 module.exports = withBundleAnalyzer(withPWA(nextConfig));
