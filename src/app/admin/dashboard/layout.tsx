@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, SquareStack, Users } from 'lucide-react';
+import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, Shield, SquareStack, Users } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import MobileMenuButton from '@/components/MobileMenuButton';
 import AdminMobileSidebar from '@/components/admin/sidebar/AdminMobileSidebar';
@@ -25,7 +25,10 @@ function SidebarNav() {
         { href: '/admin/dashboard/users', icon: <Users size={18} />, label: 'Users' },
         { href: '/admin/dashboard/organizations', icon: <Building2 size={18} />, label: 'Organizations' },
         ...(isSuperAdmin
-            ? [{ href: '/admin/dashboard/location-admins', icon: <MapPin size={18} />, label: 'Location Admins' }]
+            ? [
+                { href: '/admin/dashboard/super-admins', icon: <Shield size={18} />, label: 'Super Admins' },
+                { href: '/admin/dashboard/location-admins', icon: <MapPin size={18} />, label: 'Location Admins' }
+            ]
             : []),
         { href: '/admin/dashboard/plans', icon: <ClipboardList size={18} />, label: 'Plans' },
         { href: '/admin/dashboard/room-types', icon: <SquareStack size={18} />, label: 'Room Types' },

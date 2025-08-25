@@ -135,7 +135,8 @@
   flex: 1;
   padding: 2rem;
   background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--border)) 100%);
-  overflow-y: auto;
+  overflow: auto;
+  
 }
 
 @media (max-width: 1024px) {

@@ -1,9 +1,132 @@
-.page { min-height: 100vh; display: grid; place-items: center; padding: 1rem; }
+.page {
+  min-height: 100dvh;
+  display: grid;
+  padding: 0;
+  background: linear-gradient(
+      180deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--secondary) / 0.25) 100%
+    );
+}
 
-.cardWrapper { display: grid; align-content: start; gap: 0.75rem; }
-.helperRow { text-align: center; color: hsl(var(--muted-foreground)); font-size: 0.9rem; }
-.helperRow a { color: hsl(var(--foreground)); font-weight: 600; text-decoration: none; }
-.helperRow a:hover { text-decoration: underline; }
+.shell {
+  width: 100%;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 1fr;
+}
 
-.linkRow { font-size: 0.9rem; color: hsl(var(--muted-foreground)); }
-.adminLink { color: hsl(var(--muted-foreground)); text-decoration: underline; }
+.formPane {
+  order: 2;
+  display: grid;
+  align-content: center;
+  padding: 1.25rem 1rem 2rem;
+}
+.formWrapper {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  display: grid;
+  gap: 0.75rem;
+}
+.brand {
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+  @media (min-width: 960px) {
+    margin-top: -20rem;
+  }
+}
+.logo { 
+  border-radius: 8px;
+  object-fit: contain;
+}
+.heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: hsl(var(--foreground));
+}
+.subheading {
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 0.5rem;
+}
+
+.heroPane {
+  position: relative;
+  order: 1;
+  min-height: 220px;
+}
+.heroMedia {
+  position: relative;
+  height: 100%;
+  min-height: 220px;
+}
+.heroImage {
+  object-fit: cover;
+}
+.heroGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.0) 40%, rgba(0,0,0,0.35) 100%);
+  pointer-events: none;
+}
+.heroContent {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  color: white;
+}
+.heroTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.heroSubtitle {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.helperRow {
+  text-align: center;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+}
+.helperRow a {
+  color: hsl(var(--foreground));
+  font-weight: 600;
+  text-decoration: none;
+}
+.helperRow a:hover {
+  text-decoration: underline;
+}
+
+.linkRow {
+  font-size: 0.9rem;
+  color: hsl(var(--muted-foreground));
+}
+.adminLink {
+  color: hsl(var(--muted-foreground));
+  text-decoration: underline;
+}
+
+@media (min-width: 960px) {
+  .shell {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+  .heroPane {
+    order: 1;
+    min-height: 100dvh;
+  }
+  .heroMedia {
+    min-height: 100dvh;
+  }
+  .formPane {
+    order: 2;
+    padding: 2rem;
+    display: grid;
+    align-content: center;
+  }
+}

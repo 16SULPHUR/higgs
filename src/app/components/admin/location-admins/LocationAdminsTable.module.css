@@ -22,21 +22,21 @@
 }
 
 .addButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s;
     padding: 10px 16px;
-    background: #3b82f6;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: background-color 0.2s;
 }
-
-.addButton:hover {
-    background: #2563eb;
-}
+ 
 
 .emptyState {
     text-align: center;

@@ -1,5 +1,13 @@
 /* Card Container */
-.card { width: 100%; max-width: 420px; background-color: hsl(var(--card)); color: hsl(var(--card-foreground)); border-radius: var(--radius); border: 1px solid hsl(var(--border)); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+.card {
+  width: 100%;
+  max-width: 460px;
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: calc(var(--radius) * 1);
+  border: 1px solid hsl(var(--border));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
 
 .cardHeader {
   padding: 1.5rem;
@@ -7,13 +15,17 @@
 }
 
 .cardTitle {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: hsl(var(--foreground));
 }
 
-.cardDescription { margin-top: 0.5rem; font-size: 0.95rem; color: hsl(var(--muted-foreground)); }
+.cardDescription {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: hsl(var(--muted-foreground));
+}
 
 .cardContent {
   padding: 0 1.5rem 1.5rem;
@@ -33,14 +45,39 @@
 }
 
 .label {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.inputWrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  border-radius: calc(var(--radius) - 2px);
+  height: 2.9rem;
+  padding: 0 0.5rem;
+}
+.icon {
+  color: hsl(var(--muted-foreground));
 }
 
 /* Input Styling */
-.input { display: flex; height: 2.6rem; width: 100%; border-radius: calc(var(--radius) - 2px); border: 1px solid hsl(var(--input)); background-color: hsl(var(--background)); padding: 0.5rem 0.75rem; font-size: 0.95rem; outline: none; transition: box-shadow 0.15s ease-in-out; }
+.input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 0 0.25rem;
+  font-size: 0.95rem;
+  outline: none;
+}
 
-.input:focus-visible {
+.inputWrapper:focus-within {
   box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring));
 }
 
@@ -49,7 +86,24 @@
 }
 
 /* Button Styling */
-.button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border-radius: calc(var(--radius) - 2px); background-color: hsl(var(--primary)); color: hsl(var(--primary-foreground)); height: 2.9rem; padding: 0 1rem; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; outline: none; transition: background-color 0.15s ease-in-out; }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  height: 2.9rem;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.15s ease-in-out;
+  width: 100%;
+}
 
 .button:hover {
   background-color: hsl(var(--primary) / 0.9);
@@ -61,7 +115,7 @@
 
 /* Error Message */
 .errorText {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   color: hsl(var(--destructive));
   text-align: center;
 }
@@ -71,16 +125,56 @@
 }
 
 .divider {
-  margin: 16px 0;
+  margin: 1rem 0;
   text-align: center;
-  color: #94a3b8;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.85rem;
 }
 
-.forgotLink {
+.forgotPasswordLink {
   display: inline-block;
-  margin-top: 8px;
-  color: #60a5fa;
+  color: hsl(var(--foreground));
   text-decoration: none;
+  font-weight: 600;
+}
+
+.passwordToggle {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  padding: 0;
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.oauthButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: calc(var(--radius) - 2px);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  height: 2.9rem;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid hsl(var(--border));
+  cursor: pointer;
+  width: 100%;
+}
+.oauthButton:hover {
+  background-color: hsl(var(--secondary));
 }
 
 @keyframes spin {

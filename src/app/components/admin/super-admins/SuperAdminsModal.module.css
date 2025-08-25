@@ -1,0 +1,81 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.modal {
+  background-color: hsl(var(--card));
+  padding: 1.25rem;
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 520px;
+  border: 1px solid hsl(var(--border));
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.description {
+  color: hsl(var(--muted-foreground));
+  margin: 0 0 1rem;
+}
+.form {
+  display: grid;
+  gap: 0.75rem;
+}
+.input,
+.select {
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  padding: 0 0.75rem;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.button {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border-radius: calc(var(--radius) - 2px);
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+.button.secondary {
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+.closeButton {
+  background: transparent;
+  border: 1px solid hsl(var(--border));
+  height: 2rem;
+  width: 2rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.error {
+  color: hsl(var(--destructive));
+  font-size: 0.85rem;
+}

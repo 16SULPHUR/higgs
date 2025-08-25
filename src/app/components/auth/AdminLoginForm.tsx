@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { redirect, useRouter } from 'next/navigation';
-import { LogIn, Loader2 } from 'lucide-react';
+import { LogIn, Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { getSession } from 'next-auth/react';
 import styles from './LoginForm.module.css';
@@ -13,6 +13,7 @@ export default function AdminLoginForm() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null); 
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,37 +61,49 @@ export default function AdminLoginForm() {
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
-        <h1 className={styles.cardTitle}>Admin Portal</h1>
-        <p className={styles.cardDescription}>
-          Enter your credentials to access the dashboard.
-        </p>
+        <h2 className={styles.cardTitle}>Admin Portal</h2>
+        <p className={styles.cardDescription}>Sign in to manage Higgs Workspace.</p>
       </div>
       <div className={styles.cardContent}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.input}
-              placeholder="admin@higgs.co"
-              disabled={isLoading}
-            />
+            <div className={styles.inputWrapper}>
+              <Mail size={18} className={styles.icon} />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={styles.input}
+                placeholder="admin@higgs.co"
+                disabled={isLoading}
+                autoComplete="email"
+              />
+            </div>
           </div>
           <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.label}>Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className={styles.input}
-              disabled={isLoading}
-            />
+            <div className={styles.inputWrapper}>
+              <Lock size={18} className={styles.icon} />
+              <input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className={styles.input}
+                disabled={isLoading}
+                autoComplete="current-password"
+              />
+              <button type="button" aria-label={showPassword ? 'Hide password' : 'Show password'} className={styles.passwordToggle} onClick={() => setShowPassword((v) => !v)} disabled={isLoading}>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+          </div>
+          <div className={styles.actionsRow}>
+            <a href="/admin/forgot-password" className={styles.forgotPasswordLink}>Forgot password?</a>
           </div>
           {error && <p className={styles.errorText}>{error}</p>}
           <button type="submit" className={styles.button} disabled={isLoading}>
@@ -107,9 +120,6 @@ export default function AdminLoginForm() {
             )}
           </button>
         </form>
-
-        <div className={styles.divider}>OR</div>
-        <a href="/admin/forgot-password" className={styles.forgotLink}>Forgot password?</a>
       </div>
     </div>
   );

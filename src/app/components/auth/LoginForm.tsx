@@ -2,16 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogIn, Loader2 } from 'lucide-react'; // Import Loader2 for the spinner
+import { LogIn, Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { getSession, signIn } from 'next-auth/react';
 import { useSessionActions } from '@/contexts/SessionContext';
 import styles from './LoginForm.module.css';
 
-export default function LoginForm() {
+type LoginFormProps = {
+  variant?: 'default' | 'full';
+};
+
+export default function LoginForm({ variant = 'default' }: LoginFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { refreshSession } = useSessionActions();
 
@@ -85,71 +90,86 @@ export default function LoginForm() {
   };
 
 
+  const form = (
+    <form onSubmit={handleSubmit} className={styles.form}>
+      <div className={styles.inputGroup}>
+        <label htmlFor="email" className={styles.label}>Email</label>
+        <div className={styles.inputWrapper}>
+          <Mail size={18} className={styles.icon} />
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className={styles.input}
+            placeholder="you@company.com"
+            disabled={isLoading}
+            autoComplete="email"
+          />
+        </div>
+      </div>
+      <div className={styles.inputGroup}>
+        <label htmlFor="password" className={styles.label}>Password</label>
+        <div className={styles.inputWrapper}>
+          <Lock size={18} className={styles.icon} />
+          <input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className={styles.input}
+            disabled={isLoading}
+            autoComplete="current-password"
+          />
+          <button
+            type="button"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            className={styles.passwordToggle}
+            onClick={() => setShowPassword((v) => !v)}
+            disabled={isLoading}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.actionsRow}>
+        <a href="/forgot-password" className={styles.forgotPasswordLink}>Forgot password?</a>
+      </div>
+
+      {error && <p className={styles.errorText}>{error}</p>}
+
+      <button type="submit" className={styles.button} disabled={isLoading}>
+        {isLoading ? (
+          <>
+            <Loader2 size={16} className={styles.spinner} />
+            <span>Signing In...</span>
+          </>
+        ) : (
+          <>
+            <LogIn size={16} />
+            <span>Sign In</span>
+          </>
+        )}
+      </button>
+    </form>
+  );
+
+  if (variant === 'full') {
+    return form;
+  }
+
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
-        <h1 className={styles.cardTitle}>User Portal</h1>
-        <p className={styles.cardDescription}>
-          Enter your credentials to access the dashboard.
-        </p>
+        <h2 className={styles.cardTitle}>Sign in to your account</h2>
+        <p className={styles.cardDescription}>Access your workspace dashboard.</p>
       </div>
       <div className={styles.cardContent}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className={styles.input}
-              placeholder="admin@higgs.co"
-              disabled={isLoading}  
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className={styles.input}
-              disabled={isLoading}  
-            />
-          </div>
-          {error && <p className={styles.errorText}>{error}</p>}
-          <button type="submit" className={styles.button} disabled={isLoading}>
-             
-            {isLoading ? (
-              <>
-                <Loader2 size={16} className={styles.spinner} />
-                <span>Signing In...</span>
-              </>
-            ) : (
-              <>
-                <LogIn size={16} />
-                <span>Sign In</span>
-              </>
-            )}
-          </button>
-        </form>
-
-        <div className={styles.divider}>OR</div>
-
-        <button onClick={handleGoogleSignIn} className={`${styles.button} ${styles.googleButton}`} disabled={isLoading}>
-          <span>Sign in with Google</span>
-        </button>
+        {form}
       </div>
-
-      <div className={styles.cardFooter}>
-        <a href="/forgot-password" className={styles.forgotPasswordLink}>
-          Forgot Password?
-        </a>
-      </div>
-    </div>      
-      
+    </div>
   );
 }

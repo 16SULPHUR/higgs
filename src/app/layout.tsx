@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css"; 
 import { SessionProvider } from "./contexts/SessionContext"; 
@@ -17,7 +17,13 @@ export const metadata: Metadata = {
   title: 'Higgs Workspace',
   description: 'The customer portal for Higgs Coworking Space.',
   manifest: '/manifest.json',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default async function RootLayout({
@@ -32,7 +38,6 @@ export default async function RootLayout({
     <html lang="en">
       <head> 
         <meta name="theme-color" content="#A67951" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider> 
