@@ -19,8 +19,10 @@ export default function UserBookingsList({ bookings, onUpdate }: UserBookingsLis
     const filteredBookings = useMemo(() => {
         const now = new Date();
         if (activeFilter === 'UPCOMING') {
-            return bookings.filter(b => b.status === 'CONFIRMED' && new Date(b.start_time) > now);
+            // Show both future and ongoing (end_time in future)
+            return bookings.filter(b => b.status === 'CONFIRMED' && new Date(b.end_time) > now);
         } else {
+            // Past & cancelled
             return bookings.filter(b => b.status === 'CANCELLED' || (b.status === 'CONFIRMED' && new Date(b.end_time) <= now));
         }
     }, [bookings, activeFilter]);
@@ -33,9 +35,21 @@ export default function UserBookingsList({ bookings, onUpdate }: UserBookingsLis
             </div>
             <div className={styles.listContainer}>
                 {filteredBookings.length > 0 ? (
-                    filteredBookings.map(booking => (
-                        <BookingCard session={session} key={booking.id} booking={booking} onUpdate={onUpdate} />
-                    ))
+                    filteredBookings.map(booking => {
+                        const now = new Date();
+                        const start = new Date(booking.start_time);
+                        const end = new Date(booking.end_time);
+                        const isOngoing = start <= now && now < end && booking.status === 'CONFIRMED';
+                        return (
+                            <BookingCard
+                                session={session}
+                                key={booking.id}
+                                booking={booking}
+                                onUpdate={onUpdate}
+                                isOngoing={isOngoing}
+                            />
+                        );
+                    })
                 ) : (
                     <div className={styles.emptyFilterState}><p>No {activeFilter.toLowerCase()} bookings found.</p></div>
                 )}

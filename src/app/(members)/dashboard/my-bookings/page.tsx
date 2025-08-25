@@ -13,11 +13,9 @@ export default function MyBookingsPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const fetchBookings = async () => {
-
-    console.log("session")
-    console.log(session)
     if (!session) { 
       setBookings([]);
       setIsLoading(false);
@@ -28,26 +26,35 @@ export default function MyBookingsPage() {
     setError(null);
     try {
       const data = await api.get(session, '/api/bookings');
-      setBookings(data);
+      setBookings(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setIsLoading(false);
+      setHasFetched(true);
     }
   };
 
   useEffect(() => {
-    if (session) {
+    // Wait for session resolution; fetch once per session mount
+    if (session === undefined) {
+      setIsLoading(true);
+      return;
+    }
+    if (session && !hasFetched) {
       fetchBookings();
-    } else { 
+      return;
+    }
+    if (session === null) {
       setBookings([]);
       setIsLoading(false);
       setError(null);
+      setHasFetched(true);
     }
-  }, [session]);
+  }, [session, hasFetched]);
 
   const renderContent = () => {
-    if (isLoading) {
+    if (session === undefined || (session && isLoading)) {
       return (
         <div className={styles.loadingState}>
           <Loader2 className={styles.loaderIcon} />
@@ -75,14 +82,11 @@ export default function MyBookingsPage() {
   return (
     <div className={styles.container}>
       <a href="/dashboard" className={styles.backButton}>
-        <ArrowLeft size={16} />
-        <span>Back to Dashboard</span>
+        <ArrowLeft size={16} /> Back to Dashboard
       </a>
       <div className={styles.header}>
         <h1 className={styles.title}>My Bookings</h1>
-        <p className={styles.description}>
-          View your past and upcoming meeting room reservations.
-        </p>
+        <p className={styles.description}>View and manage your workspace bookings.</p>
       </div>
       {renderContent()}
     </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { api } from '@/lib/api.client';
 import { Calendar, Clock, DoorOpen, Hash, Pencil, UserPlus, XCircle, Loader2, Users } from 'lucide-react';
@@ -11,9 +11,10 @@ interface BookingCardProps {
     booking: any;
     onUpdate: () => void;
     session: any;
+    isOngoing?: boolean;
 }
 
-export default function BookingCard({ booking, onUpdate, session }: BookingCardProps) {
+export default function BookingCard({ booking, onUpdate, session, isOngoing = false }: BookingCardProps) {
     const [isPending, setIsPending] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [guests, setGuests] = useState<Array<{ id?: string; guest_name: string; guest_email?: string }>>(
@@ -52,10 +53,25 @@ export default function BookingCard({ booking, onUpdate, session }: BookingCardP
         }
     };
 
+    // Inline guest summary helpers
+    const PREVIEW_COUNT = 2;
+    const totalGuests = Number.isFinite(booking.guests_count) ? booking.guests_count : guests.length;
+    const previewGuests = guests.slice(0, PREVIEW_COUNT);
+    const overflowCount = Math.max(0, totalGuests - PREVIEW_COUNT);
+
+    const getInitials = (nameOrEmail: string) => {
+        const s = (nameOrEmail || '').trim();
+        if (!s) return '?';
+        const parts = s.split(/\s+/);
+        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+    };
+
     return (
         <>
-            <div className={styles.card}>
+            <div className={`${styles.card} ${isOngoing ? styles.ongoing : ''}`}>
                       <span className={`${styles.statusBadge} ${styles[booking.status?.toLowerCase() || 'unknown']}`}>{booking.status || 'UNKNOWN'}</span>
+                      {isOngoing && <span className={styles.liveBadgeTop}>Live</span>}
                 <div className={styles.mediaRow}>
                     <div className={styles.imageWrapLarge}>
                         {booking.room_icon ? (
@@ -66,26 +82,42 @@ export default function BookingCard({ booking, onUpdate, session }: BookingCardP
                         <h3 className={styles.roomName}>{booking.room_type_name}</h3>
                         <div className={styles.detailItem}><DoorOpen size={14} /><span> {booking.room_instance_name}</span></div>
                         <div className={styles.detailItem}><Calendar size={14} /><span>{formatDate(booking.start_time)}</span></div>
-                    <div className={styles.detailItem}><Clock size={14} /><span>{formatTime(booking.start_time)} to {formatTime(booking.end_time)}</span></div>
+                        <div className={styles.detailItem}>
+                            <Clock size={14} />
+                            <span>{formatTime(booking.start_time)} to {formatTime(booking.end_time)}</span>
+                        </div>
                     </div>
                     
                 </div>
                 <div className={styles.details}>  
-                     
-                    <div className={styles.detailItem}>
-                        <Users size={14} />
-                         <span><strong>Guests:</strong> {Array.isArray(guests) && guests.length > 0 ? (
-                          <>
-                            {guests.slice(0, 3).map((g, idx) => (
-                              <span key={g.id || idx} className={styles.guestChip}>{g.guest_name || g.guest_email}</span>
-                            ))}
-                             {Number.isFinite(booking.guests_count) && booking.guests_count > 2 && (
-                               <button className={styles.moreGuestsBtn} onClick={async () => { await loadGuests(); setShowGuests(true); }}>+{booking.guests_count - 2}</button>
-                             )}
-                          </>
+                    {/* Inline guest summary */}
+                    <div className={styles.guestSummaryRow}>
+                        <div className={styles.guestSummaryLeft}>
+                            <Users size={14} />
+                            <span className={styles.guestSummaryLabel}>Guests</span>
+                        </div>
+                        {totalGuests > 0 ? (
+                            <div
+                                className={styles.guestAvatarGroup}
+                                role="button"
+                                tabIndex={0}
+                                title="View all guests"
+                                onClick={async () => { await loadGuests(); setShowGuests(true); }}
+                                onKeyDown={async (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); await loadGuests(); setShowGuests(true); } }}
+                            >
+                                {previewGuests.map((g, idx) => (
+                                    <div key={g.id || idx} className={styles.avatar} title={g.guest_name || g.guest_email}>
+                                        <span className={styles.avatarText}>{getInitials(g.guest_name || g.guest_email || '')}</span>
+                                    </div>
+                                ))}
+                                {overflowCount > 0 && (
+                                    <div className={`${styles.avatar} ${styles.overflowAvatar}`}>+{overflowCount}</div>
+                                )}
+                                <span className={styles.countChip}>{totalGuests} invited</span>
+                            </div>
                         ) : (
-                          <span className={styles.noGuests}>No guests</span>
-                        )}</span>
+                            <span className={styles.noGuests}>No guests</span>
+                        )}
                     </div>
                 </div>
 

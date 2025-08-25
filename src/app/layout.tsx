@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: 'Higgs Workspace',
   description: 'The customer portal for Higgs Coworking Space.',
   manifest: '/manifest.json',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
 
 export default async function RootLayout({
@@ -31,6 +32,7 @@ export default async function RootLayout({
     <html lang="en">
       <head> 
         <meta name="theme-color" content="#A67951" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider> 

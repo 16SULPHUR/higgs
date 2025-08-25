@@ -64,7 +64,10 @@ export default function NewBookingConfirmation({ roomType, liveUserData, startDa
           </div>
         </div>
         <div className={styles.viewerCanvas}>
-          <SceneComponent roomUrl={`/3d_models/${roomType.id}.glb`} />
+          <SceneComponent 
+            roomUrl={`/3d_models/${roomType.id}.glb`} 
+            roomIcon={`/3d_models/${roomType.id}.png`}
+          />
         </div>
       </section>
 

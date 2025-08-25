@@ -54,12 +54,66 @@
   border-color: hsl(var(--border));
 }
 
+html {
+  /* Prevent horizontal scrolling on mobile */
+  overflow-x: hidden;
+  /* Smooth scrolling */
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   font-family: 'Inter', sans-serif;
+  /* Prevent horizontal scrolling */
+  overflow-x: hidden;
+  /* Improve text rendering on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent text size adjustment on orientation change */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
 }
 
 h1, h2, h3 {
     font-weight: 600;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  /* Ensure minimum touch target size */
+  button, 
+  input[type="button"], 
+  input[type="submit"], 
+  input[type="reset"],
+  a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Improve form element touch targets */
+  input, 
+  select, 
+  textarea {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Prevent text selection on interactive elements */
+  button, 
+  a {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection on content areas */
+  p, h1, h2, h3, h4, h5, h6, span, div {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
 }

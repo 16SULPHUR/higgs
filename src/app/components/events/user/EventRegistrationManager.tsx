@@ -13,17 +13,29 @@ export default function EventRegistrationManager({ eventId }: { eventId: string 
     const [isLoading, setIsLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showGuestForm, setShowGuestForm] = useState(false);
+    const [hasCheckedStatus, setHasCheckedStatus] = useState(false);
 
     useEffect(() => {
-        console.log(session)
-        if (session) {
-            api.get(session, `/api/events/${eventId}/registration-status`)
-                .then(data => setIsRegistered(data.is_registered))
-                .finally(() => setIsLoading(false));
-        } else {
+        // Only check registration status once when session becomes available
+        if (session && !hasCheckedStatus) {
             setIsLoading(true);
+            api.get(session, `/api/events/${eventId}/registration-status`)
+                .then(data => {
+                    setIsRegistered(data.is_registered);
+                    setHasCheckedStatus(true);
+                })
+                .catch(() => {
+                    setHasCheckedStatus(true);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                });
+        } else if (session === null) {
+            // User is not logged in, no need to check status
+            setIsLoading(false);
+            setHasCheckedStatus(true);
         }
-    }, [eventId, session]);
+    }, [eventId, session, hasCheckedStatus]);
 
     const handleRegister = async () => {
         setIsSubmitting(true);
@@ -49,8 +61,14 @@ export default function EventRegistrationManager({ eventId }: { eventId: string 
         }
     };
 
-    if (session === undefined) {
-        return <div className={styles.loadingPlaceholder}></div>;
+    // Show loading state only when session is undefined or when checking registration status
+    if (session === undefined || (session && isLoading)) {
+        return (
+            <button disabled className={`${styles.actionButton} ${styles.loadingButton}`}>
+                <Loader2 size={16} className={styles.spinner} />
+                <span>Loading...</span>
+            </button>
+        );
     }
 
     if (session) {
