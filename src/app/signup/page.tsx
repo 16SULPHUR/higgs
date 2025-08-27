@@ -6,7 +6,7 @@ import Link from 'next/link';
 import styles from './SignupPage.module.css';
 import Image from 'next/image';
 
-type Location = { id: string; name: string };
+// type Location = { id: string; name: string };
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -14,23 +14,23 @@ export default function SignupPage() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [locationId, setLocationId] = useState('');
-  const [locations, setLocations] = useState<Location[]>([]);
+  // const [locationId, setLocationId] = useState('');
+  // const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    fetch(`${baseUrl}/api/public/locations`)
-      .then((r) => r.json())
-      .then((data) => setLocations(data))
-      .catch(() => setLocations([]));
-  }, []);
+  // useEffect(() => {
+  //   const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  //   fetch(`${baseUrl}/api/public/locations`)
+  //     .then((r) => r.json())
+  //     .then((data) => setLocations(data))
+  //     .catch(() => setLocations([]));
+  // }, []);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    if (!name || !email || !phone || !password || !confirmPassword || !locationId) {
+    if (!name || !email || !phone || !password || !confirmPassword) {
       setError('Please fill all fields.');
       return;
     }
@@ -48,7 +48,7 @@ export default function SignupPage() {
       const res = await fetch(`${baseUrl}/api/auth/email-auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone, password, location_id: locationId }),
+        body: JSON.stringify({ name, email, phone, password }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.message || 'Registration failed');
@@ -68,10 +68,10 @@ export default function SignupPage() {
             <Image src="/login_hero_image2.png" alt="Signup hero" fill sizes="(max-width: 960px) 100vw, 50vw" priority className={styles.heroImage} />
             <div className={styles.heroGradient} />
           </div>
-          <div className={styles.heroContent}>
+          {/* <div className={styles.heroContent}>
             <h2 className={styles.heroTitle}>Join Higgs Workspace</h2>
             <p className={styles.heroSubtitle}>Create your account to get started.</p>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.formPane}>
@@ -92,9 +92,9 @@ export default function SignupPage() {
               </div>
               <div className={styles.inputGroup}>
                 <label className={styles.label}>Phone</label>
-                <input className={styles.input} placeholder="+1 555-123-4567" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <input className={styles.input} placeholder="0123456789" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
-              <div className={styles.inputGroup}>
+              {/* <div className={styles.inputGroup}>
                 <label className={styles.label}>Location</label>
                 <select className={styles.select} value={locationId} onChange={(e) => setLocationId(e.target.value)}>
                   <option value="">Select location</option>
@@ -103,7 +103,7 @@ export default function SignupPage() {
                   ))}
                 </select>
                 <span className={styles.hint}>Choose your preferred workspace location.</span>
-              </div>
+              </div> */}
               <div className={styles.inputGroup}>
                 <label className={styles.label}>Password</label>
                 <input className={styles.input} type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />

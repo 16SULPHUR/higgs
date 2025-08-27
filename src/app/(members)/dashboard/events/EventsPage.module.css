@@ -1,27 +1,45 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0.75rem;
 }
 .backButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: hsl(var(--muted-foreground));
-    margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1.5rem;
 }
-.header { text-align: center; margin-bottom: 2rem; }
-.title { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; }
-.description { margin-top: 0.5rem; font-size: 1rem; color: hsl(var(--muted-foreground)); }
-.loadingState, .errorState {
-    text-align: center;
-    padding: 4rem;
-    color: hsl(var(--muted-foreground));
+.header {
+  margin-bottom: 2rem;
+}
+.title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.description {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+.loadingState,
+.errorState {
+  text-align: center;
+  padding: 4rem;
+  color: hsl(var(--muted-foreground));
 }
 .loaderIcon {
-    margin: 0 auto 1rem;
-    animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+  animation: spin 1s linear infinite;
 }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

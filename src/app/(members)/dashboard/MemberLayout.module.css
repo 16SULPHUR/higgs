@@ -155,6 +155,12 @@
   gap: 1rem;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .headerSearch {
   position: relative;
   flex: 1;
@@ -231,6 +237,10 @@
   
   .headerSearch {
     display: none;
+  }
+  
+  .headerActions {
+    gap: 0.5rem;
   }
   
   .main {

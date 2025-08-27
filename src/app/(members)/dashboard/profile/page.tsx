@@ -67,11 +67,11 @@ export default function ProfilePage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
         <a href="/dashboard" className={styles.backButton}>
           <ArrowLeft size={16} />
           <span>Back to Dashboard</span>
         </a>
+      <div className={styles.header}>
         <div className={styles.titleSection}>
           <h1 className={styles.title}>My Profile</h1>
           <p className={styles.description}>

@@ -5,6 +5,7 @@ import styles from './MemberLayout.module.css';
 import MobileSidebar from '@/components/members/sidebar/MobileSidebar';
 import MobileMenuButton from '@/components/members/sidebar/MobileMenuButton';
 import UserProfileMenu from '@/components/common/UserProfileMenu';
+import CreditsWidget from '@/components/common/CreditsWidget';
 import { getCookie } from '@/lib/cookieUtils';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -78,8 +79,7 @@ export default function MemberPortalLayout({ children }: { children: ReactNode }
           </div>
           
           <div className={styles.headerActions}>
-             
-            
+            <CreditsWidget />
             <UserProfileMenu />
           </div>
         </header>

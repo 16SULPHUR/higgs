@@ -7,6 +7,8 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
   gap: 2rem;
   margin-bottom: 2rem;
 }
@@ -18,15 +20,12 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: hsl(var(--muted-foreground));
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background: hsl(var(--muted));
-  border: 1px solid hsl(var(--border));
-  transition: all 0.2s ease;
+  margin-bottom: 1.5rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .backButton:hover {
-  background: hsl(var(--border));
   color: hsl(var(--foreground));
 }
 

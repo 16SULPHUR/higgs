@@ -1,4 +1,8 @@
-.container { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; }
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+}
 .backButton {
   display: inline-flex;
   align-items: center;
@@ -16,15 +20,27 @@
   margin-top: 0.5rem;
   margin-bottom: 2rem;
 }
-.card { background-color: transparent; border: none; border-radius: 0; padding: 0; }
+.card {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+}
 .loadingState {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 4rem;
-    min-height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem;
+  min-height: 200px;
 }
 .loaderIcon {
-    animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
 }
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

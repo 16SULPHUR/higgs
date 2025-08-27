@@ -18,13 +18,17 @@ export default function UserBookingsList({ bookings, onUpdate }: UserBookingsLis
 
     const filteredBookings = useMemo(() => {
         const now = new Date();
+        let filtered;
         if (activeFilter === 'UPCOMING') {
             // Show both future and ongoing (end_time in future)
-            return bookings.filter(b => b.status === 'CONFIRMED' && new Date(b.end_time) > now);
+            filtered = bookings.filter(b => b.status === 'CONFIRMED' && new Date(b.end_time) > now);
         } else {
             // Past & cancelled
-            return bookings.filter(b => b.status === 'CANCELLED' || (b.status === 'CONFIRMED' && new Date(b.end_time) <= now));
+            filtered = bookings.filter(b => b.status === 'CANCELLED' || (b.status === 'CONFIRMED' && new Date(b.end_time) <= now));
         }
+        
+        // Sort by start_time in ascending order
+        return filtered.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
     }, [bookings, activeFilter]);
 
     return (

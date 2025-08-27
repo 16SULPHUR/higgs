@@ -1,49 +1,54 @@
 'use client';
 
 import { redirect } from 'next/navigation';
-import styles from './LoginPage.module.css';
+import styles from '../../login/LoginPage.module.css';
 import Image from 'next/image';
 import AdminLoginForm from '@/components/auth/AdminLoginForm';
 import { useEffect } from 'react';
-import { getCookie } from '@/lib/cookieUtils';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { getDecodedToken } from '@/lib/tokenUtils';
 
 export default function LoginPage() {
-
   const session = useSessionContext();
-  console.log("session", session);
-
+  
   useEffect(() => {
     if (session?.accessToken) {
       const decodedData = getDecodedToken(session?.accessToken);
-      console.log("decodedData")
-      console.log(decodedData?.type)
-
-      if (decodedData?.type == "admin") {
+      if (decodedData?.type == 'admin') {
         redirect('/admin/dashboard');
       }
-
       redirect('/dashboard');
     }
-  }
-    , [session]);
-    
+  }, [session]);
+
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        <div className={styles.leftPane}>
-          <a href="/login" className={styles.returnLink}>Back to user portal</a>
-          <div className={styles.formWrapper}>
-            <h1 className={styles.heading}>Admin Login</h1>
-            <p className={styles.subheading}>Sign in to manage locations, rooms, and events.</p>
-            <AdminLoginForm />
+        <div className={styles.heroPane}>
+          <div className={styles.heroMedia}>
+            <Image
+              src="/login_hero_image2.png"
+              alt="Workspace illustration"
+              fill
+              sizes="(max-width: 960px) 100vw, 50vw"
+              priority
+              className={styles.heroImage}
+            />
+            <div className={styles.heroGradient} />
           </div>
         </div>
-        <div className={styles.rightPane}>
-          <div className={styles.heroCard}>
-            <Image src="/login_hero_image_desktop.png" alt="Admin login hero" fill sizes="(max-width: 1024px) 100vw, 50vw" priority className={styles.heroImage} />
-            <div className={styles.heroOverlay} />
+
+        <div className={styles.formPane}>
+          <div className={styles.formWrapper}>
+            <div className={styles.brand}>
+              <Image src="/icons/higgs.png" alt="Higgs logo" width={200} height={70} className={styles.logo} />
+            </div>
+            <h1 className={styles.heading}>Admin sign in</h1>
+            <p className={styles.subheading}>Welcome back.</p>
+            <AdminLoginForm />
+            <div className={styles.helperRow}>
+              <div className={styles.linkRow}><a href="/login">Back to user portal</a></div>
+            </div>
           </div>
         </div>
       </section>

@@ -57,10 +57,10 @@ export default function LoginPage() {
             />
             <div className={styles.heroGradient} />
           </div>
-          <div className={styles.heroContent}>
+          {/* <div className={styles.heroContent}>
             <h2 className={styles.heroTitle}>Higgs Workspace</h2>
             <p className={styles.heroSubtitle}>Book rooms, manage events, and collaborate.</p>
-          </div>
+          </div> */}
         </div>
 
         <div className={styles.formPane}>

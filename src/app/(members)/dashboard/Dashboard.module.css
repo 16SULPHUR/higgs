@@ -138,11 +138,33 @@
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0.75rem;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.overviewCard:hover {
+  border-color: hsl(var(--primary) / 0.5);
+  background: hsl(var(--card) / 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .overviewIcon { color: hsl(var(--primary)); }
 .overviewLabel { color: hsl(var(--muted-foreground)); font-size: 0.875rem; }
 .overviewValue { color: hsl(var(--foreground)); font-weight: 700; font-size: 1.25rem; }
+.overviewAction { 
+  color: hsl(var(--muted-foreground)); 
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.overviewCard:hover .overviewAction {
+  color: hsl(var(--primary));
+  opacity: 1;
+  transform: translateX(2px);
+}
 
 .overviewSkeleton {
   height: 52px;
@@ -179,9 +201,40 @@
 .sectionAction:hover { text-decoration: underline; }
 
 .simpleList { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
-.simpleListItem { padding: 0.75rem; border: 1px solid hsl(var(--border)); border-radius: 10px; }
+.simpleListItem { 
+  padding: 0.75rem; 
+  border: 1px solid hsl(var(--border)); 
+  border-radius: 10px; 
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.simpleListItem:hover {
+  border-color: hsl(var(--primary) / 0.5);
+  background: hsl(var(--card) / 0.8);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 .simpleListPrimary { font-weight: 600; color: hsl(var(--foreground)); }
 .simpleListSecondary { color: hsl(var(--muted-foreground)); font-size: 0.875rem; }
+.simpleListAction { 
+  color: hsl(var(--muted-foreground)); 
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.simpleListItem:hover .simpleListAction {
+  color: hsl(var(--primary));
+  opacity: 1;
+  transform: translateX(2px);
+}
 
 .emptyStateBox { padding: 1rem; border-radius: 10px; background: hsl(var(--muted)); border: 1px dashed hsl(var(--border)); color: hsl(var(--muted-foreground)); }
 .ctaLink { color: hsl(var(--primary)); text-decoration: none; font-weight: 600; margin-left: 0.25rem; }

@@ -12,7 +12,7 @@ import { getCookie } from '@/lib/cookieUtils';
 import { getDecodedToken } from '@/lib/tokenUtils';
 import { useSessionContext } from '@/contexts/SessionContext';
 
-import { ArrowRight, BookUser, Building, CalendarCheck, CalendarDays, Contact, LifeBuoy, Wallet } from 'lucide-react';
+import { ArrowRight, BookUser, Building, CalendarCheck, CalendarDays, Contact, LifeBuoy, Wallet, Plus } from 'lucide-react';
 
 export default function MembersDashboardPage() {
   const session = useSessionContext();
@@ -138,10 +138,11 @@ export default function MembersDashboardPage() {
   }
 
   const overviewCards = [
-    { label: 'Available Credits', value: availableCredits, icon: <Wallet size={20} /> },
-    // { label: 'Upcoming Bookings', value: upcomingBookings.length, icon: <CalendarCheck size={20} /> },
-    { label: 'Tickets', value: tickets.length, icon: <LifeBuoy size={20} /> },
-    { label: 'Upcoming Events', value: upcomingEvents.length, icon: <CalendarDays size={20} /> },
+    // { label: 'Available Credits', value: availableCredits, icon: <Wallet size={20} /> },
+    // { label: 'Upcoming Bookings', value: upcomingBookings.length, icon: <CalendarCheck size={20} />, href: '/dashboard/my-bookings' },
+    { label: 'Tickets', value: tickets.length, icon: <LifeBuoy size={20} />, href: '/dashboard/support' },
+    { label: 'Upcoming Events', value: upcomingEvents.length, icon: <CalendarDays size={20} />, href: '/dashboard/events' },
+    // { label: 'Book a Space', value: 'Quick', icon: <Plus size={20} />, href: '/dashboard/find-room' },
   ];
 
   return (
@@ -162,17 +163,20 @@ export default function MembersDashboardPage() {
         {/* Overview */}
         <div className={styles.overviewGrid}>
           {(isLoading ? Array.from({ length: 4 }) : overviewCards).map((card: any, idx: number) => (
-            <div key={idx} className={styles.overviewCard}>
-              {isLoading ? (
+            isLoading ? (
+              <div key={idx} className={styles.overviewCard}>
                 <div className={styles.overviewSkeleton} />
-              ) : (
-                <>
-                  <div className={styles.overviewIcon}>{card.icon}</div>
-                  <div className={styles.overviewLabel}>{card.label}</div>
-                  <div className={styles.overviewValue}>{card.value}</div>
-                </>
-              )}
-            </div>
+              </div>
+            ) : (
+              <a key={idx} href={card.href} className={styles.overviewCard}>
+                <div className={styles.overviewIcon}>{card.icon}</div>
+                <div className={styles.overviewLabel}>{card.label}</div>
+                <div className={styles.overviewValue}>{card.value}</div>
+                {/* <div className={styles.overviewAction}>
+                  <ArrowRight size={16} />  
+                </div> */}
+              </a>
+            )
           ))}
         </div>
 
@@ -188,9 +192,16 @@ export default function MembersDashboardPage() {
             ) : upcomingBookings.length > 0 ? (
               <ul className={styles.simpleList}>
                 {upcomingBookings.map(b => (
-                  <li key={b.id} className={styles.simpleListItem}>
-                    <div className={styles.simpleListPrimary}>{b.room_type_name} • {formatDate(b.start_time)}</div>
-                    <div className={styles.simpleListSecondary}>{formatTime(b.start_time)} – {formatTime(b.end_time)} • ID: {b.id}</div>
+                  <li key={b.id}>
+                    <a href={`/dashboard/my-bookings`} className={styles.simpleListItem}>
+                      <div>
+                        <div className={styles.simpleListPrimary}>{b.room_type_name} • {formatDate(b.start_time)}</div>
+                        <div className={styles.simpleListSecondary}>{formatTime(b.start_time)} – {formatTime(b.end_time)}</div>
+                      </div>
+                      <div className={styles.simpleListAction}>
+                        <ArrowRight size={14} />
+                      </div>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -212,9 +223,16 @@ export default function MembersDashboardPage() {
             ) : upcomingEvents.length > 0 ? (
               <ul className={styles.simpleList}>
                 {upcomingEvents.map(ev => (
-                  <li key={ev.id} className={styles.simpleListItem}>
-                    <div className={styles.simpleListPrimary}>{ev.title}</div>
-                    <div className={styles.simpleListSecondary}>{formatDate(ev.date)}</div>
+                  <li key={ev.id}>
+                    <a href={`/dashboard/events/${ev.id}`} className={styles.simpleListItem}>
+                      <div>
+                        <div className={styles.simpleListPrimary}>{ev.title}</div>
+                        <div className={styles.simpleListSecondary}>{formatDate(ev.date)}</div>
+                      </div>
+                      <div className={styles.simpleListAction}>
+                        <ArrowRight size={14} />
+                      </div>
+                    </a>
                   </li>
                 ))}
               </ul>

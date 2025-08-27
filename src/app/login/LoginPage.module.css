@@ -15,6 +15,7 @@
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: 1fr;
+  position: relative;
 }
 
 .formPane {
@@ -33,10 +34,7 @@
 .brand {
   display: grid;
   place-items: center;
-  margin-bottom: 1rem;
-  @media (min-width: 960px) {
-    margin-top: -20rem;
-  }
+  margin-bottom: 5rem;
 }
 .logo { 
   border-radius: 8px;
@@ -128,5 +126,43 @@
     padding: 2rem;
     display: grid;
     align-content: center;
+  }
+}
+
+/* Mobile modal-style: hero as background, form centered */
+@media (max-width: 959px) {
+  .heroPane {
+    position: fixed;
+    inset: 0;
+    min-height: 100dvh;
+    z-index: 0;
+  }
+  .heroMedia {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
+  .heroGradient {
+    background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%);
+  }
+  .formPane {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    padding: 1.5rem 1rem;
+    display: grid;
+    place-items: center;
+  }
+  .formWrapper {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    background-color: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    border-radius: calc(var(--radius) + 2px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    padding: 1rem;
+  }
+  .brand {
+    margin-bottom: 1rem;
   }
 }

@@ -160,7 +160,7 @@
   align-items: center;
   padding: 1rem 2rem;
   border-top: 1px solid hsl(var(--border));
-  background: hsl(var(--muted));
+  background: hsl(var(--card));
 }
 
 .messageContainer {
@@ -188,17 +188,17 @@
   gap: 0.5rem;
   height: 2.5rem;
   padding: 0 1.25rem;
-  background: hsl(var(--primary));
-  color: white;
-  border-radius: 0.5rem;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: calc(var(--radius) - 2px);
   font-weight: 500;
   border: none;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .saveButton:hover {
-  background: hsl(var(--primary) / 0.9);
+  background-color: hsl(var(--primary) / 0.9);
 }
 
 .saveButton:disabled {

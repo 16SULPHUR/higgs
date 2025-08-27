@@ -26,7 +26,7 @@ export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
                 <Search className={styles.searchIcon} size={20} />
                 <input
                     type="text"
-                    placeholder="Search by name or email..."
+                    placeholder="Search by name or organization..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchInput}
