@@ -9,7 +9,13 @@ export async function middleware(req: NextRequest) {
   if (pathname.startsWith('/admin')) {
     const adminPublicPaths = ['/admin/login', '/admin/forgot-password'];
     const isAdminPublic = adminPublicPaths.some((p) => pathname.startsWith(p));
+    const isAdmin = req.cookies.get('role')?.toString().split('_')[1] == 'ADMIN';
 
+    console.log("isAdmin")
+    console.log(isAdmin)
+    if (isAuthenticated && !isAdmin) {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
     if (!isAuthenticated && !isAdminPublic) {
       return NextResponse.redirect(new URL('/admin/login', req.url));
     }

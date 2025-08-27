@@ -38,6 +38,7 @@ export default async function RootLayout({
     <html lang="en">
       <head> 
         <meta name="theme-color" content="#A67951" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider> 

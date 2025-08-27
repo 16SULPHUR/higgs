@@ -6,7 +6,7 @@ async function getEvents() {
   if (!res.ok) return null;
   return res.json();
 }
- 
+
 export default async function UserEventsPage() {
   const events = await getEvents();
 
