@@ -26,20 +26,6 @@ export default function LoginForm({ variant = 'default' }: LoginFormProps) {
     setIsLoading(true); 
 
     try {
-      // Preflight check to surface backend error messages (e.g., pending approval, unverified)
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-      if (!baseUrl) throw new Error('API not configured');
-      const pre = await fetch(`${baseUrl}/api/auth/email-auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!pre.ok) {
-        const data = await pre.json().catch(() => ({ message: 'Login failed' }));
-        setError(data?.message || 'Login failed');
-        return;
-      }
-
       const result = await signIn('credentials', {
         redirect: false,
         email: email,
@@ -50,27 +36,48 @@ export default function LoginForm({ variant = 'default' }: LoginFormProps) {
       if (result?.error) {
         setError('Invalid email or password.');
       } else if (result?.ok) {
+        console.log('SignIn result:', result);
+        
         const session: any = await getSession();
+        
+        console.log('Session data:', session);
+        console.log('Session accessToken:', session?.accessToken);
+        console.log('Session refreshToken:', session?.refreshToken);
+        
+        // Try to get tokens from result first, then from session
+        const accessToken = (result as any)?.accessToken || session?.accessToken;
+        const refreshToken = (result as any)?.refreshToken || session?.refreshToken;
+        
+        console.log('Final accessToken:', accessToken);
+        console.log('Final refreshToken:', refreshToken);
 
-        if (session?.session?.accessToken) {
-          document.cookie = `accessToken=${session.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        if (accessToken) {
+          document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+          console.log('Set accessToken cookie');
         }
 
-        if (session?.refreshToken) {
-          document.cookie = `refreshToken=${session.refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        if (refreshToken) {
+          document.cookie = `refreshToken=${refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+          console.log('Set refreshToken cookie');
         }
 
         if (session?.user?.role) {
           document.cookie = `role=${session.user.role}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+          console.log('Set role cookie:', session.user.role);
         }
 
         if (session?.user?.name) {
           document.cookie = `name=${session.user.name}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+          console.log('Set name cookie:', session.user.name);
         }
 
         if (session?.user?.profile_picture) {
           document.cookie = `profile_picture=${session.user.profile_picture}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+          console.log('Set profile_picture cookie');
         }
+        
+        // Verify cookies were set
+        console.log('All cookies after setting:', document.cookie);
 
         // Ensure the app-level session provider picks up the fresh cookies
         try { await refreshSession(); } catch {}

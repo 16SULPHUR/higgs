@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { LogIn, Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { getSession } from 'next-auth/react';
@@ -9,6 +9,7 @@ import styles from './LoginForm.module.css';
 import { setCookie } from '@/lib/cookieUtils';
 
 export default function AdminLoginForm() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null); 
@@ -31,29 +32,50 @@ export default function AdminLoginForm() {
     if (result?.error) {
       setError('Invalid email or password.');
     } else if (result?.ok) {
+      console.log('SignIn result:', result);
+      
       const session: any = await getSession();
+      
+      console.log('Session data:', session);
+      console.log('Session accessToken:', session?.accessToken);
+      console.log('Session refreshToken:', session?.refreshToken);
+      
+      // Try to get tokens from result first, then from session
+      const accessToken = (result as any)?.accessToken || session?.accessToken;
+      const refreshToken = (result as any)?.refreshToken || session?.refreshToken;
+      
+      console.log('Final accessToken:', accessToken);
+      console.log('Final refreshToken:', refreshToken);
 
-      if (session?.session?.accessToken) {
-        setCookie('accessToken', session.accessToken);
+      // Set cookies using document.cookie for better compatibility
+      if (accessToken) {
+        document.cookie = `accessToken=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        console.log('Set accessToken cookie');
       }
-      if (session?.refreshToken) {
-        setCookie('refreshToken', session.refreshToken);
+      if (refreshToken) {
+        document.cookie = `refreshToken=${refreshToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        console.log('Set refreshToken cookie');
       }
 
       if (session?.user?.role) {
         document.cookie = `role=${session.user.role}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        console.log('Set role cookie:', session.user.role);
       }
 
       if (session?.user?.name) {
         document.cookie = `name=${session.user.name}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        console.log('Set name cookie:', session.user.name);
       }
 
       if (session?.user?.profile_picture) {
         document.cookie = `profile_picture=${session.user.profile_picture}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
+        console.log('Set profile_picture cookie');
       }
 
-
-      redirect('/admin/dashboard');
+      // Verify cookies were set
+      console.log('All cookies after setting:', document.cookie);
+      
+      router.push('/admin/dashboard');
     }
     setIsLoading(false);
   };

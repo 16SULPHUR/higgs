@@ -73,13 +73,23 @@ export const authConfig  = {
             throw new Error('Invalid server response.');
           }
 
-          const user = data.user || data.admin;
+                  const user = data.user || data.admin;
 
-          return {
-            ...user,
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
-          };
+        console.log("user=====================")
+        console.log(user)
+
+        const userData = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          locationId: user.locationId || user.location_id || null,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+        };
+        
+        console.log('Authorize function returning user data:', userData);
+        return userData;
         } catch (error: any) {
           const message = error?.message || 'Login failed.';
           throw new Error(message);
@@ -94,6 +104,9 @@ export const authConfig  = {
 
   callbacks: {
     async jwt({ token, user, account }) { 
+      console.log('JWT callback - user:', user);
+      console.log('JWT callback - token before:', token);
+      
       if (user) {
         token.user = user;
         token.accessToken = user.accessToken;
@@ -104,6 +117,8 @@ export const authConfig  = {
           token.expiresAt = decoded.exp;
         }
       }
+      
+      console.log('JWT callback - token after:', token);
  
       if (token.expiresAt && Date.now() < token.expiresAt * 1000) {
         return token;
@@ -144,10 +159,15 @@ export const authConfig  = {
     },
 
     async session({ session, token }) {
+      console.log('Session callback - token:', token);
+      console.log('Session callback - session before:', session);
+      
       session.user = token.user as User;
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       session.error = token.error;
+      
+      console.log('Session callback - session after:', session);
       return session;
     }
   }
