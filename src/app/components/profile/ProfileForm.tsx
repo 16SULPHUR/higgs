@@ -5,12 +5,12 @@ import { User, Mail, Phone, Save, Camera, X, Loader2 } from 'lucide-react';
 import styles from './ProfileForm.module.css';
 import { api } from '@/lib/api.client';
 import { getCookie, setCookie } from '@/lib/cookieUtils';
-import { useSessionContext } from '@/contexts/SessionContext';
+import { useSession } from '@/contexts/SessionContext';
 
 export default function ProfileForm() {
-  const session = useSessionContext();
+  const session = useSession();
   const [profile, setProfile] = useState<any>(null);
-  const [formData, setFormData] = useState({ name: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', profession: '' });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
@@ -28,7 +28,7 @@ export default function ProfileForm() {
       try {
         const data = await api.get(session, '/api/auth/me');
         setProfile(data);
-        setFormData({ name: data.name || '', phone: data.phone || '' });
+        setFormData({ name: data.name || '', phone: data.phone || '', profession: data.profession || '' });
         if (data.profile_picture) {
           setImagePreview(data.profile_picture);
         }
@@ -80,6 +80,7 @@ export default function ProfileForm() {
     const data = new FormData();
     data.append('name', formData.name);
     data.append('phone', formData.phone);
+    data.append('profession', formData.profession);
     if (imageFile) {
       data.append('profile_picture', imageFile);
     }
@@ -87,6 +88,14 @@ export default function ProfileForm() {
       const updatedProfile = await api.patch(session, '/api/profile', data);
       setSuccess('Profile updated successfully!');
       setProfile(updatedProfile);
+      
+      // Update formData with the updated values
+      setFormData({
+        name: updatedProfile.name || '',
+        phone: updatedProfile.phone || '',
+        profession: updatedProfile.profession || ''
+      });
+      
       if (updatedProfile.name) {
         setCookie('name', updatedProfile.name);
       }
@@ -206,6 +215,22 @@ export default function ProfileForm() {
               onChange={handleTextChange}
               className={styles.input}
               placeholder="Enter your phone number"
+            />
+          </div>
+        </div>
+        
+        <div className={styles.inputGroup}>
+          <label htmlFor="profession">Profession</label>
+          <div className={styles.inputWrapper}>
+            <User size={18} className={styles.inputIcon} />
+            <input
+              id="profession"
+              name="profession"
+              type="text"
+              value={formData.profession}
+              onChange={handleTextChange}
+              className={styles.input}
+              placeholder="Enter your profession (e.g., Software Engineer, Designer, Manager)"
             />
           </div>
         </div>

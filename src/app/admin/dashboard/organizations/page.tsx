@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useState, useEffect } from 'react'; 
 import { api } from '@/lib/api.client';
 import { Plus, Loader2 } from 'lucide-react'; 
 import TableSkeleton from '@/components/common/TableSkeleton';
-import styles from '../rooms/RoomsPage.module.css';  
+import styles from './OrganizationsPage.module.css';  
 import OrgsTable from '@/components/orgs/OrgsTable';
 import { useSessionContext } from '@/contexts/SessionContext';
 
@@ -16,8 +15,7 @@ export default function OrgsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
-    if (!session) {
-      // No session - clear data and stop loading
+    if (!session) { 
       setData(null);
       setIsLoading(false);
       return;

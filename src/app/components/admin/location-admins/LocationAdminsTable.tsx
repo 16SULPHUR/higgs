@@ -73,8 +73,7 @@ export default function LocationAdminsTable({ session }: { session: any }) {
 
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <h2>Location Admins</h2>
+            <div className={styles.header}> 
                 <Link href="/admin/dashboard/location-admins/new" className={styles.addButton}>
                     <Plus size={16} />
                     Add Location Admin

@@ -30,23 +30,7 @@
     border: 1px solid hsl(var(--border));
     border-radius: var(--radius);
     overflow-x: auto;
-    overflow-y: hidden;
-    display: block;
-    width: 100%;
-    max-width: 100%;
     -webkit-overflow-scrolling: touch;
-}
-.backButton {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: hsl(var(--muted-foreground));
-  margin-bottom: 0.75rem;
-}
-.backButton:hover {
-  color: hsl(var(--foreground));
 }
 
 @media (max-width: 768px) {
@@ -76,3 +60,6 @@
         font-size: 0.9rem;
     }
 }
+
+
+

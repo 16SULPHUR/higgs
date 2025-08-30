@@ -47,6 +47,12 @@
     margin-top: 0.25rem;
     text-decoration: none;
 }
+.profession {
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    margin-top: 0.25rem;
+    font-style: italic;
+}
 .email {
     font-size: 0.875rem;
     color: hsl(var(--primary));

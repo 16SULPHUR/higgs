@@ -1,10 +1,12 @@
 'use client';
 
-import { X, Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, SquareStack, Users } from 'lucide-react';
+import { X, Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, SquareStack, Users, Shield } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import styles from './AdminMobileSidebar.module.css';
 import Image from 'next/image';
+import { getDecodedToken } from '@/lib/tokenUtils';
+import { useSessionContext } from '@/contexts/SessionContext';
 
 interface AdminMobileSidebarProps {
     isOpen: boolean;
@@ -12,15 +14,23 @@ interface AdminMobileSidebarProps {
 }
 
 export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSidebarProps) {
+    const session = useSessionContext();
     const pathname = usePathname();
     if (!isOpen) return null;
+
+    const isSuperAdmin = getDecodedToken(session?.accessToken)?.role === 'SUPER_ADMIN';
 
     const navItems = [
         { href: '/admin/dashboard', icon: <LayoutDashboard size={18} />, label: 'Overview' },
         { href: '/admin/dashboard/bookings', icon: <ClipboardCheck size={18} />, label: 'Bookings' },
         { href: '/admin/dashboard/users', icon: <Users size={18} />, label: 'Users' },
         { href: '/admin/dashboard/organizations', icon: <Building2 size={18} />, label: 'Organizations' },
-        { href: '/admin/dashboard/location-admins', icon: <MapPin size={18} />, label: 'Location Admins' },
+        ...(isSuperAdmin
+            ? [
+                { href: '/admin/dashboard/super-admins', icon: <Shield size={18} />, label: 'Super Admins' },
+                { href: '/admin/dashboard/location-admins', icon: <MapPin size={18} />, label: 'Location Admins' }
+            ]
+            : []),
         { href: '/admin/dashboard/plans', icon: <ClipboardList size={18} />, label: 'Plans' },
         { href: '/admin/dashboard/room-types', icon: <SquareStack size={18} />, label: 'Room Types' },
         { href: '/admin/dashboard/rooms', icon: <DoorOpen size={18} />, label: 'Room Instances' },

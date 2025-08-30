@@ -22,7 +22,8 @@ import { api } from '@/lib/api.client';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const session = useSessionContext();
+  const sessionContext = useSessionContext();
+  const session = sessionContext.session;
 
   const [mounted, setMounted] = useState(false);
 
@@ -63,10 +64,10 @@ export default function AdminDashboardPage() {
     const run = async () => {
       try {
         const [bookingsRes, roomsRes, eventsRes, ticketsRes] = await Promise.all([
-          api.get(null, '/api/admin/bookings'),
-          api.get(null, '/api/admin/rooms'),
-          api.get(null, '/api/admin/events'),
-          api.get(null, '/api/admin/support-tickets'),
+          api.get(session, '/api/admin/bookings'),
+          api.get(session, '/api/admin/rooms'),
+          api.get(session, '/api/admin/events'),
+          api.get(session, '/api/admin/support-tickets'),
         ]);
 
         if (isCancelled) return;

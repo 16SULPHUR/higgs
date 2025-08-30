@@ -16,7 +16,7 @@ interface SuperAdmin {
   created_at: string;
 }
 
-export default function SuperAdminsTable({ session }: { session: any }) {
+export default function SuperAdminsTable({ session, showActions }: { session: any, showActions?: boolean }) {
   const [items, setItems] = useState<SuperAdmin[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -119,14 +119,15 @@ export default function SuperAdminsTable({ session }: { session: any }) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h2>Super Admins</h2>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button className={styles.addButton} onClick={() => setInviteOpen(true)}>
-            <Plus size={16} /> Add Super Admin
-          </button>
+      {showActions && (
+        <div className={styles.header}> 
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className={styles.addButton} onClick={() => setInviteOpen(true)}>
+              <Plus size={16} /> Invite Super Admin
+            </button> 
+          </div>
         </div>
-      </div>
+      )}
 
       {items.length === 0 ? (
         <div className={styles.emptyState}>

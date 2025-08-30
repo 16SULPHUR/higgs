@@ -6,6 +6,8 @@ import MemberCard from './MemberCard';
 import styles from './MemberList.module.css';
 
 export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
+    console.log("initialUsers");
+    console.log(initialUsers);
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredUsers = useMemo(() => {
@@ -14,7 +16,8 @@ export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
         }
         return initialUsers.filter(user => { 
             return (user.name && user.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                (user.organization_name && user.organization_name.toLowerCase().includes(searchTerm.toLowerCase()))
+                (user.organization_name && user.organization_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                (user.profession && user.profession.toLowerCase().includes(searchTerm.toLowerCase()))
         }
         );
     }, [searchTerm, initialUsers]);
@@ -26,7 +29,7 @@ export default function MemberList({ initialUsers }: { initialUsers: any[] }) {
                 <Search className={styles.searchIcon} size={20} />
                 <input
                     type="text"
-                    placeholder="Search by name or organization..."
+                    placeholder="Search by name, organization, or profession..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className={styles.searchInput}

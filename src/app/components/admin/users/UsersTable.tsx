@@ -42,11 +42,12 @@ export default function UsersTable({ users, onUpdate, session, onGiveCredits }: 
 
     return (
         <table className={styles.table}>
-            <thead><tr><th>Name</th><th>Organization</th><th>Role</th><th>Credits</th><th>Status</th><th>Actions</th></tr></thead>
+            <thead><tr><th>Name</th><th>Profession</th><th>Organization</th><th>Role</th><th>Credits</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>
                 {users.map((user) => (
                     <tr key={user.id}>
                         <td><div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>{user.profile_picture ? (<Image src={user.profile_picture} alt={user.name} width={32} height={32} style={{ borderRadius: '50%' }} />) : (<span className={styles.avatarFallback}><User size={16} /></span>)}<div><div style={{ fontWeight: 500 }}>{user.name}</div><div className={styles.subtext}>{user.email}</div></div></div></td>
+                        <td>{user.profession || <span className={styles.muted}>N/A</span>}</td>
                         <td>{user.organization_name || <span className={styles.muted}>N/A</span>}</td>
                         <td>{user.role}</td>
                         <td>{user.role === 'INDIVIDUAL_USER' ? (typeof user.individual_credits === 'number' ? user.individual_credits : 0) : <span className={styles.muted}>—</span>}</td>

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api.client';
 import { Plus, Loader2 } from 'lucide-react'; 
 import TableSkeleton from '@/components/common/TableSkeleton';
-import styles from '@/admin/dashboard/rooms/RoomsPage.module.css';
+import styles from './PlansPage.module.css';
 import PlansTable from '@/components/plans/PlansTable';
 import { useSessionContext } from '@/contexts/SessionContext';
 

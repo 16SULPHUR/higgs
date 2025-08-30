@@ -7,10 +7,10 @@ import { PlusCircle, Loader2 } from 'lucide-react';
 import AdminTicketsTable from '@/components/admin/tickets/AdminTicketsTable';
 import TableSkeleton from '@/components/common/TableSkeleton';
 import styles from './AdminTicketsPage.module.css';
-import { useSessionContext } from '@/contexts/SessionContext';
+import { useSession } from '@/contexts/SessionContext';
 
 export default function AdminTicketsPage() {
-  const session = useSessionContext();
+  const session = useSession();
   const [tickets, setTickets] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

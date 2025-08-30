@@ -37,6 +37,11 @@ export default function MemberCard({ user }: { user: any }) {
                             </p>
                         )
                     }
+                    {user.profession && (
+                        <p className={styles.profession}>
+                            {user.profession}
+                        </p>
+                    )}
             </div>
         </div>
     );

@@ -1,17 +1,41 @@
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2rem;
+    align-items: start;
 }
+
 .emptyState {
     text-align: center;
-    padding: 4rem 1rem;
+    padding: 4rem 2rem;
     color: hsl(var(--muted-foreground));
-    border: 1px dashed hsl(var(--border));
+    border: 2px dashed hsl(var(--border));
     border-radius: var(--radius);
+    background-color: hsl(var(--card));
 }
+
 .emptyState h3 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: hsl(var(--foreground));
+    margin-bottom: 0.5rem;
+}
+
+.emptyState p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid {
+        gap: 1rem;
+    }
 }

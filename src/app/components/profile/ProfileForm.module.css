@@ -121,6 +121,12 @@
 
 .inputWrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profileFormContainer {
+  width: 100%;
 }
 
 .inputIcon {
@@ -152,6 +158,71 @@
   background: hsl(var(--muted));
   color: hsl(var(--muted-foreground));
   cursor: not-allowed;
+}
+
+.changeEmailButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.changeEmailButton:hover {
+  background: hsl(var(--secondary) / 0.9);
+  border-color: hsl(var(--border) / 0.8);
+}
+
+.emailChangeStatus {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: hsl(var(--muted));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.expiredWarning {
+  color: hsl(var(--destructive));
+  font-weight: 500;
+}
+
+.resumeButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.resumeButton:hover {
+  background: hsl(var(--primary) / 0.9);
 }
 
 .formFooter {

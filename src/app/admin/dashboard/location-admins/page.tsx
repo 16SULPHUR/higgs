@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSessionContext } from '@/contexts/SessionContext';
 import LocationAdminsTable from '@/components/admin/location-admins/LocationAdminsTable';
 import { getDecodedToken } from '@/lib/tokenUtils';
-import styles from '../rooms/RoomsPage.module.css';
+import styles from './LocationAdminsPage.module.css';
 
 export default function LocationAdminsPage() {
   const router = useRouter();
@@ -68,7 +68,9 @@ export default function LocationAdminsPage() {
           </p>
         </div>
       </div>
-      <LocationAdminsTable session={session} />
+      <div className={styles.tableContainer}>
+        <LocationAdminsTable session={session} />
+      </div>
     </div>
   );
 }

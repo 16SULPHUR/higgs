@@ -7,10 +7,10 @@ import { Plus, Loader2 } from 'lucide-react';
 import UsersTable from '@/components/admin/users/UsersTable';
 import TableSkeleton from '@/components/common/TableSkeleton';
 import styles from './AdminUsersPage.module.css';
-import { useSessionContext } from '@/contexts/SessionContext';
+import { useSession } from '@/contexts/SessionContext';
 
 export default function AdminUsersPage() {
-  const session = useSessionContext();
+  const session = useSession();
   const [users, setUsers] = useState<any[]>([]); 
   const [orgs, setOrgs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -57,113 +57,202 @@ export default function AdminUsersPage() {
     }
   }, [session]);
 
-  const addToOrg = async (userId: string, organization_id: string, role: string = 'ORG_USER') => {
-    if (!session) return;
-    await api.patch(session, `/api/admin/users/${userId}`, { organization_id, role });
-    await fetchData();
-  };
-
-  const giveCredits = async (userId: string) => {
-    setCreditsUserId(userId);
-    setCreditsAmount('');
-  };
-
-  const submitCredits = async () => {
-    if (!creditsUserId) return;
-    setCreditsError(null);
-    const creditsToAssign = Number(creditsAmount);
-    if (Number.isNaN(creditsToAssign)) { setCreditsError('Enter a valid number'); return; }
+  const addToOrg = async (userId: string, orgId: string) => {
     try {
-      setCreditsLoading(true);
-      await api.post(session, `/api/admin/assign-credits/${creditsUserId}`, { creditsToAssign });
-      setCreditsUserId(null);
-      setCreditsAmount('');
-      await fetchData();
+      await api.post(session, `/api/admin/users/${userId}/add-to-org`, { orgId });
+      fetchData(); // Refresh data
     } catch (err: any) {
-      setCreditsError(err.message || 'Failed to assign credits.');
+      alert('Failed to add user to organization: ' + err.message);
+    }
+  };
+
+  const removeFromOrg = async (userId: string) => {
+    try {
+      await api.delete(session, `/api/admin/users/${userId}/remove-from-org`);
+      fetchData(); // Refresh data
+    } catch (err: any) {
+      alert('Failed to remove user from organization: ' + err.message);
+    }
+  };
+
+  const addCredits = async () => {
+    if (!creditsUserId || !creditsAmount) return;
+    
+    setCreditsLoading(true);
+    setCreditsError(null);
+    
+    try {
+      await api.post(session, `/api/admin/users/${creditsUserId}/add-credits`, {
+        credits: parseInt(creditsAmount)
+      });
+      
+      setCreditsAmount('');
+      setCreditsUserId(null);
+      fetchData(); // Refresh data
+    } catch (err: any) {
+      setCreditsError(err.message || 'Failed to add credits');
     } finally {
       setCreditsLoading(false);
     }
   };
 
+  const filteredUsers = () => {
+    if (tab === 'all') return users;
+    if (tab === 'individuals') return users.filter(u => !u.org_id);
+    if (tab === 'org_members') return users.filter(u => u.org_id);
+    return users;
+  };
+
+  if (session === undefined) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh',
+        fontSize: '18px',
+        color: '#6b7280'
+      }}>
+        Loading users...
+      </div>
+    );
+  }
+
+  if (session === null) {
+    return null;
+  }
+
   return (
     <div>
       <div className={styles.header}>
         <div>
-          <h1 className={styles.title}>Manage Users</h1>
-          <p className={styles.description}>View, edit, and manage all user accounts.</p>
+          <h1 className={styles.title}>Users</h1>
+          <p className={styles.subtitle}>Manage user accounts and organizations</p>
         </div>
-        <a href="/admin/dashboard/users/new" className={styles.addButton}>
-          <Plus size={16} />
-          <span>Add New User</span>
-        </a>
+        <Link href="/admin/dashboard/users/new" className={styles.addButton}>
+          <Plus size={20} />
+          Add User
+        </Link>
       </div>
-      {(() => {
-        const individualUsers = users.filter((u: any) => u.role === 'INDIVIDUAL_USER');
-        const orgMembers = users.filter((u: any) => u.role === 'ORG_USER' || u.role === 'ORG_ADMIN');
-        const filteredUsers = tab === 'all' ? users : tab === 'individuals' ? individualUsers : orgMembers;
-        return (
-          <>
-            <div className={styles.tabs}>
-              <button className={`${styles.tab} ${tab === 'all' ? styles.tabActive : ''}`} onClick={() => setTab('all')}>All ({users.length})</button>
-              <button className={`${styles.tab} ${tab === 'individuals' ? styles.tabActive : ''}`} onClick={() => setTab('individuals')}>Individuals ({individualUsers.length})</button>
-              <button className={`${styles.tab} ${tab === 'org_members' ? styles.tabActive : ''}`} onClick={() => setTab('org_members')}>Org Members ({orgMembers.length})</button>
-            </div>
-            <div className={styles.tableContainer}>
-              {isLoading ? (
-                <TableSkeleton cols={5} />
-              ) : error ? (
-                <p>Error: {error}</p>
-              ) : (
-                <UsersTable session={session} users={filteredUsers} onUpdate={fetchData} onGiveCredits={giveCredits} />
-              )}
-            </div>
-          </>
-        );
-      })()}
 
+      <div className={styles.tabs}>
+        <button 
+          className={`${styles.tab} ${tab === 'all' ? styles.active : ''}`}
+          onClick={() => setTab('all')}
+        >
+          All Users ({users.length})
+        </button>
+        <button 
+          className={`${styles.tab} ${tab === 'individuals' ? styles.active : ''}`}
+          onClick={() => setTab('individuals')}
+        >
+          Individuals ({users.filter(u => !u.org_id).length})
+        </button>
+        <button 
+          className={`${styles.tab} ${tab === 'org_members' ? styles.active : ''}`}
+          onClick={() => setTab('org_members')}
+        >
+          Organization Members ({users.filter(u => u.org_id).length})
+        </button>
+      </div>
+
+      {isLoading ? (
+        <div className={styles.tableContainer}>
+          <TableSkeleton cols={7} />
+        </div>
+      ) : error ? (
+        <div className={styles.error}>
+          <p>Error: {error}</p>
+          <button onClick={fetchData} className={styles.retryButton}>
+            <Loader2 size={16} />
+            Retry
+          </button>
+        </div>
+      ) : (
+        <div className={styles.tableContainer}>
+          <UsersTable 
+            users={filteredUsers()}
+            session={session}
+            onUpdate={fetchData}
+            onGiveCredits={(userId) => setCreditsUserId(userId)}
+          />
+        </div>
+      )}
+
+      {/* Add to Organization Modal */}
       {modalUserId && (
-        <div className={styles.modalOverlay} onClick={() => setModalUserId(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3>Select organization</h3>
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="org-select">Organization</label>
-              <select id="org-select" value={selectedOrgId} onChange={(e) => setSelectedOrgId(e.target.value)}>
-                <option value="">Select organization</option>
-                {orgs.map((org:any) => (
-                  <option key={org.id} value={org.id}>{org.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className={styles.actionsRow}>
-              <button className={styles.secondaryButton} onClick={() => setModalUserId(null)}>Cancel</button>
-              <button className={styles.primaryButton} disabled={!selectedOrgId} onClick={async () => {
-                if (!selectedOrgId) return;
-                await addToOrg(modalUserId!, selectedOrgId, 'ORG_USER');
-                setModalUserId(null);
-              }}>Add to Org</button>
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3>Add User to Organization</h3>
+            <select 
+              value={selectedOrgId} 
+              onChange={(e) => setSelectedOrgId(e.target.value)}
+              className={styles.select}
+            >
+              <option value="">Select Organization</option>
+              {orgs.map(org => (
+                <option key={org.id} value={org.id}>{org.name}</option>
+              ))}
+            </select>
+            <div className={styles.modalActions}>
+              <button 
+                onClick={() => {
+                  if (selectedOrgId) {
+                    addToOrg(modalUserId, selectedOrgId);
+                    setModalUserId(null);
+                    setSelectedOrgId('');
+                  }
+                }}
+                disabled={!selectedOrgId}
+                className={styles.primaryButton}
+              >
+                Add
+              </button>
+              <button 
+                onClick={() => {
+                  setModalUserId(null);
+                  setSelectedOrgId('');
+                }}
+                className={styles.secondaryButton}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
       )}
 
+      {/* Add Credits Modal */}
       {creditsUserId && (
-        <div className={styles.modalOverlay} onClick={() => setCreditsUserId(null)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h3>Assign credits to user</h3>
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="credits-input">Credits (use negative to remove)</label>
-              <input id="credits-input" type="number" value={creditsAmount} onChange={(e) => setCreditsAmount(e.target.value)} />
-              <span className={styles.hint}>Users in an organization cannot receive individual credits.</span>
-            </div>
-            {creditsError && <p className={styles.errorText}>{creditsError}</p>}
-            <div className={styles.actionsRow}>
-              <button className={styles.secondaryButton} onClick={() => setCreditsUserId(null)}>Cancel</button>
-              <button className={styles.primaryButton} onClick={submitCredits} disabled={creditsLoading}>{creditsLoading ? 'Saving...' : 'Save'}</button>
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h3>Add Credits</h3>
+            <input
+              type="number"
+              placeholder="Number of credits"
+              value={creditsAmount}
+              onChange={(e) => setCreditsAmount(e.target.value)}
+              className={styles.input}
+            />
+            {creditsError && <p className={styles.error}>{creditsError}</p>}
+            <div className={styles.modalActions}>
+              <button 
+                onClick={addCredits}
+                disabled={!creditsAmount || creditsLoading}
+                className={styles.primaryButton}
+              >
+                {creditsLoading ? <Loader2 size={16} /> : 'Add Credits'}
+              </button>
+              <button 
+                onClick={() => {
+                  setCreditsUserId(null);
+                  setCreditsAmount('');
+                  setCreditsError(null);
+                }}
+                className={styles.secondaryButton}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

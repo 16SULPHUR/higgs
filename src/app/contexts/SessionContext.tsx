@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { clearAllCookies, getCookie, setCookie } from '@/lib/cookieUtils';
 import { getDecodedTokenExpiry } from '@/lib/tokenUtils';
+import { tokenRefreshService } from '@/lib/tokenRefreshService';
 import { jwtDecode } from 'jwt-decode';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -22,19 +23,33 @@ export type CustomSession = {
 type SessionContextType = {
   session: CustomSession | null | undefined;
   refreshSession: () => Promise<void>;
+  refreshAccessToken: () => Promise<string | null>;
 };
 
-const SessionContext = createContext<SessionContextType | null>(null);
+const SessionContext = createContext<SessionContextType | undefined>(undefined);
 
 export const useSessionContext = () => {
-  const context = useContext(SessionContext); 
-  return context?.session;
+  const context = useContext(SessionContext);
+  if (context === undefined) {
+    throw new Error('useSessionContext must be used within a SessionProvider');
+  }
+  return context;
+};
+
+// Backward compatibility hook that returns just the session object
+export const useSession = () => {
+  const context = useContext(SessionContext);
+  if (context === undefined) {
+    throw new Error('useSession must be used within a SessionProvider');
+  }
+  return context.session;
 };
 
 export const useSessionActions = () => {
   const context = useContext(SessionContext);
   return {
     refreshSession: context?.refreshSession || (() => Promise.resolve()),
+    refreshAccessToken: context?.refreshAccessToken || (() => Promise.resolve(null)),
   };
 };
 
@@ -101,6 +116,9 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
           accessToken = data.accessToken;
           setCookie('accessToken', data.accessToken);
           setSession({ accessToken, refreshToken: data.refreshToken || refreshToken });
+          
+          // Schedule proactive refresh for the new token
+          tokenRefreshService.scheduleProactiveRefresh();
           return;
         } catch (error) {
           console.error('Client token refresh failed', error);
@@ -116,15 +134,28 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
 
     // Token valid; set session even if refresh token is missing
     setSession({ accessToken, refreshToken });
+    
+    // Schedule proactive refresh for the valid token
+    tokenRefreshService.scheduleProactiveRefresh();
+  }, []);
+
+  const refreshAccessTokenContext = useCallback(async (): Promise<string | null> => {
+    return tokenRefreshService.manualRefresh();
   }, []);
 
   useEffect(() => {
     initializeSession();
+    
+    // Cleanup function to stop proactive refresh when component unmounts
+    return () => {
+      tokenRefreshService.stopProactiveRefresh();
+    };
   }, [initializeSession]);
 
   const contextValue = {
     session,
     refreshSession: initializeSession,
+    refreshAccessToken: refreshAccessTokenContext,
   };
 
   return <SessionContext.Provider value={contextValue}>{children}</SessionContext.Provider>;

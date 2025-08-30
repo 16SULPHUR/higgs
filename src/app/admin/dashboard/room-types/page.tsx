@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { api } from '@/lib/api.client';
 import { Plus, Loader2 } from 'lucide-react'; 
 import TableSkeleton from '@/components/common/TableSkeleton';
-import styles from '../rooms/RoomsPage.module.css';
+import styles from './RoomTypesPage.module.css';
 import RoomTypesTable from '@/components/room-types/RoomTypesTable';
 import { useSessionContext } from '@/contexts/SessionContext';
 

@@ -61,8 +61,8 @@ export default function AdminLoginForm() {
   return (
     <div className={styles.card}>
       <div className={styles.cardHeader}>
-        <h2 className={styles.cardTitle}>Admin Portal</h2>
-        <p className={styles.cardDescription}>Sign in to manage Higgs Workspace.</p>
+        {/* <h2 className={styles.cardTitle}>Admin Portal</h2>
+        <p className={styles.cardDescription}>Sign in to manage Higgs Workspace.</p> */}
       </div>
       <div className={styles.cardContent}>
         <form onSubmit={handleSubmit} className={styles.form}>

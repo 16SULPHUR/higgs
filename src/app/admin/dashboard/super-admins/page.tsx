@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSessionContext } from '@/contexts/SessionContext';
 import { getDecodedToken } from '@/lib/tokenUtils';
-import styles from '../rooms/RoomsPage.module.css';
+import styles from './SuperAdminsPage.module.css';
 import SuperAdminsTable from '@/components/admin/super-admins/SuperAdminsTable';
 
 export default function SuperAdminsPage() {
@@ -42,12 +42,11 @@ export default function SuperAdminsPage() {
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>Super Admins</h1>
-          <p className={styles.description}>Invite, promote, and manage super administrators.</p>
         </div>
       </div>
-      <SuperAdminsTable session={session} />
+      <div className={styles.tableContainer}>
+        <SuperAdminsTable session={session} showActions />
+      </div>
     </div>
   );
 }
-
-

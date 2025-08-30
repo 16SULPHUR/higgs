@@ -1,21 +1,20 @@
 'use client';
 
-import styles from '../rooms/RoomsPage.module.css';
 import { useState, useEffect } from 'react';
 import { api } from '@/lib/api.client';
 import BookingsTable from '@/components/admin/bookings/BookingsTable';
 import TableSkeleton from '@/components/common/TableSkeleton';
-import { useSessionContext } from '@/contexts/SessionContext';
+import { useSession } from '@/contexts/SessionContext';
+import styles from './BookingsPage.module.css';
 
 export default function AdminBookingsPage() {
-  const session = useSessionContext();
+  const session = useSession();
   const [bookings, setBookings] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchBookings = async () => {
     if (!session) {
-      // No session - clear bookings and stop loading
       setBookings([]);
       setIsLoading(false);
       return;
@@ -63,7 +62,7 @@ export default function AdminBookingsPage() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.header}>
         <div>
           <h1 className={styles.title}>All Bookings</h1>
