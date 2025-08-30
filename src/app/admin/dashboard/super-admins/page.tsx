@@ -18,7 +18,7 @@ export default function SuperAdminsPage() {
       return;
     }
     try {
-      const decoded = getDecodedToken(session?.accessToken);
+      const decoded = getDecodedToken(session?.session?.accessToken);
       if (decoded?.type !== 'admin' || decoded?.role !== 'SUPER_ADMIN') {
         router.replace('/admin/dashboard');
         return;

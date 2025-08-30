@@ -43,7 +43,7 @@ export default function LocationAdminDetailPage() {
 
     // Check if user is admin
     try {
-      const decodedData = getDecodedToken(session?.accessToken);
+      const decodedData = getDecodedToken(session?.session?.accessToken);
       if (decodedData?.type !== "admin") {
         window.location.href = '/login';
         return;

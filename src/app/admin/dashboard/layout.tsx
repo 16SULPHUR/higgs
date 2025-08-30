@@ -17,7 +17,7 @@ function SidebarNav() {
     const pathname = usePathname();
     const session = useSessionContext(); 
  
-    const isSuperAdmin = getDecodedToken(session?.accessToken)?.role === 'SUPER_ADMIN';
+    const isSuperAdmin = getDecodedToken(session?.session?.accessToken)?.role === 'SUPER_ADMIN';
  
     const navItems = [
         { href: '/admin/dashboard', icon: <LayoutDashboard size={18} />, label: 'Overview' },

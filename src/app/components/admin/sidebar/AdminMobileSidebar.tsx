@@ -18,7 +18,7 @@ export default function AdminMobileSidebar({ isOpen, onClose }: AdminMobileSideb
     const pathname = usePathname();
     if (!isOpen) return null;
 
-    const isSuperAdmin = getDecodedToken(session?.accessToken)?.role === 'SUPER_ADMIN';
+    const isSuperAdmin = getDecodedToken(session?.session?.accessToken)?.role === 'SUPER_ADMIN';
 
     const navItems = [
         { href: '/admin/dashboard', icon: <LayoutDashboard size={18} />, label: 'Overview' },

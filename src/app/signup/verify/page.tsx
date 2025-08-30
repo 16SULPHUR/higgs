@@ -51,7 +51,7 @@ export default function VerifySignupPage() {
       }
 
       const session: any = await getSession();
-      if (session?.accessToken) {
+      if (session?.session?.accessToken) {
         document.cookie = `accessToken=${session.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax;`;
       }
       if (session?.refreshToken) {

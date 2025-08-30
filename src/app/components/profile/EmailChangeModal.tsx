@@ -68,7 +68,7 @@ export default function EmailChangeModal({ isOpen, onClose, onSuccess, currentEm
         setError(null);
 
         try {
-            const response = await api.post(session, '/api/profile/resend-email-change-otp');
+            const response = await api.post(session, '/api/profile/resend-email-change-otp', {});
             setExpiresAt(new Date(response.expiresAt));
             setSuccess('New verification code sent to your new email address.');
         } catch (err: any) {

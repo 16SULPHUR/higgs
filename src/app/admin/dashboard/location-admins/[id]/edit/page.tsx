@@ -31,7 +31,7 @@ export default function EditLocationAdminPage() {
 
     // Check if user is admin
     try {
-      const decodedData = getDecodedToken(session?.accessToken);
+      const decodedData = getDecodedToken(session?.session?.accessToken);
       if (decodedData?.type !== "admin") {
         router.replace('/login');
         return;

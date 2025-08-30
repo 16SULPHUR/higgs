@@ -33,7 +33,7 @@ export default function AdminLoginForm() {
     } else if (result?.ok) {
       const session: any = await getSession();
 
-      if (session?.accessToken) {
+      if (session?.session?.accessToken) {
         setCookie('accessToken', session.accessToken);
       }
       if (session?.refreshToken) {

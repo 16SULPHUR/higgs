@@ -12,8 +12,8 @@ export default function LoginPage() {
   const session = useSessionContext();
   
   useEffect(() => {
-    if (session?.accessToken) {
-      const decodedData = getDecodedToken(session?.accessToken);
+    if (session?.session?.accessToken) {
+      const decodedData = getDecodedToken(session?.session?.accessToken);
       if (decodedData?.type == 'admin') {
         redirect('/admin/dashboard');
       }
