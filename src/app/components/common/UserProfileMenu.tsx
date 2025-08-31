@@ -144,12 +144,18 @@ export default function UserProfileMenu() {
                     <p className={styles.dropdownName}>{userData.name}</p>
                     <p className={styles.dropdownEmail}>{userData.email}</p>
                 </div>
-                {!isAdmin && (
+                {isAdmin ? (
+                    <a href="/admin/dashboard/profile" className={styles.dropdownItem}>
+                        <User size={14} /> Profile
+                    </a>
+                ) : (
                     <a href="/dashboard/profile" className={styles.dropdownItem}>
                         <User size={14} /> My Profile
                     </a>
                 )}
-                <SignOutButton />
+                <div className={styles.dropdownItem}>
+                    <SignOutButton />
+                </div>
             </div>
         </div>
     );

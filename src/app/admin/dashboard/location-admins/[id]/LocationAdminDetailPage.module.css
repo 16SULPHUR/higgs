@@ -60,12 +60,12 @@
 }
 
 .editButton {
-    background: #3b82f6;
+    background: hsl(var(--primary));
     color: white;
 }
 
 .editButton:hover {
-    background: #2563eb;
+    background: hsl(var(--primary));
 }
 
 .deleteButton {

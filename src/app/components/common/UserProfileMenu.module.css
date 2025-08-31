@@ -86,9 +86,22 @@
   color: hsl(var(--foreground));
   text-decoration: none;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .dropdownItem:hover {
   background: hsl(var(--muted));
   color: hsl(var(--primary));
+}
+
+/* Sign out button specific styling within the profile menu */
+.dropdownItem:last-child {
+  border-top: 1px solid hsl(var(--border));
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+}
+
+.dropdownItem:last-child:hover {
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
 }

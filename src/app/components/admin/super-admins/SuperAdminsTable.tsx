@@ -39,6 +39,8 @@ export default function SuperAdminsTable({ session, showActions }: { session: an
     try {
       setLoading(true);
       const data = await api.get(session, '/api/admin/super-admins');
+      console.log("data")
+      console.log(data)
       setItems(data);
     } catch (err: any) {
       setError(err.message || 'Failed to load super admins');
@@ -157,7 +159,7 @@ export default function SuperAdminsTable({ session, showActions }: { session: an
                   </td>
                   <td>{new Date(sa.created_at).toLocaleString()}</td>
                   <td>
-                    {sa.is_active && sa.id !== getDecodedToken(session.accessToken).id && (
+                    {sa.is_active && sa.id !== getDecodedToken(session?.session?.accessToken)?.id && (
                       <button className={styles.statusToggle} onClick={() => handleDemote(sa.id)}>
                         <ShieldMinus size={14} /> Deactivate
                       </button>

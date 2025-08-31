@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, Shield, SquareStack, Users } from 'lucide-react';
+import { Building2, CalendarDays, ClipboardCheck, ClipboardList, DoorOpen, LayoutDashboard, LifeBuoy, MapPin, Shield, SquareStack, Users, User } from 'lucide-react';
 import SignOutButton from '@/components/SignOutButton';
 import MobileMenuButton from '@/components/MobileMenuButton';
 import AdminMobileSidebar from '@/components/admin/sidebar/AdminMobileSidebar';
@@ -21,6 +21,7 @@ function SidebarNav() {
  
     const navItems = [
         { href: '/admin/dashboard', icon: <LayoutDashboard size={18} />, label: 'Overview' },
+        { href: '/admin/dashboard/profile', icon: <User size={18} />, label: 'Profile' },
         { href: '/admin/dashboard/bookings', icon: <ClipboardCheck size={18} />, label: 'Bookings' },
         { href: '/admin/dashboard/users', icon: <Users size={18} />, label: 'Users' },
         { href: '/admin/dashboard/organizations', icon: <Building2 size={18} />, label: 'Organizations' },

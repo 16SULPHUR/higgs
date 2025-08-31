@@ -97,12 +97,12 @@
 }
 
 .submitButton {
-    background: #3b82f6;
+    background: hsl(var(--primary));
     color: white;
 }
 
 .submitButton:hover:not(:disabled) {
-    background: #2563eb;
+    background: hsl(var(--primary));
 }
 
 .submitButton:disabled {

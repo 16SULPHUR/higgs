@@ -13,7 +13,7 @@
 }
 
 .modal {
-    background: white;
+    background: hsl(var(--card));
     border-radius: 12px;
     padding: 32px;
     max-width: 500px;
@@ -33,13 +33,7 @@
     cursor: pointer;
     padding: 8px;
     border-radius: 6px;
-    color: #6b7280;
-    transition: all 0.2s;
-}
-
-.closeButton:hover {
-    background-color: #f3f4f6;
-    color: #374151;
+    color: hsl(var(--muted-foreground));
 }
 
 .stepContent {
@@ -49,13 +43,13 @@
 .stepTitle {
     font-size: 24px;
     font-weight: 600;
-    color: #111827;
+    color: hsl(var(--foreground));
     margin: 0 0 12px 0;
 }
 
 .stepDescription {
     font-size: 16px;
-    color: #6b7280;
+    color: hsl(var(--muted-foreground));
     margin: 0 0 24px 0;
     line-height: 1.5;
 }
@@ -72,7 +66,7 @@
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: #374151;
+    color: hsl(var(--foreground));
     margin-bottom: 8px;
 }
 
@@ -85,35 +79,37 @@
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-    color: #9ca3af;
+    color: hsl(var(--muted-foreground));
 }
 
 .input {
     width: 100%;
     padding: 12px 12px 12px 40px;
-    border: 1px solid #d1d5db;
+    border: 1px solid hsl(var(--border));
     border-radius: 8px;
     font-size: 16px;
     transition: border-color 0.2s;
     box-sizing: border-box;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
 }
 
 .input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
 }
 
 .input:disabled {
-    background-color: #f9fafb;
-    color: #6b7280;
+    background-color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
     cursor: not-allowed;
 }
 
 .otpInput {
     width: 100%;
     padding: 16px;
-    border: 2px solid #d1d5db;
+    border: 2px solid hsl(var(--border));
     border-radius: 8px;
     font-size: 24px;
     font-weight: 600;
@@ -121,12 +117,14 @@
     letter-spacing: 4px;
     transition: border-color 0.2s;
     box-sizing: border-box;
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
 }
 
 .otpInput:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.1);
 }
 
 .expiryInfo {
@@ -135,11 +133,11 @@
     justify-content: center;
     gap: 8px;
     padding: 12px;
-    background-color: #fef3c7;
-    border: 1px solid #f59e0b;
+    background-color: hsl(var(--warning) / 0.1);
+    border: 1px solid hsl(var(--warning));
     border-radius: 8px;
     margin-bottom: 24px;
-    color: #92400e;
+    color: hsl(var(--warning-foreground));
     font-size: 14px;
 }
 
@@ -156,137 +154,117 @@
   overflow: hidden;
 }
 
+/* Remove button animation and hover effect */
 .buttonGroup button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  display: none;
 }
 
 .buttonGroup button:hover::before {
-  left: 100%;
+  display: none;
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
   min-width: 120px;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.4);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Remove transition and animation */
+  transition: none;
 }
 
-.primaryButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-}
-
+.primaryButton:hover:not(:disabled),
 .primaryButton:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+  background: hsl(var(--primary));
+  transform: none;
+  box-shadow: 0 4px 15px hsl(var(--primary) / 0.4);
 }
 
 .primaryButton:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3), 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 0 0 3px hsl(var(--primary) / 0.3), 0 4px 15px hsl(var(--primary) / 0.4);
 }
 
 .primaryButton:disabled {
-  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
 .secondaryButton {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-  border: none;
+  background: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border: 1px solid hsl(var(--border));
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
   min-width: 120px;
-  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px hsl(var(--secondary) / 0.2);
+  /* Remove transition and animation */
+  transition: none;
 }
 
-.secondaryButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #e085e8 0%, #e04a5f 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
-}
-
+.secondaryButton:hover:not(:disabled),
 .secondaryButton:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(240, 147, 251, 0.4);
+  background: hsl(var(--secondary));
 }
 
 .secondaryButton:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.3), 0 4px 15px rgba(240, 147, 251, 0.4);
+  box-shadow: 0 0 0 3px hsl(var(--secondary) / 0.3), 0 2px 4px hsl(var(--secondary) / 0.2);
 }
 
 .secondaryButton:disabled {
-  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
 }
 
 .cancelButton {
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  color: #92400e;
+  background: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
   min-width: 120px;
-  box-shadow: 0 4px 15px rgba(252, 182, 159, 0.4);
+  box-shadow: 0 2px 4px hsl(var(--destructive) / 0.2);
+  /* Remove transition and animation */
+  transition: none;
 }
 
-.cancelButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ffe4c4 0%, #fbb08a 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(252, 182, 159, 0.5);
-}
-
+.cancelButton:hover:not(:disabled),
 .cancelButton:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(252, 182, 159, 0.4);
+  background: hsl(var(--destructive));
 }
 
 .cancelButton:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(252, 182, 159, 0.3), 0 4px 15px rgba(252, 182, 159, 0.4);
+  box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.3), 0 2px 4px hsl(var(--destructive) / 0.2);
 }
 
 .cancelButton:disabled {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  color: #9ca3af;
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
   cursor: not-allowed;
-  transform: none;
   box-shadow: none;
 }
 
 .successIcon {
-    color: #10b981;
+    color: hsl(var(--success));
     margin-bottom: 16px;
 }
 
@@ -295,11 +273,11 @@
     align-items: center;
     gap: 8px;
     padding: 12px 16px;
-    background-color: #fef2f2;
-    border: 1px solid #fecaca;
+    background-color: hsl(var(--destructive) / 0.1);
+    border: 1px solid hsl(var(--destructive));
     border-radius: 8px;
     margin-bottom: 20px;
-    color: #dc2626;
+    color: hsl(var(--destructive-foreground));
     font-size: 14px;
 }
 
@@ -308,11 +286,11 @@
     align-items: center;
     gap: 8px;
     padding: 12px 16px;
-    background-color: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    background-color: hsl(var(--success) / 0.1);
+    border: 1px solid hsl(var(--success));
     border-radius: 8px;
     margin-bottom: 20px;
-    color: #16a34a;
+    color: hsl(var(--success-foreground));
     font-size: 14px;
 }
 

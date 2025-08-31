@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
-import { User, Mail, Phone, Save, Camera, X, Loader2 } from 'lucide-react';
+import { User, Mail, Phone, Save, Camera, X, Loader2, Edit3 } from 'lucide-react';
 import styles from './ProfileForm.module.css';
 import { api } from '@/lib/api.client';
 import { getCookie, setCookie } from '@/lib/cookieUtils';
 import { useSession } from '@/contexts/SessionContext';
+import EmailChangeModal from './EmailChangeModal';
 
 export default function ProfileForm() {
   const session = useSession();
@@ -16,6 +17,7 @@ export default function ProfileForm() {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [isEmailChangeModalOpen, setIsEmailChangeModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   useEffect(() => {
@@ -111,6 +113,23 @@ export default function ProfileForm() {
     }
   };
 
+  const refreshProfile = async () => {
+    try {
+      const data = await api.get(session, '/api/auth/me');
+      setProfile(data);
+      setFormData({ name: data.name || '', phone: data.phone || '', profession: data.profession || '' });
+      if (data.profile_picture) {
+        setImagePreview(data.profile_picture);
+      }
+      // Update cookies with new email if changed
+      if (data.email) {
+        setCookie('email', data.email);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to refresh profile.');
+    }
+  };
+
   if (!profile && !error) {
     return (
         <div className={styles.loadingContainer}>
@@ -121,135 +140,156 @@ export default function ProfileForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.profileHeader}>
-        <div className={styles.avatarContainer}>
-          {imagePreview ? (
-            <>
-              <Image
-                src={imagePreview}
-                alt="Profile Picture"
-                width={120}
-                height={120}
-                className={styles.avatar}
+    <div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.profileHeader}>
+          <div className={styles.avatarContainer}>
+            {imagePreview ? (
+              <>
+                <Image
+                  src={imagePreview}
+                  alt="Profile Picture"
+                  width={120}
+                  height={120}
+                  className={styles.avatar}
+                />
+                <button 
+                  type="button"
+                  className={styles.removeImageButton}
+                  onClick={removeImage}
+                >
+                  <X size={16} />
+                </button>
+              </>
+            ) : (
+              <div className={styles.avatarFallback}>
+                <User size={48} />
+              </div>
+            )}
+            <button 
+              type="button"
+              className={styles.avatarEditButton}
+              onClick={triggerFileInput}
+            >
+              <Camera size={16} />
+              <span>Change Photo</span>
+            </button>
+            <input
+              ref={fileInputRef}
+              id="profile_picture"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className={styles.hiddenInput}
+            />
+          </div>
+          <div className={styles.headerInfo}>
+            <h2 className={styles.userName}>{profile?.name}</h2>
+            <p className={styles.userEmail}>{profile?.email}</p>
+          </div>
+        </div>
+        
+        <div className={styles.formContent}>
+          <div className={styles.inputGroup}>
+            <label htmlFor="name">Full Name</label>
+            <div className={styles.inputWrapper}>
+              <User size={18} className={styles.inputIcon} />
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={formData.name}
+                onChange={handleTextChange}
+                required
+                className={styles.input}
+                placeholder="Enter your full name"
               />
-              <button 
-                type="button"
-                className={styles.removeImageButton}
-                onClick={removeImage}
-              >
-                <X size={16} />
-              </button>
-            </>
-          ) : (
-            <div className={styles.avatarFallback}>
-              <User size={48} />
             </div>
-          )}
+          </div>
+          
+          <div className={styles.inputGroup}>
+            <label htmlFor="email">Email Address</label>
+            <div className={styles.inputWrapper}>
+              <Mail size={18} className={styles.inputIcon} />
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={profile?.email || ''}
+                disabled
+                className={styles.input}
+                title="Email cannot be changed directly. Use the Change Email button below."
+              />
+              <button
+                type="button"
+                onClick={() => setIsEmailChangeModalOpen(true)}
+                className={styles.changeEmailButton}
+                title="Change Email Address"
+              >
+                <Edit3 size={16} />
+                <span>Change Email</span>
+              </button>
+            </div>
+          </div>
+          
+          <div className={styles.inputGroup}>
+            <label htmlFor="phone">Phone Number</label>
+            <div className={styles.inputWrapper}>
+              <Phone size={18} className={styles.inputIcon} />
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleTextChange}
+                className={styles.input}
+                placeholder="Enter your phone number"
+              />
+            </div>
+          </div>
+          
+          <div className={styles.inputGroup}>
+            <label htmlFor="profession">Profession</label>
+            <div className={styles.inputWrapper}>
+              <User size={18} className={styles.inputIcon} />
+              <input
+                id="profession"
+                name="profession"
+                type="text"
+                value={formData.profession}
+                onChange={handleTextChange}
+                className={styles.input}
+                placeholder="Enter your profession (e.g., Software Engineer, Designer, Manager)"
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className={styles.formFooter}>
+          <div className={styles.messageContainer}>
+            {error && <p className={styles.errorMessage}>{error}</p>}
+            {success && <p className={styles.successMessage}>{success}</p>}
+          </div>
           <button 
-            type="button"
-            className={styles.avatarEditButton}
-            onClick={triggerFileInput}
+            type="submit" 
+            disabled={isPending} 
+            className={styles.saveButton}
           >
-            <Camera size={16} />
-            <span>Change Photo</span>
+            <Save size={16} />
+            <span>{isPending ? 'Saving...' : 'Save Changes'}</span>
           </button>
-          <input
-            ref={fileInputRef}
-            id="profile_picture"
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className={styles.hiddenInput}
-          />
         </div>
-        <div className={styles.headerInfo}>
-          <h2 className={styles.userName}>{profile?.name}</h2>
-          <p className={styles.userEmail}>{profile?.email}</p>
-        </div>
-      </div>
+      </form>
       
-      <div className={styles.formContent}>
-        <div className={styles.inputGroup}>
-          <label htmlFor="name">Full Name</label>
-          <div className={styles.inputWrapper}>
-            <User size={18} className={styles.inputIcon} />
-            <input
-              id="name"
-              name="name"
-              type="text"
-              value={formData.name}
-              onChange={handleTextChange}
-              required
-              className={styles.input}
-              placeholder="Enter your full name"
-            />
-          </div>
-        </div>
-        
-        <div className={styles.inputGroup}>
-          <label htmlFor="email">Email Address</label>
-          <div className={styles.inputWrapper}>
-            <Mail size={18} className={styles.inputIcon} />
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={profile?.email || ''}
-              disabled
-              className={styles.input}
-              title="Email cannot be changed."
-            />
-          </div>
-        </div>
-        
-        <div className={styles.inputGroup}>
-          <label htmlFor="phone">Phone Number</label>
-          <div className={styles.inputWrapper}>
-            <Phone size={18} className={styles.inputIcon} />
-            <input
-              id="phone"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleTextChange}
-              className={styles.input}
-              placeholder="Enter your phone number"
-            />
-          </div>
-        </div>
-        
-        <div className={styles.inputGroup}>
-          <label htmlFor="profession">Profession</label>
-          <div className={styles.inputWrapper}>
-            <User size={18} className={styles.inputIcon} />
-            <input
-              id="profession"
-              name="profession"
-              type="text"
-              value={formData.profession}
-              onChange={handleTextChange}
-              className={styles.input}
-              placeholder="Enter your profession (e.g., Software Engineer, Designer, Manager)"
-            />
-          </div>
-        </div>
-      </div>
-      
-      <div className={styles.formFooter}>
-        <div className={styles.messageContainer}>
-          {error && <p className={styles.errorMessage}>{error}</p>}
-          {success && <p className={styles.successMessage}>{success}</p>}
-        </div>
-        <button 
-          type="submit" 
-          disabled={isPending} 
-          className={styles.saveButton}
-        >
-          <Save size={16} />
-          <span>{isPending ? 'Saving...' : 'Save Changes'}</span>
-        </button>
-      </div>
-    </form>
+      <EmailChangeModal
+        isOpen={isEmailChangeModalOpen}
+        onClose={() => setIsEmailChangeModalOpen(false)}
+        onSuccess={() => {
+          setIsEmailChangeModalOpen(false);
+          refreshProfile();
+        }}
+        currentEmail={profile?.email || ''}
+      />
+    </div>
   );
 }
