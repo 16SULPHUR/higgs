@@ -39,6 +39,7 @@ export default async function RootLayout({
       <head> 
         <meta name="theme-color" content="#A67951" />
         <link rel="icon" href="/favicon.ico" />
+        <script defer src="https://tracker.ankit-patil.workers.dev/api/script/site_37ixdi7ds5tr"></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}> 
         <SessionProvider> 
